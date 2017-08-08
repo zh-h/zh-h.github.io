@@ -1,0 +1,74 @@
+<h1>谁是 po 主？</h1>
+<div style="margin:0 auto;width:500px; ">
+    <div>
+        <label for="picUrl">微博图片地址：</label>
+        <input type="text" id="picUrl" style="width:350px; ">
+        <button id="findButton" onclick="onClickFindButton()">查找</button>
+    </div>
+    <div>
+        微博主页：
+        <a href="#" target="blank" id="homePageUrl">?</a>
+    </div>
+</div>
+<script>
+    function decodeBase62(number) {
+        var alphabet = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        var out = 0
+        var len = number.length - 1
+        for (var t = 0; t <= len; t++) {
+            out = out + alphabet.indexOf(number.substr(t, 1)) * Math.pow(62, len - t)
+        }
+        return out
+    }
+
+    function decode16Unit(number) {
+        return parseInt(number, 16)
+    }
+
+    function decode(number) {
+        if (number.startsWith('00')) {
+            return decodeBase62(number)
+        } else {
+            return decode16Unit(number)
+        }
+    }
+
+    function findNumber(url) {
+        var lastIndexOfSlash = url.lastIndexOf('/')
+        var number = url.substr(lastIndexOfSlash + 1, 8)
+        return number
+    }
+
+    function findUid(url) {
+        var number = findNumber(url)
+        var uid = decode(number)
+        return uid
+    }
+
+    function constructHomePageUrl(uid) {
+        var prefixUrl = 'http://weibo.com/u/'
+        return prefixUrl + uid
+    }
+
+    function main(url) {
+        var uid = findUid(url)
+        var homePageUrl = constructHomePageUrl(uid)
+        console.log(homePageUrl)
+        return homePageUrl
+    }
+
+    // testDecodeBase62()
+    // testDecode16Unit()
+    // main('http://wx1.sinaimg.cn/mw690/41480b59ly1fj50powiqpj20qo4rhb29.jpg')
+    var picUrlEle = document.querySelector('#picUrl')
+    var homePageUrlEle = document.querySelector('#homePageUrl')
+    var onClickFindButton = function() {
+        var picUrl = picUrlEle.value
+        var homePageUrl = main(picUrl)
+        homePageUrlEle.href = homePageUrl
+        homePageUrlEle.innerHTML = homePageUrl
+        setTimeout(function() {
+            homePageUrlEle.click() // 使用 window.open 会被拦截
+        }, 200)
+    }
+</script>
