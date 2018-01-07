@@ -36,7 +36,9 @@ Hard resetting...
 ### 刷入
 
 1. 运行`esptool.py --port COM3 write_flash -fm qio 0x00000 esp8266-20170823-v1.9.2.bin`
-默认的`-fm`写入模式是`dio`对于大于 4M 的 Flash 会有更好的性能
+默认的`-fm`写入模式是`dio`对于大于 4M 的 Flash 会有更好的兼容，但是速率受限。
+> multi I/O SPI设备是有从单一设备支持增加带宽或throughput的能力。相对于标准的串行Flash存储设备，一个dual I/O接口能够使能双倍的速率。quad I/O接口能提升throughput四次。
+
 2. 运行成功的输出如下
 ```bash
 $ esptool.py --port COM3 write_flash -fm qio 0x00000 esp8266-20170823-v1.9.2.bin
@@ -61,6 +63,11 @@ Hard resetting...
 3. 按下板子的 RST 键重启
 
 ## REPL
+> REPL — 交互式解释器环境。
+R(read)、E(evaluate)、P(print)、L(loop) 
+输入值，交互式解释器会读取输入内容并对它求值，再返回结果，并重复此过程。
+
+Micropython 提供REPL，但是为了能够人机交互，需要其他的软件接收信号发送给开发板。
 
 ### putty
 
@@ -238,8 +245,4 @@ else:
 if __name__ == '__main__':
     getch_loop()
 
-```
-- Java
-```java
-// TODO
 ```

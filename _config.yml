@@ -79,5 +79,5 @@ theme: indigo
 deploy:
 - type: git
   repo: https://github.com/zh-h/zh-h.github.io.git
-- type: git
-  repo: https://gitee.com/zonghua/zonghua.git
+# - type: git
+#   repo: https://gitee.com/zonghua/zonghua.git
