@@ -201,48 +201,50 @@ port.open(e => {
 - Python
 ```python
 # 参考 Django createsuperuser 的时候输入密码的功能
-from sys import stdout
 import platform
-
-if platform.system() == 'Windows':
-    is_windows = True
-    import msvcrt
+from sys import stdout
 
 
-    def getch_loop():
-        while True:
-            key = msvcrt.getch()
-            key_ascii = int.from_bytes(key, byteorder='little')
-            stdout.write(chr(key_ascii))  # unicode
-            stdout.write('\n')
-            stdout.flush()
-            if key_ascii == 3:
-                print('bye')
-                break
-else:
-    is_windows = False
-    import curses
+class Getcher:
+    def __init__(self):
+        self.__getch = None
+        if platform.system() == 'Windows':
+            import msvcrt
 
-    window = curses.initscr()
-    curses.noecho()
-    curses.cbreak()
-    window.keypad(True)
+            def getch_func():
+                return int.from_bytes(msvcrt.getch(), byteorder='little')
+            self.__getch = getch_func
+        else:
+            def getch_func_cursor():
+                import curses
+
+                window = curses.initscr()
+                curses.noecho()
+                window.keypad(True)
+
+                def getch_func():
+                    try:
+                        stdout.write('\r')  # return line first position
+                        key = window.getch()
+                        return key
+                    except KeyboardInterrupt:
+                        curses.endwin()
+                        return 3
+                    except Exception:
+                        curses.endwin()
+                return getch_func
+
+            self.__getch = getch_func_cursor()
+
+    def getch(self):
+        return self.__getch()
 
 
-    def getch_loop():
-        try:
-            while True:
-                key_ascii = window.getch()
-                stdout.write(chr(key_ascii))  # unicode
-                stdout.write('\r\n')
-                stdout.flush()
-        except KeyboardInterrupt:
-            print('bye')
-            curses.endwin()
-        except Exception:
-            curses.endwin()
+g = Getcher()
 
-if __name__ == '__main__':
-    getch_loop()
-
+while True:
+    k = g.getch()
+    if k == 3:
+        exit(0)
+    print(chr(k))
 ```
