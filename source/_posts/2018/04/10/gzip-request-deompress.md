@@ -99,6 +99,75 @@ public class GunzipFilter implements Filter {
 
 ```
 
+### OpenResty
+OpenResty 可以通过使用 Lua 书写逻辑，可以导入使用 Lua 的类库，也可以通过 FFI 调用 C 语言编写的动态链接库。
+
+需要下载 Lua 的 FFI zlib 库，然后通过 lua 脚本导入。
+
+1. 下载 https://github.com/luapower/zlib/archive/master.tar.gz
+2. 解压master.tar.gz
+3. 将`linux64/libz.so` `zlib_h.lua` `zlib.lua`复制到`/usr/local/openresty/lualib/`
+4. 在`/usr/local/openresty/lualib/`创建`gunzip.lua`文件
+5. 在文件中输入
+```
+local ffi  = require "ffi"
+local zlib = require "zlib"
+
+local function reader(s)
+    local done
+    return function()
+        if done then return end
+        done = true
+        return s
+    end
+end
+
+local function writer()
+    local t = {}
+    return function(data, sz)
+        if not data then return table.concat(t) end
+        t[#t + 1] = ffi.string(data, sz)
+    end
+end
+
+local encoding = ngx.req.get_headers()['Content-Encoding']
+ngx.log(ngx.INFO, "encoding: "..encoding)
+
+if encoding == 'gzip' or encoding == 'deflate' or encoding == 'deflate-raw' then
+    ngx.req.clear_header('Content-Encoding');
+    ngx.req.read_body()
+
+    local body = ngx.req.get_body_data()
+
+    if body then
+        ngx.log(ngx.INFO, "unzip body")
+        local write = writer()
+        local map = {
+            gzip = 'gzip', 
+            deflate = 'zlib', 
+            ['deflate-raw'] = 'deflate'
+        }
+        local format = map[encoding]
+        zlib.inflate(reader(body), write, nil, format)
+        ngx.req.set_body_data(write())
+    end
+
+```
+6. 编辑`/usr/local/openresty/nginx/conf/nginx.conf`在`server`块插入一下内容
+```
+	# call request body to lua context
+	location / {
+	    # 非常重要，否则大文件解压因为被放到文件里导致读取的时候乱码
+		client_body_buffer_size 2048k;  
+		access_by_lua_file /usr/local/openresty/lualib/resty/gunzip.lua;
+		proxy_pass http://192.168.150.226:8800;
+    }
+
+```
+7. `/usr/local/openresty/nginx/sbin/nginx -s reload` 重载更新脚本。
+
+OpenResty 映射对应需要请求的 URL 然后在对应的处理或者转发前执行 Lua 脚本，Lua 脚本判断请求类型读取请求体，并且使用 zlib 将其解压，然后再写回请求体，最后再把 `Content-Encoding` 清除，放置后端再做错误处理。
+
 ## 使用 gzip 压缩请求
 
 ### CURL
