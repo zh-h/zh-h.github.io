@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>PHP大型网站的架构总结 | Applehater | developer ? operator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#009999">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="本文对工作中接触到的部分架构进行归纳总结。 一个大型的Web系统，要面对上亿的注册用户，大量的用户内容，巨大的访问量还有EB级别的数据存储。 操作系统所有软件都要运行在操作系统上，因此操作系统要保证高效、稳定和安全。包管理工具提供丰富的、稳定、新的软件包也是重要的选择。 Ubuntu新潮，有很多软件包可以快速跟进； 简单，易用。 CentOSCentOS的生命周期是7年，基本上可以覆盖硬件的生命周">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP大型网站的架构总结">
+<meta property="og:url" content="https://zh-h.github.io/2017/08/10/2017/08/10/large-PHP-website-architecture/index.html">
+<meta property="og:site_name" content="Applehater">
+<meta property="og:description" content="本文对工作中接触到的部分架构进行归纳总结。 一个大型的Web系统，要面对上亿的注册用户，大量的用户内容，巨大的访问量还有EB级别的数据存储。 操作系统所有软件都要运行在操作系统上，因此操作系统要保证高效、稳定和安全。包管理工具提供丰富的、稳定、新的软件包也是重要的选择。 Ubuntu新潮，有很多软件包可以快速跟进； 简单，易用。 CentOSCentOS的生命周期是7年，基本上可以覆盖硬件的生命周">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2019-10-26T21:49:24.151Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP大型网站的架构总结">
+<meta name="twitter:description" content="本文对工作中接触到的部分架构进行归纳总结。 一个大型的Web系统，要面对上亿的注册用户，大量的用户内容，巨大的访问量还有EB级别的数据存储。 操作系统所有软件都要运行在操作系统上，因此操作系统要保证高效、稳定和安全。包管理工具提供丰富的、稳定、新的软件包也是重要的选择。 Ubuntu新潮，有很多软件包可以快速跟进； 简单，易用。 CentOSCentOS的生命周期是7年，基本上可以覆盖硬件的生命周">
+    
+        <link rel="alternate" type="application/atom+xml" title="Applehater" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zohar Hou</h5>
+          <a href="mailto:emguaEBvdXRsb29rLmNvbQ==" title="emguaEBvdXRsb29rLmNvbQ==" class="mail">emguaEBvdXRsb29rLmNvbQ==</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories/Java/"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-weibo"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/links"  >
+                <i class="icon icon-lg icon-link"></i>
+                Links
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zh-h" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">PHP大型网站的架构总结</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">PHP大型网站的架构总结</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-08-09T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2017-08-10
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/">PHP</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#操作系统"><span class="post-toc-number">1.</span> <span class="post-toc-text"><a href="#&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;" class="headerlink" title="&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;"></a>&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Ubuntu"><span class="post-toc-number">1.1.</span> <span class="post-toc-text"><a href="#Ubuntu" class="headerlink" title="Ubuntu"></a>Ubuntu</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#CentOS"><span class="post-toc-number">1.2.</span> <span class="post-toc-text"><a href="#CentOS" class="headerlink" title="CentOS"></a>CentOS</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Windows-Server"><span class="post-toc-number">1.3.</span> <span class="post-toc-text"><a href="#Windows-Server" class="headerlink" title="Windows Server"></a>Windows Server</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#虚拟化"><span class="post-toc-number">2.</span> <span class="post-toc-text"><a href="#&#x865A;&#x62DF;&#x5316;" class="headerlink" title="&#x865A;&#x62DF;&#x5316;"></a>&#x865A;&#x62DF;&#x5316;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#OpenStack"><span class="post-toc-number">2.1.</span> <span class="post-toc-text"><a href="#OpenStack" class="headerlink" title="OpenStack"></a>OpenStack</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#运行环境"><span class="post-toc-number">3.</span> <span class="post-toc-text"><a href="#&#x8FD0;&#x884C;&#x73AF;&#x5883;" class="headerlink" title="&#x8FD0;&#x884C;&#x73AF;&#x5883;"></a>&#x8FD0;&#x884C;&#x73AF;&#x5883;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#PHP"><span class="post-toc-number">3.1.</span> <span class="post-toc-text"><a href="#PHP" class="headerlink" title="PHP"></a>PHP</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Node-js"><span class="post-toc-number">3.2.</span> <span class="post-toc-text"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Web-服务器"><span class="post-toc-number">4.</span> <span class="post-toc-text"><a href="#Web-&#x670D;&#x52A1;&#x5668;" class="headerlink" title="Web &#x670D;&#x52A1;&#x5668;"></a>Web &#x670D;&#x52A1;&#x5668;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Nginx"><span class="post-toc-number">4.1.</span> <span class="post-toc-text"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#文件系统"><span class="post-toc-number">5.</span> <span class="post-toc-text"><a href="#&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;" class="headerlink" title="&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;"></a>&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#FastDFS"><span class="post-toc-number">5.1.</span> <span class="post-toc-text"><a href="#FastDFS" class="headerlink" title="FastDFS"></a>FastDFS</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#SQL"><span class="post-toc-number">6.</span> <span class="post-toc-text"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#MariaDB"><span class="post-toc-number">6.1.</span> <span class="post-toc-text"><a href="#MariaDB" class="headerlink" title="MariaDB"></a>MariaDB</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#MyCat"><span class="post-toc-number">6.1.1.</span> <span class="post-toc-text"><a href="#MyCat" class="headerlink" title="MyCat"></a>MyCat</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#NoSQL"><span class="post-toc-number">7.</span> <span class="post-toc-text"><a href="#NoSQL" class="headerlink" title="NoSQL"></a>NoSQL</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Elasticsearch"><span class="post-toc-number">7.1.</span> <span class="post-toc-text"><a href="#Elasticsearch" class="headerlink" title="Elasticsearch"></a>Elasticsearch</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#CouchDB"><span class="post-toc-number">7.2.</span> <span class="post-toc-text"><a href="#CouchDB" class="headerlink" title="CouchDB"></a>CouchDB</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Redis"><span class="post-toc-number">7.3.</span> <span class="post-toc-text"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#负载均衡"><span class="post-toc-number">8.</span> <span class="post-toc-text"><a href="#&#x8D1F;&#x8F7D;&#x5747;&#x8861;" class="headerlink" title="&#x8D1F;&#x8F7D;&#x5747;&#x8861;"></a>&#x8D1F;&#x8F7D;&#x5747;&#x8861;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#HaProxy"><span class="post-toc-number">8.1.</span> <span class="post-toc-text"><a href="#HaProxy" class="headerlink" title="HaProxy"></a>HaProxy</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#消息中间件"><span class="post-toc-number">9.</span> <span class="post-toc-text"><a href="#&#x6D88;&#x606F;&#x4E2D;&#x95F4;&#x4EF6;" class="headerlink" title="&#x6D88;&#x606F;&#x4E2D;&#x95F4;&#x4EF6;"></a>&#x6D88;&#x606F;&#x4E2D;&#x95F4;&#x4EF6;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Rabbit-MQ"><span class="post-toc-number">9.1.</span> <span class="post-toc-text"><a href="#Rabbit-MQ" class="headerlink" title="Rabbit MQ"></a>Rabbit MQ</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#RPC"><span class="post-toc-number">10.</span> <span class="post-toc-text"><a href="#RPC" class="headerlink" title="RPC"></a>RPC</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Thrift"><span class="post-toc-number">10.1.</span> <span class="post-toc-text"><a href="#Thrift" class="headerlink" title="Thrift"></a>Thrift</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Yar"><span class="post-toc-number">10.2.</span> <span class="post-toc-text"><a href="#Yar" class="headerlink" title="Yar"></a>Yar</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#应用框架"><span class="post-toc-number">11.</span> <span class="post-toc-text"><a href="#&#x5E94;&#x7528;&#x6846;&#x67B6;" class="headerlink" title="&#x5E94;&#x7528;&#x6846;&#x67B6;"></a>&#x5E94;&#x7528;&#x6846;&#x67B6;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Gearman"><span class="post-toc-number">11.1.</span> <span class="post-toc-text"><a href="#Gearman" class="headerlink" title="Gearman"></a>Gearman</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#运维监控"><span class="post-toc-number">12.</span> <span class="post-toc-text"><a href="#&#x8FD0;&#x7EF4;&#x76D1;&#x63A7;" class="headerlink" title="&#x8FD0;&#x7EF4;&#x76D1;&#x63A7;"></a>&#x8FD0;&#x7EF4;&#x76D1;&#x63A7;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Puppet"><span class="post-toc-number">12.1.</span> <span class="post-toc-text"><a href="#Puppet" class="headerlink" title="Puppet"></a>Puppet</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Cacti"><span class="post-toc-number">12.2.</span> <span class="post-toc-text"><a href="#Cacti" class="headerlink" title="Cacti"></a>Cacti</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Nagios"><span class="post-toc-number">12.3.</span> <span class="post-toc-text"><a href="#Nagios" class="headerlink" title="Nagios"></a>Nagios</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-2017/08/10/large-PHP-website-architecture"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">PHP大型网站的架构总结</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-08-10 00:00:00" datetime="2017-08-09T16:00:00.000Z"  itemprop="datePublished">2017-08-10</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/">PHP</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>本文对工作中接触到的部分架构进行归纳总结。</p>
+<p>一个大型的Web系统，要面对上亿的注册用户，大量的用户内容，巨大的访问量还有EB级别的数据存储。</p>
+<h2 id="操作系统"><a href="#操作系统" class="headerlink" title="操作系统"></a>操作系统</h2><p>所有软件都要运行在操作系统上，因此操作系统要保证高效、稳定和安全。包管理工具提供丰富的、稳定、新的软件包也是重要的选择。</p>
+<h3 id="Ubuntu"><a href="#Ubuntu" class="headerlink" title="Ubuntu"></a>Ubuntu</h3><p>新潮，有很多软件包可以快速跟进；</p>
+<p>简单，易用。</p>
+<h3 id="CentOS"><a href="#CentOS" class="headerlink" title="CentOS"></a>CentOS</h3><p>CentOS的生命周期是7年，基本上可以覆盖硬件的生命周期；</p>
+<p>对硬件的支持更好（有些服务器是自行组装的机器）；</p>
+<p>PXE 安装系统比 Ubuntu 快多了；</p>
+<p>稳定。</p>
+<h3 id="Windows-Server"><a href="#Windows-Server" class="headerlink" title="Windows Server"></a>Windows Server</h3><p>主要用途是特定平台的 Microso Office 文档转换服务。</p>
+<h2 id="虚拟化"><a href="#虚拟化" class="headerlink" title="虚拟化"></a>虚拟化</h2><h3 id="OpenStack"><a href="#OpenStack" class="headerlink" title="OpenStack"></a>OpenStack</h3><h2 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h2><p>本文接触到的体系主要使用的是动态语言，在运行环境/解释器中运行，需要保证运行的高效与稳定啊。</p>
+<h3 id="PHP"><a href="#PHP" class="headerlink" title="PHP"></a>PHP</h3><p>Web 服务器不能直接执行 PHP ， 当接收到请求后，会把请求交给 PHP 解释器处理，处理结果返回给客户端。</p>
+<p>请求转发过程需要用到 CGI 管理器，使用 Nginx + PHP-FPM。</p>
+<p>PHP-FPM 维护一个进程池，进程复用中处理多个请求，相比 Apache PHP-Mod 一个请求一个进程大大提高了处理速度、降低了内存消耗。</p>
+<h3 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h3><p>主要用在消息推送系统中，相比 PHP 有以下显著优点：</p>
+<ol>
+<li><p>采用事件驱动、异步编程，为网络服务而设计。其实Javascript的匿名函数和闭包特性非常适合事件驱动、异步编程；</p>
+</li>
+<li><p>Node.js非阻塞模式的IO处理模式非常适合大量链接的客户端进行大量的数据推送（使用 Websocket 兼容 Web 端）。</p>
+</li>
+</ol>
+<p>Node.js 的缺点也是显著的：</p>
+<ol>
+<li><p>可靠性低，回调出错难以排查，一个线程奔溃就需要重启整个进程；</p>
+</li>
+<li><p>单进程，单线程，只支持单核CPU。当前的集群方案也不能很好利用机器资源，还造成监控维护困难。</p>
+</li>
+</ol>
+<h2 id="Web-服务器"><a href="#Web-服务器" class="headerlink" title="Web 服务器"></a>Web 服务器</h2><p>处理静态文件的访问，并且提供反向代理到内网的 Http 或者 Websocket 服务。需要运行集群，保证可用度。</p>
+<h3 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h3><p>一款轻量级、高性能的 Web 服务器/反向代理服务器，配合 PHP-FPM 能够得到更高的运行效率。</p>
+<h2 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h2><h3 id="FastDFS"><a href="#FastDFS" class="headerlink" title="FastDFS"></a>FastDFS</h3><p>开源的分布式文件系统，功能包括：文件存储、文件同步、文件访问（文件上传、文件下载）等，解决了大容量存储和负载均衡的问题。</p>
+<h2 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h2><h3 id="MariaDB"><a href="#MariaDB" class="headerlink" title="MariaDB"></a>MariaDB</h3><p>MariaDB数据库管理系统是 MySQL 的一个分支，主要由开源社区在维护，采用GPL授权许可 MariaDB的目的是完全兼容MySQL。</p>
+<p>使用 MariaDB 而不使用 MySQL 的原因是为了规避 Oracle 收购 MySQL 后协议变更导致的使用授权风险。</p>
+<h4 id="MyCat"><a href="#MyCat" class="headerlink" title="MyCat"></a>MyCat</h4><p>单表、单库无法应对大量数据，所以需要进行数据库的拆分，数据库集群使用 MyCat 进行分表、分库、联合查询处理。</p>
+<h2 id="NoSQL"><a href="#NoSQL" class="headerlink" title="NoSQL"></a>NoSQL</h2><h3 id="Elasticsearch"><a href="#Elasticsearch" class="headerlink" title="Elasticsearch"></a>Elasticsearch</h3><p>分布式的文档检索服务，可以提供文章页面的检索服务。</p>
+<p>由于 Elasticsearch 提供了 JSON 的数据查询和存储模式，能够实现很多 NoSQL 的特性，因此也会在 Elasticsearch 直接存储标签等数据。相比关系数据库可以提供更快的查询速度。</p>
+<p>各个模块的系统使用 Logstash 过滤日志存储到 Elasticsearch 中，使用 Kibana 进行查看，就是 ELK 日志处理方案。</p>
+<h3 id="CouchDB"><a href="#CouchDB" class="headerlink" title="CouchDB"></a>CouchDB</h3><p>使用 CouchDB 进行 Web 集群的 Session 共享。</p>
+<h3 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h3><p>提供了丰富的数据结构，可以在应用中执行各种缓存，分布式提供大量数据、高可用的服务。</p>
+<h2 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h2><h3 id="HaProxy"><a href="#HaProxy" class="headerlink" title="HaProxy"></a>HaProxy</h3><p>提供高可用性、负载均衡以及基于TCP（第四层）和HTTP（第七层）应用的代理。</p>
+<p>Redis 使用 HAProxy 实现分布式集群。</p>
+<h2 id="消息中间件"><a href="#消息中间件" class="headerlink" title="消息中间件"></a>消息中间件</h2><h3 id="Rabbit-MQ"><a href="#Rabbit-MQ" class="headerlink" title="Rabbit MQ"></a>Rabbit MQ</h3><ol>
+<li><p>耗时任务（视频转码，文档转换）需要发送到消息队列中，然后由大量的 Worker 进行处理，处理结果返回到消息队列中，或者持久化到数据库。</p>
+</li>
+<li><p>缓冲大量并发的访问，进行流量削峰。</p>
+</li>
+</ol>
+<h2 id="RPC"><a href="#RPC" class="headerlink" title="RPC"></a>RPC</h2><h3 id="Thrift"><a href="#Thrift" class="headerlink" title="Thrift"></a>Thrift</h3><p>高效、多语言的远程执行框架。</p>
+<h3 id="Yar"><a href="#Yar" class="headerlink" title="Yar"></a>Yar</h3><p>PHP 使用的并行化远程执行框架。</p>
+<h2 id="应用框架"><a href="#应用框架" class="headerlink" title="应用框架"></a>应用框架</h2><h3 id="Gearman"><a href="#Gearman" class="headerlink" title="Gearman"></a>Gearman</h3><p>把任务分发到不同的进程中处理，对工作进行并行化和负载均衡处理。</p>
+<h2 id="运维监控"><a href="#运维监控" class="headerlink" title="运维监控"></a>运维监控</h2><h3 id="Puppet"><a href="#Puppet" class="headerlink" title="Puppet"></a>Puppet</h3><p>自动化配置和管理工具，可以通过集群对大量的服务器进行管理。</p>
+<p>自动化运维系统中通过 Puppet 推送执行脚本到指定的服务器群组。</p>
+<h3 id="Cacti"><a href="#Cacti" class="headerlink" title="Cacti"></a>Cacti</h3><p>网络流量监控，rrdtool 生成图标。</p>
+<h3 id="Nagios"><a href="#Nagios" class="headerlink" title="Nagios"></a>Nagios</h3><ol>
+<li><p>监控系统、应用和交换机网络设备；</p>
+</li>
+<li><p>自定义监控规则；</p>
+</li>
+<li><p>插件提供邮件、短信、微信乃至电话的告警通知。</p>
+</li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-10-26T21:49:24.151Z" itemprop="dateUpdated">2019-10-27 05:49:24</time>
+</span><br>
+
+
+        
+        这里不可以写作者留言.
+        
+    </div>
+    <footer>
+        <a href="https://zh-h.github.io">
+            <img src="/img/avatar.jpg" alt="Zohar Hou">
+            Zohar Hou
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2017/08/10/2017/08/10/large-PHP-website-architecture/&title=《PHP大型网站的架构总结》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2017/08/10/2017/08/10/large-PHP-website-architecture/&title=《PHP大型网站的架构总结》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2017/08/10/2017/08/10/large-PHP-website-architecture/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《PHP大型网站的架构总结》 — Applehater&url=https://zh-h.github.io/2017/08/10/2017/08/10/large-PHP-website-architecture/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2017/08/10/2017/08/10/large-PHP-website-architecture/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/08/11/2017/08/11/kotlin-servlet/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Kotlin Servlet 示例</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/08/08/import-gitlab/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">// TODO 把 Gitlab 上的 Wiki 迁移过来</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'zh-h',
+            repo: 'zh-h.github.io.comment',
+            oauth: {
+                client_id: '3a6263282611b5518bd4',
+                client_secret: 'df06fc0681c7b83ceba630b8649f6cc80a0776ae',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+            <p>
+                
+                    <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+                    
+                        <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+            </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zohar Hou &copy; 2015 - 2019</span>
+            <span>
+                <a href="http://www.beian.gov.cn/portal/index" target="_blank">粤ICP备14081324号</a>
+            </span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2017/08/10/2017/08/10/large-PHP-website-architecture/&title=《PHP大型网站的架构总结》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2017/08/10/2017/08/10/large-PHP-website-architecture/&title=《PHP大型网站的架构总结》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2017/08/10/2017/08/10/large-PHP-website-architecture/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《PHP大型网站的架构总结》 — Applehater&url=https://zh-h.github.io/2017/08/10/2017/08/10/large-PHP-website-architecture/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2017/08/10/2017/08/10/large-PHP-website-architecture/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zh-h.github.io/2017/08/10/2017/08/10/large-PHP-website-architecture/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Look at me !';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Emmm ...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

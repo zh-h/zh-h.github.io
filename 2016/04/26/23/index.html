@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>PHP7 + Nginx installation and optimization on Ubuntu | Applehater | developer ? operator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#009999">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="1. 安装 Nginx1. 使用源123sudo add-apt-repository ppa:nginx/stable  sudo apt-get update  sudo apt-get upgrade nginx -y 2. 安装1sudo yum install nginx 3. 配置然后配置站点12345678910111213141516171819202122232425262728">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP7 + Nginx installation and optimization on Ubuntu">
+<meta property="og:url" content="https://zh-h.github.io/2016/04/26/23/index.html">
+<meta property="og:site_name" content="Applehater">
+<meta property="og:description" content="1. 安装 Nginx1. 使用源123sudo add-apt-repository ppa:nginx/stable  sudo apt-get update  sudo apt-get upgrade nginx -y 2. 安装1sudo yum install nginx 3. 配置然后配置站点12345678910111213141516171819202122232425262728">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2019-10-26T21:49:24.155Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP7 + Nginx installation and optimization on Ubuntu">
+<meta name="twitter:description" content="1. 安装 Nginx1. 使用源123sudo add-apt-repository ppa:nginx/stable  sudo apt-get update  sudo apt-get upgrade nginx -y 2. 安装1sudo yum install nginx 3. 配置然后配置站点12345678910111213141516171819202122232425262728">
+    
+        <link rel="alternate" type="application/atom+xml" title="Applehater" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zohar Hou</h5>
+          <a href="mailto:emguaEBvdXRsb29rLmNvbQ==" title="emguaEBvdXRsb29rLmNvbQ==" class="mail">emguaEBvdXRsb29rLmNvbQ==</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories/Java/"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-weibo"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/links"  >
+                <i class="icon icon-lg icon-link"></i>
+                Links
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zh-h" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">PHP7 + Nginx installation and optimization on Ubuntu</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">PHP7 + Nginx installation and optimization on Ubuntu</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-04-26T04:16:00.000Z" itemprop="datePublished" class="page-time">
+  2016-04-26
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/">PHP</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/调优/">调优</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/调优/配置/">配置</a></li></ul></li></ul></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#1-安装-Nginx"><span class="post-toc-number">1.</span> <span class="post-toc-text"><a href="#1-&#x5B89;&#x88C5;-Nginx" class="headerlink" title="1. &#x5B89;&#x88C5; Nginx"></a>1. &#x5B89;&#x88C5; Nginx</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-使用源"><span class="post-toc-number">1.1.</span> <span class="post-toc-text"><a href="#1-&#x4F7F;&#x7528;&#x6E90;" class="headerlink" title="1. &#x4F7F;&#x7528;&#x6E90;"></a>1. &#x4F7F;&#x7528;&#x6E90;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-安装"><span class="post-toc-number">1.2.</span> <span class="post-toc-text"><a href="#2-&#x5B89;&#x88C5;" class="headerlink" title="2. &#x5B89;&#x88C5;"></a>2. &#x5B89;&#x88C5;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3-配置"><span class="post-toc-number">1.3.</span> <span class="post-toc-text"><a href="#3-&#x914D;&#x7F6E;" class="headerlink" title="3. &#x914D;&#x7F6E;"></a>3. &#x914D;&#x7F6E;</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#2-安装-PHP7"><span class="post-toc-number">2.</span> <span class="post-toc-text"><a href="#2-&#x5B89;&#x88C5;-PHP7" class="headerlink" title="2. &#x5B89;&#x88C5; PHP7"></a>2. &#x5B89;&#x88C5; PHP7</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-添加源"><span class="post-toc-number">2.1.</span> <span class="post-toc-text"><a href="#1-&#x6DFB;&#x52A0;&#x6E90;" class="headerlink" title="1. &#x6DFB;&#x52A0;&#x6E90;"></a>1. &#x6DFB;&#x52A0;&#x6E90;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-安装-PHP7-和常用的扩展"><span class="post-toc-number">2.2.</span> <span class="post-toc-text"><a href="#2-&#x5B89;&#x88C5;-PHP7-&#x548C;&#x5E38;&#x7528;&#x7684;&#x6269;&#x5C55;" class="headerlink" title="2. &#x5B89;&#x88C5; PHP7 &#x548C;&#x5E38;&#x7528;&#x7684;&#x6269;&#x5C55;"></a>2. &#x5B89;&#x88C5; PHP7 &#x548C;&#x5E38;&#x7528;&#x7684;&#x6269;&#x5C55;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3-配置-PHP7"><span class="post-toc-number">2.3.</span> <span class="post-toc-text"><a href="#3-&#x914D;&#x7F6E;-PHP7" class="headerlink" title="3. &#x914D;&#x7F6E; PHP7"></a>3. &#x914D;&#x7F6E; PHP7</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#3-测试"><span class="post-toc-number">3.</span> <span class="post-toc-text"><a href="#3-&#x6D4B;&#x8BD5;" class="headerlink" title="3. &#x6D4B;&#x8BD5;"></a>3. &#x6D4B;&#x8BD5;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-使用cli"><span class="post-toc-number">3.1.</span> <span class="post-toc-text"><a href="#1-&#x4F7F;&#x7528;cli" class="headerlink" title="1. &#x4F7F;&#x7528;cli"></a>1. &#x4F7F;&#x7528;cli</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-使用-phpinfo"><span class="post-toc-number">3.2.</span> <span class="post-toc-text"><a href="#2-&#x4F7F;&#x7528;-phpinfo" class="headerlink" title="2. &#x4F7F;&#x7528; phpinfo"></a>2. &#x4F7F;&#x7528; phpinfo</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3-ab-对比"><span class="post-toc-number">3.3.</span> <span class="post-toc-text"><a href="#3-ab-&#x5BF9;&#x6BD4;" class="headerlink" title="3. ab &#x5BF9;&#x6BD4;"></a>3. ab &#x5BF9;&#x6BD4;</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-23"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">PHP7 + Nginx installation and optimization on Ubuntu</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-04-26 12:16:00" datetime="2016-04-26T04:16:00.000Z"  itemprop="datePublished">2016-04-26</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/">PHP</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/调优/">调优</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/调优/配置/">配置</a></li></ul></li></ul></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="1-安装-Nginx"><a href="#1-安装-Nginx" class="headerlink" title="1. 安装 Nginx"></a>1. 安装 Nginx</h1><h2 id="1-使用源"><a href="#1-使用源" class="headerlink" title="1. 使用源"></a>1. 使用源</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:nginx/stable  </span><br><span class="line">sudo apt-get update  </span><br><span class="line">sudo apt-get upgrade nginx -y</span><br></pre></td></tr></table></figure>
+<h2 id="2-安装"><a href="#2-安装" class="headerlink" title="2. 安装"></a>2. 安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install nginx</span><br></pre></td></tr></table></figure>
+<h2 id="3-配置"><a href="#3-配置" class="headerlink" title="3. 配置"></a>3. 配置</h2><p>然后配置站点<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80 ;</span><br><span class="line">    listen [::]:80  ipv6only=on;</span><br><span class="line"></span><br><span class="line">    root /usr/share/nginx/html/typecho;</span><br><span class="line">    index index.php index.html index.htm;</span><br><span class="line"></span><br><span class="line">    server_name applehater.cn;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        #if (-f $request_filename/index.html)&#123;</span><br><span class="line">        #    rewrite (.*) $1/index.html break;</span><br><span class="line">        #&#125;</span><br><span class="line">        #if (-f $request_filename/index.php)&#123;</span><br><span class="line">        #    rewrite (.*) $1/index.php;</span><br><span class="line">        #&#125;</span><br><span class="line">        #if (!-f $request_filename)&#123;</span><br><span class="line">        #    rewrite (.*) /index.php;</span><br><span class="line">        #&#125;</span><br><span class="line">        try_files $uri $uri/ /index.php?$query_string;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location ~ \.php$ &#123;</span><br><span class="line">        try_files $uri /index.php =404;</span><br><span class="line">        fastcgi_split_path_info ^(.+\.php)(/.+)$;</span><br><span class="line">        fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;</span><br><span class="line">        fastcgi_index index.php;</span><br><span class="line">        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;</span><br><span class="line">        include fastcgi_params;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="2-安装-PHP7"><a href="#2-安装-PHP7" class="headerlink" title="2. 安装 PHP7"></a>2. 安装 PHP7</h1><h2 id="1-添加源"><a href="#1-添加源" class="headerlink" title="1. 添加源"></a>1. 添加源</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install python-software-properties software-properties-common</span><br><span class="line"></span><br><span class="line">$ sudo add-apt-repository ppa:ondrej/php</span><br><span class="line"></span><br><span class="line">$ sudo apt-get update</span><br></pre></td></tr></table></figure>
+<h2 id="2-安装-PHP7-和常用的扩展"><a href="#2-安装-PHP7-和常用的扩展" class="headerlink" title="2. 安装 PHP7 和常用的扩展"></a>2. 安装 PHP7 和常用的扩展</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install php7.0-fpm php7.0-mysql php7.0-common php7.0-curl php7.0-cli php7.0-mcrypt php7.0-mbstring php7.0-dom</span><br></pre></td></tr></table></figure>
+<h2 id="3-配置-PHP7"><a href="#3-配置-PHP7" class="headerlink" title="3. 配置 PHP7"></a>3. 配置 PHP7</h2><p>去掉路径前缀，编辑<code>/etc/php/7.0/fpm/php.ini</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cgi.fix_pathinfo=0</span><br></pre></td></tr></table></figure></p>
+<p>启动服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo phpenmod mcrypt</span><br><span class="line"></span><br><span class="line">sudo service php7.0-fpm restart</span><br></pre></td></tr></table></figure></p>
+<h1 id="3-测试"><a href="#3-测试" class="headerlink" title="3. 测试"></a>3. 测试</h1><h2 id="1-使用cli"><a href="#1-使用cli" class="headerlink" title="1. 使用cli"></a>1. 使用cli</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">php -v</span><br><span class="line"></span><br><span class="line">PHP 7.0.5-3+donate.sury.org~trusty+1 (cli) ( NTS )</span><br><span class="line">Copyright (c) 1997-2016 The PHP Group</span><br><span class="line">Zend Engine v3.0.0, Copyright (c) 1998-2016 Zend Technologies</span><br><span class="line">    with Zend OPcache v7.0.6-dev, Copyright (c) 1999-2016, by Zend Technologies</span><br></pre></td></tr></table></figure>
+<h2 id="2-使用-phpinfo"><a href="#2-使用-phpinfo" class="headerlink" title="2. 使用 phpinfo"></a>2. 使用 phpinfo</h2><p>创建文件<code>/usr/share/nginx/html/typecho/info.php</code><br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">echo</span> phpinfo();</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>显示详细信息页面</p>
+<h2 id="3-ab-对比"><a href="#3-ab-对比" class="headerlink" title="3. ab 对比"></a>3. ab 对比</h2><p>这是<code>php5.6</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">Server Software:        nginx/1.8.1</span><br><span class="line">Server Hostname:        applehater.cn</span><br><span class="line">Server Port:            80</span><br><span class="line"></span><br><span class="line">Document Path:          /</span><br><span class="line">Document Length:        11494 bytes</span><br><span class="line"></span><br><span class="line">Concurrency Level:      1</span><br><span class="line">Time taken for tests:   3.321 seconds</span><br><span class="line">Complete requests:      100</span><br><span class="line">Failed requests:        0</span><br><span class="line">Total transferred:      1171500 bytes</span><br><span class="line">HTML transferred:       1149400 bytes</span><br><span class="line">Requests per second:    30.11 [#/sec] (mean)</span><br><span class="line">Time per request:       33.207 [ms] (mean)</span><br><span class="line">Time per request:       33.207 [ms] (mean, across all concurrent requests)</span><br><span class="line">Transfer rate:          344.52 [Kbytes/sec] received</span><br><span class="line"></span><br><span class="line">Connection Times (ms)</span><br><span class="line">              min  mean[+/-sd] median   max</span><br><span class="line">Connect:        0    0   0.0      0       0</span><br><span class="line">Processing:    30   33   1.9     33      39</span><br><span class="line">Waiting:       28   32   1.9     32      38</span><br><span class="line">Total:         30   33   2.0     33      39</span><br><span class="line"></span><br><span class="line">Percentage of the requests served within a certain time (ms)</span><br><span class="line">  50%     33</span><br><span class="line">  66%     33</span><br><span class="line">  75%     34</span><br><span class="line">  80%     35</span><br><span class="line">  90%     36</span><br><span class="line">  95%     38</span><br><span class="line">  98%     39</span><br><span class="line">  99%     39</span><br><span class="line"> 100%     39 (longest request)</span><br></pre></td></tr></table></figure></p>
+<p>更新到 <code>php7</code> 后<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">Server Software:        nginx/1.8.1</span><br><span class="line">Server Hostname:        applehater.cn</span><br><span class="line">Server Port:            80</span><br><span class="line"></span><br><span class="line">Document Path:          /</span><br><span class="line">Document Length:        11434 bytes</span><br><span class="line"></span><br><span class="line">Concurrency Level:      1</span><br><span class="line">Time taken for tests:   1.442 seconds</span><br><span class="line">Complete requests:      100</span><br><span class="line">Failed requests:        0</span><br><span class="line">Total transferred:      1161800 bytes</span><br><span class="line">HTML transferred:       1143400 bytes</span><br><span class="line">Requests per second:    69.34 [#/sec] (mean)</span><br><span class="line">Time per request:       14.421 [ms] (mean)</span><br><span class="line">Time per request:       14.421 [ms] (mean, across all concurrent requests)</span><br><span class="line">Transfer rate:          786.73 [Kbytes/sec] received</span><br><span class="line"></span><br><span class="line">Connection Times (ms)</span><br><span class="line">              min  mean[+/-sd] median   max</span><br><span class="line">Connect:        0    0   0.0      0       0</span><br><span class="line">Processing:    13   14   1.3     14      22</span><br><span class="line">Waiting:       13   14   1.1     14      22</span><br><span class="line">Total:         13   14   1.3     14      22</span><br><span class="line"></span><br><span class="line">Percentage of the requests served within a certain time (ms)</span><br><span class="line">  50%     14</span><br><span class="line">  66%     14</span><br><span class="line">  75%     15</span><br><span class="line">  80%     15</span><br><span class="line">  90%     15</span><br><span class="line">  95%     17</span><br><span class="line">  98%     20</span><br><span class="line">  99%     22</span><br><span class="line"> 100%     22 (longest request)</span><br></pre></td></tr></table></figure></p>
+<p>可见升级之后qps提高了130%，请求时间从33.207 ms下降到14.421 ms 减少了130% ！</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-10-26T21:49:24.155Z" itemprop="dateUpdated">2019-10-27 05:49:24</time>
+</span><br>
+
+
+        
+        这里不可以写作者留言.
+        
+    </div>
+    <footer>
+        <a href="https://zh-h.github.io">
+            <img src="/img/avatar.jpg" alt="Zohar Hou">
+            Zohar Hou
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2016/04/26/23/&title=《PHP7 + Nginx installation and optimization on Ubuntu》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2016/04/26/23/&title=《PHP7 + Nginx installation and optimization on Ubuntu》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2016/04/26/23/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《PHP7 + Nginx installation and optimization on Ubuntu》 — Applehater&url=https://zh-h.github.io/2016/04/26/23/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2016/04/26/23/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2016/04/26/24/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">PHP7 的响应速度是旧版本的 230%!</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/04/25/start/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">欢迎使用 Typecho</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'zh-h',
+            repo: 'zh-h.github.io.comment',
+            oauth: {
+                client_id: '3a6263282611b5518bd4',
+                client_secret: 'df06fc0681c7b83ceba630b8649f6cc80a0776ae',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+            <p>
+                
+                    <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+                    
+                        <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+            </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zohar Hou &copy; 2015 - 2019</span>
+            <span>
+                <a href="http://www.beian.gov.cn/portal/index" target="_blank">粤ICP备14081324号</a>
+            </span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2016/04/26/23/&title=《PHP7 + Nginx installation and optimization on Ubuntu》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2016/04/26/23/&title=《PHP7 + Nginx installation and optimization on Ubuntu》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2016/04/26/23/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《PHP7 + Nginx installation and optimization on Ubuntu》 — Applehater&url=https://zh-h.github.io/2016/04/26/23/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2016/04/26/23/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zh-h.github.io/2016/04/26/23/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Look at me !';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Emmm ...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

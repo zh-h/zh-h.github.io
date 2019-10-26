@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>SQL去重问题 | Applehater | developer ? operator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#009999">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="问题：前期开发的需求没有对某个数据表的某个字段进行唯一性校验，现在需要把有重复的数据行合并到一起， 并且重复数据中取ID最大的一条创建表123456CREATE TABLE `user` (	`id` INT(11) NOT NULL,	`username` VARCHAR(50) NULL DEFAULT NULL,	`email` VARCHAR(50) NULL DEFAULT NULL,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL去重问题">
+<meta property="og:url" content="https://zh-h.github.io/2015/07/10/34/index.html">
+<meta property="og:site_name" content="Applehater">
+<meta property="og:description" content="问题：前期开发的需求没有对某个数据表的某个字段进行唯一性校验，现在需要把有重复的数据行合并到一起， 并且重复数据中取ID最大的一条创建表123456CREATE TABLE `user` (	`id` INT(11) NOT NULL,	`username` VARCHAR(50) NULL DEFAULT NULL,	`email` VARCHAR(50) NULL DEFAULT NULL,">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2019-10-26T21:49:24.156Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SQL去重问题">
+<meta name="twitter:description" content="问题：前期开发的需求没有对某个数据表的某个字段进行唯一性校验，现在需要把有重复的数据行合并到一起， 并且重复数据中取ID最大的一条创建表123456CREATE TABLE `user` (	`id` INT(11) NOT NULL,	`username` VARCHAR(50) NULL DEFAULT NULL,	`email` VARCHAR(50) NULL DEFAULT NULL,">
+    
+        <link rel="alternate" type="application/atom+xml" title="Applehater" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zohar Hou</h5>
+          <a href="mailto:emguaEBvdXRsb29rLmNvbQ==" title="emguaEBvdXRsb29rLmNvbQ==" class="mail">emguaEBvdXRsb29rLmNvbQ==</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories/Java/"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-weibo"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/links"  >
+                <i class="icon icon-lg icon-link"></i>
+                Links
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zh-h" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">SQL去重问题</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">SQL去重问题</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2015-07-10T00:54:00.000Z" itemprop="datePublished" class="page-time">
+  2015-07-10
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/默认分类/">默认分类</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/默认分类/sql/">sql</a></li></ul></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#方法1"><span class="post-toc-number">1.</span> <span class="post-toc-text"><a href="#&#x65B9;&#x6CD5;1" class="headerlink" title="&#x65B9;&#x6CD5;1"></a>&#x65B9;&#x6CD5;1</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#MySQL-语句执行顺序"><span class="post-toc-number">2.</span> <span class="post-toc-text"><a href="#MySQL-&#x8BED;&#x53E5;&#x6267;&#x884C;&#x987A;&#x5E8F;" class="headerlink" title="MySQL &#x8BED;&#x53E5;&#x6267;&#x884C;&#x987A;&#x5E8F;"></a>MySQL &#x8BED;&#x53E5;&#x6267;&#x884C;&#x987A;&#x5E8F;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#注意项"><span class="post-toc-number">2.1.</span> <span class="post-toc-text"><a href="#&#x6CE8;&#x610F;&#x9879;" class="headerlink" title="&#x6CE8;&#x610F;&#x9879;"></a>&#x6CE8;&#x610F;&#x9879;</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分组聚合"><span class="post-toc-number">3.</span> <span class="post-toc-text"><a href="#&#x5206;&#x7EC4;&#x805A;&#x5408;" class="headerlink" title="&#x5206;&#x7EC4;&#x805A;&#x5408;"></a>&#x5206;&#x7EC4;&#x805A;&#x5408;</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-34"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">SQL去重问题</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2015-07-10 08:54:00" datetime="2015-07-10T00:54:00.000Z"  itemprop="datePublished">2015-07-10</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/默认分类/">默认分类</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/默认分类/sql/">sql</a></li></ul></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>问题：前期开发的需求没有对某个数据表的某个字段进行唯一性校验，现在需要把有重复的数据行合并到一起， 并且重复数据中取ID最大的一条<br>创建表<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`user`</span> (</span><br><span class="line">	<span class="string">`id`</span> <span class="built_in">INT</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">	<span class="string">`username`</span> <span class="built_in">VARCHAR</span>(<span class="number">50</span>) <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">	<span class="string">`email`</span> <span class="built_in">VARCHAR</span>(<span class="number">50</span>) <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">	PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<p>表中插入的数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">+----+----------+------------------+</span><br><span class="line">| id | username | email            |</span><br><span class="line">+----+----------+------------------+</span><br><span class="line">|  1 | zonghua  | zh.h@outlook.com |</span><br><span class="line">|  2 | lala     | zh.h@outlook.com |</span><br><span class="line">|  3 | yoyo     | yoyo@outlook.com |</span><br><span class="line">|  4 | coco     | coco@outlook.com |</span><br><span class="line">+----+----------+------------------+</span><br></pre></td></tr></table></figure></p>
+<p>表中的第一和第二行的email重复，在使用emial确定唯一身份的情况下，去掉第一行或者第二行。</p>
+<h2 id="方法1"><a href="#方法1" class="headerlink" title="方法1"></a>方法1</h2><ol>
+<li>把用户表按照email分组（或者组合其他条件分组）取每组id最大的id；</li>
+<li>把原来用户表左关联到id最大的虚拟表，即b；</li>
+<li>关联后右边没有的id就是两表的差集，即重复email但id不是最大的行；</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> a.id <span class="keyword">from</span> <span class="string">`user`</span> a <span class="keyword">left</span> <span class="keyword">join</span> (</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">max</span>(<span class="keyword">id</span>) <span class="keyword">as</span> <span class="string">`id`</span>, email <span class="keyword">from</span> <span class="string">`user`</span> <span class="keyword">group</span> <span class="keyword">by</span> email)  b <span class="keyword">on</span> a.id = b.id </span><br><span class="line"><span class="keyword">where</span> <span class="keyword">isnull</span>(b.id)</span><br></pre></td></tr></table></figure>
+<p>或者直接用in查询；</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">id</span> <span class="keyword">from</span> <span class="string">`user`</span> <span class="keyword">where</span> <span class="keyword">id</span> <span class="keyword">not</span> <span class="keyword">in</span>(</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">id</span> <span class="keyword">from</span> (</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">max</span>(<span class="keyword">id</span>) <span class="keyword">id</span>, email <span class="keyword">from</span> <span class="string">`user`</span> <span class="keyword">group</span> <span class="keyword">by</span> email) <span class="keyword">as</span> b</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>得到。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+----+----------+------------------+</span><br><span class="line">| id | username | email            |</span><br><span class="line">+----+----------+------------------+</span><br><span class="line">|  1 | zonghua  | zh.h@outlook.com |</span><br><span class="line">+----+----------+------------------+</span><br></pre></td></tr></table></figure></p>
+<p>把重复数据id存入临时表；</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> temp_user <span class="keyword">as</span>  (</span><br><span class="line"><span class="keyword">select</span> a.id <span class="keyword">from</span> <span class="string">`user`</span> a <span class="keyword">left</span> <span class="keyword">join</span> (</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">max</span>(<span class="keyword">id</span>) <span class="keyword">as</span> <span class="string">`id`</span>, email <span class="keyword">from</span> <span class="string">`user`</span> <span class="keyword">group</span> <span class="keyword">by</span> email)  b <span class="keyword">on</span> a.id = b.id </span><br><span class="line"><span class="keyword">where</span> <span class="keyword">isnull</span>(b.id)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>然后删除；</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> <span class="string">`user`</span> <span class="keyword">where</span> <span class="keyword">id</span> <span class="keyword">in</span> (<span class="keyword">select</span> <span class="keyword">id</span> <span class="keyword">from</span> <span class="string">`temp_user`</span>)</span><br></pre></td></tr></table></figure>
+<p>结果。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+----+----------+------------------+</span><br><span class="line">| id | username | email            |</span><br><span class="line">+----+----------+------------------+</span><br><span class="line">|  2 | lala     | zh.h@outlook.com |</span><br><span class="line">|  3 | yoyo     | yoyo@outlook.com |</span><br><span class="line">|  4 | coco     | coco@outlook.com |</span><br><span class="line">+----+----------+------------------+</span><br></pre></td></tr></table></figure>
+<h2 id="MySQL-语句执行顺序"><a href="#MySQL-语句执行顺序" class="headerlink" title="MySQL 语句执行顺序"></a>MySQL 语句执行顺序</h2><ol>
+<li>FORM: 对FROM的左边的表和右边的表计算笛卡尔积。产生虚表VT1</li>
+<li>ON: 对虚表VT1进行ON筛选，只有那些符合<join-condition>的行才会被记录在虚表VT2中。</join-condition></li>
+<li>JOIN： 如果指定了OUTER JOIN（比如left join、 right join），那么保留表中未匹配的行就会作为外部行添加到虚拟表VT2中，产生虚拟表VT3, rug from子句中包含两个以上的表的话，那么就会对上一个join连接产生的结果VT3和下一个表重复执行步骤1~3这三个步骤，一直到处理完所有的表为止。</li>
+<li>WHERE： 对虚拟表VT3进行WHERE条件过滤。只有符合<where-condition>的记录才会被插入到虚拟表VT4中。</where-condition></li>
+<li>GROUP BY: 根据group by子句中的列，对VT4中的记录进行分组操作，产生VT5.</li>
+<li>CUBE | ROLLUP: 对表VT5进行cube或者rollup操作，产生表VT6.</li>
+<li>HAVING： 对虚拟表VT6应用having过滤，只有符合<having-condition>的记录才会被 插入到虚拟表VT7中。</having-condition></li>
+<li>SELECT： 执行select操作，选择指定的列，插入到虚拟表VT8中。</li>
+<li>DISTINCT： 对VT8中的记录进行去重。产生虚拟表VT9.</li>
+<li>ORDER BY: 将虚拟表VT9中的记录按照<order_by_list>进行排序操作，产生虚拟表VT10.</order_by_list></li>
+<li>LIMIT：取出指定行的记录，产生虚拟表VT11, 并将结果返回。</li>
+</ol>
+<h3 id="注意项"><a href="#注意项" class="headerlink" title="注意项"></a>注意项</h3><p><strong>1. distinct的唯一是select所有字段的组合条件</strong><br><strong>2. group by 条件必须在 select 里面</strong><br><strong>3. 先group by后order by</strong><br><strong>4. exist是做真值判断，in是形成虚拟表</strong><br><strong>5. in后面只能有一个字段</strong></p>
+<h2 id="分组聚合"><a href="#分组聚合" class="headerlink" title="分组聚合"></a>分组聚合</h2><p>分组统计具有同名部门的部门名称+ID、员工总数、最低薪水、最高薪水、薪水总计。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">concat</span>(d.name, <span class="string">'-'</span>,d.id), <span class="keyword">count</span>(u.id), <span class="keyword">min</span>(u.salary), <span class="keyword">max</span>(u.salary), <span class="keyword">sum</span>(u.salary)</span><br><span class="line"><span class="keyword">from</span> <span class="string">`department`</span> d <span class="keyword">left</span> <span class="keyword">join</span> <span class="string">`user`</span> u <span class="keyword">on</span> d.id = u.department_id</span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span> d.id, d.name</span><br></pre></td></tr></table></figure>
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-10-26T21:49:24.156Z" itemprop="dateUpdated">2019-10-27 05:49:24</time>
+</span><br>
+
+
+        
+        这里不可以写作者留言.
+        
+    </div>
+    <footer>
+        <a href="https://zh-h.github.io">
+            <img src="/img/avatar.jpg" alt="Zohar Hou">
+            Zohar Hou
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2015/07/10/34/&title=《SQL去重问题》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2015/07/10/34/&title=《SQL去重问题》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2015/07/10/34/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《SQL去重问题》 — Applehater&url=https://zh-h.github.io/2015/07/10/34/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2015/07/10/34/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2015/08/16/22/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Hello World ! golang 并没有 while true, do while 语法</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2014/08/18/8/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">比尔·盖茨：苹果只为牟利，比特币大有前途，Office是人类的希望</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'zh-h',
+            repo: 'zh-h.github.io.comment',
+            oauth: {
+                client_id: '3a6263282611b5518bd4',
+                client_secret: 'df06fc0681c7b83ceba630b8649f6cc80a0776ae',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+            <p>
+                
+                    <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+                    
+                        <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+            </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zohar Hou &copy; 2015 - 2019</span>
+            <span>
+                <a href="http://www.beian.gov.cn/portal/index" target="_blank">粤ICP备14081324号</a>
+            </span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2015/07/10/34/&title=《SQL去重问题》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2015/07/10/34/&title=《SQL去重问题》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2015/07/10/34/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《SQL去重问题》 — Applehater&url=https://zh-h.github.io/2015/07/10/34/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2015/07/10/34/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zh-h.github.io/2015/07/10/34/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Look at me !';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Emmm ...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

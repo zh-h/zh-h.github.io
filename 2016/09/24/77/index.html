@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Java 的正则工具使用 | Applehater | developer ? operator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#009999">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="先来欣赏一下符合 rfc5322 标准的 Email 格式正则1(?:[a-z0-9!#$%&amp;amp;&amp;apos;*+/=?^_`&amp;#123;|&amp;#125;~-]+(?:\.[a-z0-9!#$%&amp;amp;&amp;apos;*+/=?^_`&amp;#123;|&amp;#125;~-]+)*|&amp;quot;(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 的正则工具使用">
+<meta property="og:url" content="https://zh-h.github.io/2016/09/24/77/index.html">
+<meta property="og:site_name" content="Applehater">
+<meta property="og:description" content="先来欣赏一下符合 rfc5322 标准的 Email 格式正则1(?:[a-z0-9!#$%&amp;amp;&amp;apos;*+/=?^_`&amp;#123;|&amp;#125;~-]+(?:\.[a-z0-9!#$%&amp;amp;&amp;apos;*+/=?^_`&amp;#123;|&amp;#125;~-]+)*|&amp;quot;(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2019-10-26T21:49:24.159Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 的正则工具使用">
+<meta name="twitter:description" content="先来欣赏一下符合 rfc5322 标准的 Email 格式正则1(?:[a-z0-9!#$%&amp;amp;&amp;apos;*+/=?^_`&amp;#123;|&amp;#125;~-]+(?:\.[a-z0-9!#$%&amp;amp;&amp;apos;*+/=?^_`&amp;#123;|&amp;#125;~-]+)*|&amp;quot;(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[">
+    
+        <link rel="alternate" type="application/atom+xml" title="Applehater" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zohar Hou</h5>
+          <a href="mailto:emguaEBvdXRsb29rLmNvbQ==" title="emguaEBvdXRsb29rLmNvbQ==" class="mail">emguaEBvdXRsb29rLmNvbQ==</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories/Java/"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-weibo"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/links"  >
+                <i class="icon icon-lg icon-link"></i>
+                Links
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zh-h" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Java 的正则工具使用</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Java 的正则工具使用</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-09-24T03:03:00.000Z" itemprop="datePublished" class="page-time">
+  2016-09-24
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/正则/">正则</a></li></ul></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Matcher"><span class="post-toc-number">1.</span> <span class="post-toc-text"><a href="#Matcher" class="headerlink" title="Matcher"></a>Matcher</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#晕乎乎的-PHP-是这样写的"><span class="post-toc-number">2.</span> <span class="post-toc-text"><a href="#&#x6655;&#x4E4E;&#x4E4E;&#x7684;-PHP-&#x662F;&#x8FD9;&#x6837;&#x5199;&#x7684;" class="headerlink" title="&#x6655;&#x4E4E;&#x4E4E;&#x7684; PHP &#x662F;&#x8FD9;&#x6837;&#x5199;&#x7684;"></a>&#x6655;&#x4E4E;&#x4E4E;&#x7684; PHP &#x662F;&#x8FD9;&#x6837;&#x5199;&#x7684;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#纠缠到-Python-是这样的"><span class="post-toc-number">3.</span> <span class="post-toc-text"><a href="#&#x7EA0;&#x7F20;&#x5230;-Python-&#x662F;&#x8FD9;&#x6837;&#x7684;" class="headerlink" title="&#x7EA0;&#x7F20;&#x5230; Python &#x662F;&#x8FD9;&#x6837;&#x7684;"></a>&#x7EA0;&#x7F20;&#x5230; Python &#x662F;&#x8FD9;&#x6837;&#x7684;</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-77"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Java 的正则工具使用</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-09-24 11:03:00" datetime="2016-09-24T03:03:00.000Z"  itemprop="datePublished">2016-09-24</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/正则/">正则</a></li></ul></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>先来欣赏一下符合 <a href="http://www.ietf.org/rfc/rfc5322.txt" target="_blank" rel="noopener">rfc5322</a> 标准的 Email 格式正则<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(?:[a-z0-9!#$%&amp;&apos;*+/=?^_`&#123;|&#125;~-]+(?:\.[a-z0-9!#$%&amp;&apos;*+/=?^_`&#123;|&#125;~-]+)*|&quot;(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*&quot;)@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.)&#123;3&#125;(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])</span><br></pre></td></tr></table></figure></p>
+<h2 id="Matcher"><a href="#Matcher" class="headerlink" title="Matcher"></a>Matcher</h2><p>检查用户名和密码，只能由数字和字母构成，长度4到8位。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public class CheckAuthInfo &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        D.d(checkAuthInfo(&quot;fWlj23&quot;));</span><br><span class="line">        D.d(checkAuthInfo(&quot;)*&amp;^^*sdhf232&quot;));</span><br><span class="line">        D.d(checkAuthInfo(&quot;哈哈哈哈&quot;));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static boolean checkAuthInfo(String field)&#123;</span><br><span class="line">        // 字符串里的 \ 要转义，包含字符例如 （ 的时候要 \\( 转义使用</span><br><span class="line">        Pattern userInfoPattern = Pattern.compile(&quot;^[\\w|\\d]&#123;4,8&#125;$&quot;); </span><br><span class="line">        Matcher matcher = userInfoPattern.matcher(field);</span><br><span class="line">        // 如果没有找到而使用 group 方法会导致异常，group 按照 （） 分组捕获</span><br><span class="line">        return matcher.find(); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>输出<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">true</span><br><span class="line">false</span><br><span class="line">false</span><br></pre></td></tr></table></figure></p>
+<p><a href="http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/8u40-b25/java/util/regex/Pattern.java?av=f" target="_blank" rel="noopener">Java regex API</a></p>
+<p>用的东西杂了，就会经常把符号弄混，之前手写代码竟然写成了 <code>^(\w|\d)[4,8]$</code> 错得很是尴尬</p>
+<h2 id="晕乎乎的-PHP-是这样写的"><a href="#晕乎乎的-PHP-是这样写的" class="headerlink" title="晕乎乎的 PHP 是这样写的"></a>晕乎乎的 PHP 是这样写的</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$regex = &apos;/^http:\/\/([\w.]+)\/([\w]+)\/([\w]+)\.html$/i&apos;; // / 符号要反转义</span><br><span class="line">$str = &apos;http://applehater.cn&apos;;</span><br><span class="line">$matches = array();</span><br><span class="line">if(preg_match($regex, $str, $matches))&#123;</span><br><span class="line">    var_dump($matches);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="纠缠到-Python-是这样的"><a href="#纠缠到-Python-是这样的" class="headerlink" title="纠缠到 Python 是这样的"></a>纠缠到 Python 是这样的</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 用 r 修饰的字符串直接就是正则对象，也不用像 Java 一样转义</span><br><span class="line">m = re.match(r&quot;(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)&quot;, &apos;admin@applehater.cn&apos;)</span><br><span class="line">print m.group() // 如果没有找到就返回 None ， Java 这样用会抛出异常的</span><br></pre></td></tr></table></figure>
+<p><a href="https://docs.python.org/3/library/re.html?highlight=regex#re.regex.pattern" target="_blank" rel="noopener">Python re.regex.pattern API</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-10-26T21:49:24.159Z" itemprop="dateUpdated">2019-10-27 05:49:24</time>
+</span><br>
+
+
+        
+        这里不可以写作者留言.
+        
+    </div>
+    <footer>
+        <a href="https://zh-h.github.io">
+            <img src="/img/avatar.jpg" alt="Zohar Hou">
+            Zohar Hou
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2016/09/24/77/&title=《Java 的正则工具使用》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2016/09/24/77/&title=《Java 的正则工具使用》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2016/09/24/77/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java 的正则工具使用》 — Applehater&url=https://zh-h.github.io/2016/09/24/77/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2016/09/24/77/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2016/09/26/78/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Jetty 路径差异 Tomcat</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/09/23/76/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">BIO AIO NIO</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'zh-h',
+            repo: 'zh-h.github.io.comment',
+            oauth: {
+                client_id: '3a6263282611b5518bd4',
+                client_secret: 'df06fc0681c7b83ceba630b8649f6cc80a0776ae',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+            <p>
+                
+                    <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+                    
+                        <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+            </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zohar Hou &copy; 2015 - 2019</span>
+            <span>
+                <a href="http://www.beian.gov.cn/portal/index" target="_blank">粤ICP备14081324号</a>
+            </span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2016/09/24/77/&title=《Java 的正则工具使用》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2016/09/24/77/&title=《Java 的正则工具使用》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2016/09/24/77/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java 的正则工具使用》 — Applehater&url=https://zh-h.github.io/2016/09/24/77/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2016/09/24/77/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zh-h.github.io/2016/09/24/77/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Look at me !';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Emmm ...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

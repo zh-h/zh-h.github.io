@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>802.1x客户端 Openwrt LuCI 开发 | Applehater | developer ? operator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#009999">
+    
+    
+    <meta name="keywords" content="Linux,lua,openwrt">
+    <meta name="description" content="[*] Client: Start. [1] Server: Request Notification![1] Client: Response Notification.[2] Server: Request Identity![2] Client: Response Identity.[3] Server: Request MD5-Challenge![3] Client: Response">
+<meta name="keywords" content="Linux,lua,openwrt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="802.1x客户端 Openwrt LuCI 开发">
+<meta property="og:url" content="https://zh-h.github.io/2015/10/03/10/index.html">
+<meta property="og:site_name" content="Applehater">
+<meta property="og:description" content="[*] Client: Start. [1] Server: Request Notification![1] Client: Response Notification.[2] Server: Request Identity![2] Client: Response Identity.[3] Server: Request MD5-Challenge![3] Client: Response">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="http://applehater.cn/usr/uploads/2016/04/2040003621.png">
+<meta property="og:image" content="http://applehater.cn/usr/uploads/2016/04/3704091219.png">
+<meta property="og:image" content="http://applehater.cn/usr/uploads/2016/04/3824900447.png">
+<meta property="og:image" content="http://applehater.cn/usr/uploads/2016/04/1509506759.png">
+<meta property="og:image" content="http://applehater.cn/usr/uploads/2016/04/421157550.png">
+<meta property="og:image" content="http://applehater.cn/usr/uploads/2016/04/2732519726.png">
+<meta property="og:image" content="http://applehater.cn/usr/uploads/2016/04/3092905004.png">
+<meta property="og:image" content="http://applehater.cn/usr/uploads/2016/04/2732519726.png">
+<meta property="og:updated_time" content="2019-10-26T21:49:24.150Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="802.1x客户端 Openwrt LuCI 开发">
+<meta name="twitter:description" content="[*] Client: Start. [1] Server: Request Notification![1] Client: Response Notification.[2] Server: Request Identity![2] Client: Response Identity.[3] Server: Request MD5-Challenge![3] Client: Response">
+<meta name="twitter:image" content="http://applehater.cn/usr/uploads/2016/04/2040003621.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Applehater" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zohar Hou</h5>
+          <a href="mailto:emguaEBvdXRsb29rLmNvbQ==" title="emguaEBvdXRsb29rLmNvbQ==" class="mail">emguaEBvdXRsb29rLmNvbQ==</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories/Java/"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-weibo"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/links"  >
+                <i class="icon icon-lg icon-link"></i>
+                Links
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zh-h" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">802.1x客户端 Openwrt LuCI 开发</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">802.1x客户端 Openwrt LuCI 开发</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2015-10-03T06:35:00.000Z" itemprop="datePublished" class="page-time">
+  2015-10-03
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#8021x"><span class="post-toc-number">1.</span> <span class="post-toc-text">802.1x</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#openwrt"><span class="post-toc-number">2.</span> <span class="post-toc-text">Openwrt</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#"><span class="post-toc-number">3.</span> <span class="post-toc-text">&#x4ECE;&#x6E90;&#x7801;&#x7F16;&#x8BD1;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#"><span class="post-toc-number">4.</span> <span class="post-toc-text">&#x5237;&#x56FA;&#x4EF6;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#"><span class="post-toc-number">5.</span> <span class="post-toc-text">&#x5B89;&#x88C5;&#x8F6F;&#x4EF6;&#x5305;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#"><span class="post-toc-number">6.</span> <span class="post-toc-text">&#x5B9E;&#x73B0;&#x8FDE;&#x63A5;&#x65E5;&#x5FD7;&#x67E5;&#x770B;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#"><span class="post-toc-number">7.</span> <span class="post-toc-text">&#x66F4;&#x65B0;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#"><span class="post-toc-number">7.1.</span> <span class="post-toc-text">&#x8C03;&#x6574;&#x542F;&#x52A8;&#x6B21;&#x5E8F;</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-10"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">802.1x客户端 Openwrt LuCI 开发</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2015-10-03 14:35:00" datetime="2015-10-03T06:35:00.000Z"  itemprop="datePublished">2015-10-03</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p><pre><code class="language-shell">[*] Client: Start.</code></pre></p>
+<p>[1] Server: Request Notification!<br>[1] Client: Response Notification.<br>[2] Server: Request Identity!<br>[2] Client: Response Identity.<br>[3] Server: Request MD5-Challenge!<br>[3] Client: Response MD5-Challenge.<br>[4] Server: (H3C private data)<br>[4] Server: Success.<br></p>
+<p></p><h2 id="8021x">802.1x</h2><p></p>
+<p><blockquote></blockquote></p>
+<p>目前国内很多大学的校园网安装了基于802.1X认证协议的设备，但是包括华为、实达、锐捷、中兴、星空急速等在内的几家公司全都不提供802.1X客户端的Linux版本，而且…</p><br><br><p>以上是Ubuntu中文wiki发现的坏消息,好在出现了同学们分析协议（<a href="http://www.cnblogs.com/bitpeach/p/4092806.html" target="_blank" rel="noopener">iNode协议逆向研究初步入门by tsy</a>），重写移植的客户端，方便了我们的学(zhe)习（teng）</p><br><p>伟大的802.1x开源客户端项目</p><br><p>1、 <a href="http://sourceforge.net/projects/njit8021xclient/files/" target="_blank" rel="noopener">njit8021xclient</a> <br> 2、 <a href="http://sourceforge.net/projects/h3cclient/" target="_blank" rel="noopener">H3C 802.1x Compatible Client</a></p><br><h2 id="openwrt">Openwrt</h2><br><blockquote><br><p>openwrt是嵌入式设备上运行的linux系统。 OpenWrt 的文件系统是可写的，开发者无需在每一次修改后重新编译， <br> 令它更像一个小型的 Linux 电脑系统，也加快了开发速度。 你会发现无论是 ARM, PowerPC 或 MIPS 的处理器，都有很好的支持。 并且附带3000左右的软件包，用户可以方便的自定义功能来制作固件。 也可以方便的移植各类功能到openwrt下。</p><br></blockquote><br><h2 id="">从源码编译</h2><br><p><strong>njit-client on openwrt</strong></p><br><p><a href="http://www.7forz.com/1973/" target="_blank" rel="noopener">【详细教程】编译openwrt + njit-client 1.3，通过iNode认证 </a></p><br><p><a href="http://talk.withme.me/?p=115" target="_blank" rel="noopener">njit-client在Openwrt平台交叉编译安装傻瓜化步骤(图文)</a></p><br><p><a href="https://github.com/nanpuyue/OH3C/wiki/2.-OH3C%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B" target="_blank" rel="noopener">H3C 802.1x Client For OpenWrt 用于OpenWrt的H3C 802.1x认证客户端</a></p><br><p><a href="http://wiki.ubuntu.org.cn/UbuntuHelp:OpenSSL/zh" target="_blank" rel="noopener">解决编译过程中的openssl动态链接库问题</a></p><br><h2 id="">刷固件</h2><br><p>我有一个精简的hg255d固件，安装完后还有11.MB的空间，方便以后再折腾更多的软件。</p><br><p>lintel的u-boot，网线连接，清空浏览器缓存（防止自动跳转），按下复位键(Rest)再开机，稍等连上电脑出现连接图标，打开<code>192.168.1.1</code>便出现以下界面。</p><br><p><img src="http://applehater.cn/usr/uploads/2016/04/2040003621.png" alt="hg255"></p><br><p>然后就按部就班选择固件，点升级，自动刷入重启，几分钟后就能重新连上。</p><br><p><img src="http://applehater.cn/usr/uploads/2016/04/3704091219.png" alt="hg255"></p><br><p>默认密码登陆，按照提示设置好ssh密码，<code>network&gt;interface&gt;WAN&gt;Edit&gt;Advance Setting&gt;Override MAC address</code>设置lan覆盖MAC</p><br><h2 id="">安装软件包</h2><br><p>附件里有编译好的客户端<code>luci-app-x3c8021x<strong>ramips.ipk</strong></code> 和依赖包<code>libpcap_1.5.3-1_ramips_24kec.ipk</code></p><br><p>以上软件包均仅支持ramips的cpu，hg255d的r302t在支持范围内。</p><br><p>使用WinSCP的SCP模式连接路由器，将两个软件包上传到<code>/root/</code>目录</p><br><p><img src="http://applehater.cn/usr/uploads/2016/04/3824900447.png" alt="802.1x"></p><br><p>使用快捷键<code>Crtl+P</code>打开PuTTy，ssh登陆，然后使用以下命令按顺序安装软件。</p><br><pre><code class="language-shell">opkg install libpcap_1.5.3-1_ramips_24kec.ipk<br>opkg install luci-app-x3c8021xramips.ipk<br></code></pre><br><p>如果安装的时候出现提示架构不兼容的情况，按照以下配置使得opkg可以兼容安装。 编辑<code>\etc\opkg.conf</code>在文件末尾添加</p><br><pre><code class="language-txt">arch all 100<br>arch ralink 200<br>arch ramips 300<br>arch ramips<em>24kec 400<br></em></code></pre><br><p><img src="http://applehater.cn/usr/uploads/2016/04/1509506759.png" alt="inode"></p><br><p>至此安装完成，重启路由器，在<code>network&gt;x3c8021x</code>便可打开设置页面，以下是我的配置，实际使用新版密钥，可以兼容inode 7.0</p><br><p><img src="http://applehater.cn/usr/uploads/2016/04/421157550.png" alt="inode"></p><br><h2 id="">实现连接日志查看</h2><br><p>LuCI采用了MVC三层架构，同时其使用Lua脚本开发，所以开发LuCI的配置界面不需要编辑任何的Html代码，如果不需要修改视图(view),就不用涉及其他层面。</p><br><p><a href="http://luci.subsignal.org/api/luci/modules/luci.sys.html#exec" target="_blank" rel="noopener">Luci的API文档</a></p><br><pre><code class="language-lua">entry(path, target, title=nil, order=nil)<br></code></pre><br><p>第一个参数是访问的路径，例如<code>{“test”, “hehe”, “2333”}</code>就可以在<code><a href="http://192.168.1.1/cgi-bin/luci/test/hehe/2333" target="_blank" rel="noopener">http://192.168.1.1/cgi-bin/luci/test/hehe/2333</a></code>访问，在后台添加就需要类似<code>{“admin”, “status”, “syslog”}</code>的参数，在status-&gt;syslog里面显示菜单。</p><br><p>第二个参数是目标，有三种</p><br><ol><br><li>直接制定函数，使用call(function)</li><br><li>访问指定的页面例如<code>template(“myapp/index”)</code>直接访问<code>/usr/lib/lua/luci/view/myapp/index.html</code></li><br><li>调用模块，使用<code>cbi(“myapp/index”)</code>调用<code>`/usr/lib/lua/luci/model/cbi/myapp/index.lua</code>在这个模块再分发各种请求</li><br></ol><br><p>其他两个参数显而易懂，一个显示名称，一个显示次序（非必需）。</p><br><p>照着葫芦画瓢，参考文档在控<a href="http://luci.subsignal.org/trac/wiki/Documentation/ModulesHowTo" target="_blank" rel="noopener">luci wiki</a>制器<code>/usr/lib/lua/luci/controller/admin/status.lua</code>中尝试着添加这么一个一个入口.</p><br><pre><code class="language-lua">function index()<br>    entry({“admin”, “status”}, alias(“admin”, “status”, “overview”), (“Status”), 20).index = true<br>    entry({“admin”, “status”, “overview”}, template(“admin<em>status/index”), </em>(“Overview”), 1)<br>    entry({“admin”, “status”, “iptables”}, call(“action<em>iptables”), </em>(“Firewall”), 2).leaf = true<br>    entry({“admin”, “status”, “routes”}, template(“admin<em>status/routes”), </em>(“Routes”), 3)<br>    entry({“admin”, “status”, “syslog”}, call(“action<em>syslog”), </em>(“System Log”), 4)<br>    entry({“admin”, “status”, “dmesg”}, call(“action<em>dmesg”), </em>(“Kernel Log”), 5)<br>    entry({“admin”, “status”, “processes”}, cbi(“admin<em>status/processes”), </em>(“Processes”), 6)<br>    entry({“admin”, “status”, “x3c8021x”}, call(“x3c8021x<em>log”), </em>(“x3c8021x”), 7)<br><br>    –[[entry({“admin”, “status”, “realtime”}, alias(“admin”, “status”, “realtime”, “load”), _(“Realtime Graphs”), 7)]]–<br><br>–[[省略一段代码,lua的行注释好像就是这么用吧]]–<br>end<br></code></pre><br><p>call(function)引用声明的一个函数</p><br><pre><code class="language-lua">function action_syslog()<br>    local syslog = luci.sys.syslog()<br>    luci.template.render(“admin_status/syslog”, {syslog=syslog})<br>end<br>–[[照着葫芦画瓢，exec(command)执行一段shell命令，并将命令输出的结果作为返回值返回，依此我们得到日志文件的内容啦，当然根据MVC思想，照样使用原来的视图模板]]–<br>function x3c8021x_log()<br>    local x3clog=exec(“cat /tmp/log/x3c8021x.log”)<br>    luci.template.render(“admin_status/syslog”, {syslog=x3clog})<br>end<br></code></pre><br><p>因为Luci是随机启动的，接下来需要重启路由使得修改生效， 不过运行的时候出现了问题，这是一个空函数。</p><br><pre><code class="language-shell">/usr/lib/lua/luci/dispatcher.lua:448: Failed to execute call dispatcher target for entry ‘/admin/status/x3c8021x’.<br>The called action terminated with an exception:<br>/usr/lib/lua/luci/controller/admin/status.lua:56: attempt to call global ‘exec’ (a nil value)<br>stack traceback:<br>    [C]: in function ‘assert’<br>    /usr/lib/lua/luci/dispatcher.lua:448: in function ‘dispatch’<br>    /usr/lib/lua/luci/dispatcher.lua:195: in function &lt;/usr/lib/lua/luci/dispatcher.lua:194&gt;<br></code></pre><br><p>所以使用函数的时候需要加上模块名</p><br><pre><code class="language-lua">local x3clog=luci.util.exec(“cat /tmp/log/x3c8021x.log”)<br></code></pre><br><p>重启的时候正好出现不能启动连接的问题，在页面重启之后就看到了日志记录的过程</p><br><p><img src="http://applehater.cn/usr/uploads/2016/04/2732519726.png" alt="log"></p><br><p>接下来要在X3C8021x的页面添加日志查看的链接<code>\usr\lib\lua\luci\model\cbi\x3c8021x.lua</code>照葫芦画瓢，添加一个分部，section是和配置文件映射的，所以只能继续沿用。</p><br><pre><code class="language-lua">s = m:section(TypedSection, “adv_set”, translate(“Log”))<br>s.anonymous = true<br><br>l = s:option(Value, “log”, translate(“Auth Log”))<br>l.template = “x3c8012x”<br>l.nocreate = true<br></code></pre><br><p>在<code>\usr\lib\lua\luci\view\</code>添加一个<code>x3c8012x.html</code>视图模板, 视图模板也有执行脚本，所以模型(model)调用的时候也能处理显示数据</p><br><pre><code class="language-html">&lt;div&gt;<br><br>&lt;pre&gt;<br>        …&lt;%=luci.util.exec(“tail -n 20 /tmp/log/x3c8021x.log”) %&gt;<br>&lt;!– tail 是常用的linux命令， tail -n [num]显示文件指定倒数行数的文字 –&gt;<br>      &lt;/pre&gt;<br>    &lt;/div&gt;<br>&lt;a class=”cbi-button” href=””&gt;Refresh&lt;/a&gt;<br></code></pre><br><p>从此页面可以显示刷新日志信息，关于什么json，实时显示什么的以后再完善吧</p><br><p><img src="http://applehater.cn/usr/uploads/2016/04/3092905004.png" alt="802.1x"></p><br><h2 id="">更新</h2><br><h3 id="">调整启动次序</h3><br><p>重启路由器的时候，还没有获取到MAC就启动x3cilent就会出现问题。</p><br><p><img src="http://applehater.cn/usr/uploads/2016/04/2732519726.png" alt="log"></p><br><p><code>/etc/init.d/x3c8021x</code> 修改<code>START=50</code>为<code>START=99</code>，这是启动脚本的优先级，不能超过100.</p><br><p><span style="font-size: large;">//////////<span>//////////</span><span>//////////////</span></span></p><br><p><span style="font-size: large;"><span>//////////&nbsp;<span>下载1：</span></span><a href="http://pan.baidu.com/s/1o6u1ouA" target="_blank">附件</a><a href="http://vdisk.weibo.com/s/zFM_tVkFkm5Vr/1443930719" target="_blank"></a>&nbsp;//////////<br></span></p><br><p><span style="font-size: large;"><span>//////////&nbsp;<span>下载2：<a href="http://vdisk.weibo.com/s/zFM_tVkFkm5Vr/1443930719" target="_blank">附件</a></span>&nbsp;<span>//////////</span></span></span></p><br><p><span style="font-size: large;"><span>//////////</span><span>//////////<span>/////////////</span></span></span></p>
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-10-26T21:49:24.150Z" itemprop="dateUpdated">2019-10-27 05:49:24</time>
+</span><br>
+
+
+        
+        这里不可以写作者留言.
+        
+    </div>
+    <footer>
+        <a href="https://zh-h.github.io">
+            <img src="/img/avatar.jpg" alt="Zohar Hou">
+            Zohar Hou
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lua/">lua</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/openwrt/">openwrt</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2015/10/03/10/&title=《802.1x客户端 Openwrt LuCI 开发》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2015/10/03/10/&title=《802.1x客户端 Openwrt LuCI 开发》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2015/10/03/10/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《802.1x客户端 Openwrt LuCI 开发》 — Applehater&url=https://zh-h.github.io/2015/10/03/10/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2015/10/03/10/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2015/10/04/9/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">node get post提交中文参数</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2015/09/03/12/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Windows 10更改标题栏</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'zh-h',
+            repo: 'zh-h.github.io.comment',
+            oauth: {
+                client_id: '3a6263282611b5518bd4',
+                client_secret: 'df06fc0681c7b83ceba630b8649f6cc80a0776ae',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+            <p>
+                
+                    <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+                    
+                        <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+            </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zohar Hou &copy; 2015 - 2019</span>
+            <span>
+                <a href="http://www.beian.gov.cn/portal/index" target="_blank">粤ICP备14081324号</a>
+            </span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2015/10/03/10/&title=《802.1x客户端 Openwrt LuCI 开发》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2015/10/03/10/&title=《802.1x客户端 Openwrt LuCI 开发》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2015/10/03/10/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《802.1x客户端 Openwrt LuCI 开发》 — Applehater&url=https://zh-h.github.io/2015/10/03/10/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2015/10/03/10/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zh-h.github.io/2015/10/03/10/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Look at me !';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Emmm ...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

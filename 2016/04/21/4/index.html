@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Django 之奇技淫巧 Admin | Applehater | developer ? operator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#009999">
+    
+    
+    <meta name="keywords" content="python,django,Django,Python">
+    <meta name="description" content="Django Admin Site1. 自定后台管理面板列表显示的返回值class ThesisTopicReviewHistoryAdmin(admin.ModelAdmin): list_display = (&amp;apos;reviewer&amp;apos;, &amp;apos;thesisTopic&amp;apos;, &amp;apos;comment&amp;apos;, &amp;apos;state&amp;apos;, ) list">
+<meta name="keywords" content="python,django,Django,Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django 之奇技淫巧 Admin">
+<meta property="og:url" content="https://zh-h.github.io/2016/04/21/4/index.html">
+<meta property="og:site_name" content="Applehater">
+<meta property="og:description" content="Django Admin Site1. 自定后台管理面板列表显示的返回值class ThesisTopicReviewHistoryAdmin(admin.ModelAdmin): list_display = (&amp;apos;reviewer&amp;apos;, &amp;apos;thesisTopic&amp;apos;, &amp;apos;comment&amp;apos;, &amp;apos;state&amp;apos;, ) list">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="https://o2mmig5qb.qnssl.com/6aafb70c553c44c8856b3a2c0b00a6ee.png">
+<meta property="og:image" content="https://o2mmig5qb.qnssl.com/a70b07511a90489db64ee09a1a09c4b2.png">
+<meta property="og:updated_time" content="2019-10-26T21:49:24.156Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Django 之奇技淫巧 Admin">
+<meta name="twitter:description" content="Django Admin Site1. 自定后台管理面板列表显示的返回值class ThesisTopicReviewHistoryAdmin(admin.ModelAdmin): list_display = (&amp;apos;reviewer&amp;apos;, &amp;apos;thesisTopic&amp;apos;, &amp;apos;comment&amp;apos;, &amp;apos;state&amp;apos;, ) list">
+<meta name="twitter:image" content="https://o2mmig5qb.qnssl.com/6aafb70c553c44c8856b3a2c0b00a6ee.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Applehater" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zohar Hou</h5>
+          <a href="mailto:emguaEBvdXRsb29rLmNvbQ==" title="emguaEBvdXRsb29rLmNvbQ==" class="mail">emguaEBvdXRsb29rLmNvbQ==</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories/Java/"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-weibo"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/links"  >
+                <i class="icon icon-lg icon-link"></i>
+                Links
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zh-h" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Django 之奇技淫巧 Admin</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Django 之奇技淫巧 Admin</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-04-21T06:14:00.000Z" itemprop="datePublished" class="page-time">
+  2016-04-21
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Django-Admin-Site"><span class="post-toc-number">1.</span> <span class="post-toc-text"><a href="#Django-Admin-Site" class="headerlink" title="Django Admin Site"></a>Django Admin Site</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-自定后台管理面板列表显示的返回值"><span class="post-toc-number">1.1.</span> <span class="post-toc-text"><a href="#1-&#x81EA;&#x5B9A;&#x540E;&#x53F0;&#x7BA1;&#x7406;&#x9762;&#x677F;&#x5217;&#x8868;&#x663E;&#x793A;&#x7684;&#x8FD4;&#x56DE;&#x503C;" class="headerlink" title="1. &#x81EA;&#x5B9A;&#x540E;&#x53F0;&#x7BA1;&#x7406;&#x9762;&#x677F;&#x5217;&#x8868;&#x663E;&#x793A;&#x7684;&#x8FD4;&#x56DE;&#x503C;"></a>1. &#x81EA;&#x5B9A;&#x540E;&#x53F0;&#x7BA1;&#x7406;&#x9762;&#x677F;&#x5217;&#x8868;&#x663E;&#x793A;&#x7684;&#x8FD4;&#x56DE;&#x503C;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-自定义列表字段html标签返回"><span class="post-toc-number">1.2.</span> <span class="post-toc-text"><a href="#2-&#x81EA;&#x5B9A;&#x4E49;&#x5217;&#x8868;&#x5B57;&#x6BB5;html&#x6807;&#x7B7E;&#x8FD4;&#x56DE;" class="headerlink" title="2. &#x81EA;&#x5B9A;&#x4E49;&#x5217;&#x8868;&#x5B57;&#x6BB5;html&#x6807;&#x7B7E;&#x8FD4;&#x56DE;"></a>2. &#x81EA;&#x5B9A;&#x4E49;&#x5217;&#x8868;&#x5B57;&#x6BB5;html&#x6807;&#x7B7E;&#x8FD4;&#x56DE;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3-下拉框列表过滤"><span class="post-toc-number">1.3.</span> <span class="post-toc-text"><a href="#3-&#x4E0B;&#x62C9;&#x6846;&#x5217;&#x8868;&#x8FC7;&#x6EE4;" class="headerlink" title="3. &#x4E0B;&#x62C9;&#x6846;&#x5217;&#x8868;&#x8FC7;&#x6EE4;"></a>3. &#x4E0B;&#x62C9;&#x6846;&#x5217;&#x8868;&#x8FC7;&#x6EE4;</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-4"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Django 之奇技淫巧 Admin</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-04-21 14:14:00" datetime="2016-04-21T06:14:00.000Z"  itemprop="datePublished">2016-04-21</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="Django-Admin-Site"><a href="#Django-Admin-Site" class="headerlink" title="Django Admin Site"></a>Django Admin Site</h1><h2 id="1-自定后台管理面板列表显示的返回值"><a href="#1-自定后台管理面板列表显示的返回值" class="headerlink" title="1. 自定后台管理面板列表显示的返回值"></a>1. 自定后台管理面板列表显示的返回值</h2><pre><code>class ThesisTopicReviewHistoryAdmin(admin.ModelAdmin):
+list_display = (&apos;reviewer&apos;, &apos;thesisTopic&apos;, &apos;comment&apos;, &apos;state&apos;, )
+list_filter = (&apos;state&apos;, &apos;reviewer&apos;, &apos;created&apos;, )
+search_fields = (&apos;thesisTopic&apos;,)
+
+def save_model(self, request, obj, form, change):
+    # 保存该评审记录
+    obj.save()
+    # 改变相应题目的评审状态
+    topic = obj.thesisTopic
+    topic.reviewState = obj.state
+    topic.save()
+
+def get_readonly_fields(self, request, obj=None):
+    if request.user.is_superuser:
+        return ()
+    else:
+        return self.list_display
+</code></pre><p>以上类如get_attrbute_fields()的方法均可以重写。<br>如果需要让一个timestamp类型的<code>create_at</code>属性不是显示整数二十显示一个完整的日期，可以重写此方法.</p>
+<pre><code>class TeacherReviewAdmin(admin.ModelAdmin):
+list_display = (&apos;get_topic&apos;, &apos;student&apos;, &apos;comment&apos;, &apos;score&apos;,&apos;create_at&apos;,&apos;get_year&apos;, &apos;review_state&apos;,)
+list_filter = (&apos;student__year&apos;, &apos;student__studentClass&apos;, &apos;student__studentClass__campus&apos;)
+search_fields = (&apos;student__name&apos;, &apos;student__studentNo&apos;)
+teacher_readonly_fields = (&apos;student&apos;, &apos;topic&apos;, &apos;finalthesisdoc&apos;,)
+teacher_readonly_fields_no_topic = (&apos;student&apos;, &apos;topic&apos;, &apos;finalthesisdoc&apos;, &apos;comment&apos;, &apos;score&apos;, &apos;review_state&apos;,)
+superuser_readonly_fields = (&apos;topic&apos;, &apos;finalthesisdoc&apos;,)
+
+superuser_fields = (&apos;student&apos;, &apos;topic&apos;, &apos;finalthesisdoc&apos;, &apos;comment&apos;, &apos;score&apos;, &apos;review_state&apos;,)
+teacher_fields = (&apos;student&apos;, &apos;topic&apos;, &apos;finalthesisdoc&apos;, &apos;comment&apos;, &apos;score&apos;, &apos;review_state&apos;,)
+
+def get_year(self, obj):
+    return obj.student.year
+# 甚至可以动态更改属性的描述
+get_year.short_description = u&apos;年份&apos;
+get_year.admin_order_field = &apos;-student__year&apos;
+def create_at(self, obj=None):
+    return datetime.datetime.fromtimestamp(obj.create_at)
+</code></pre><h2 id="2-自定义列表字段html标签返回"><a href="#2-自定义列表字段html标签返回" class="headerlink" title="2. 自定义列表字段html标签返回"></a>2. 自定义列表字段html标签返回</h2><pre><code>class WeiboUserAdmin(admin.ModelAdmin):
+def expires_time(self, obj):
+    return datetime.datetime.fromtimestamp(obj.expires_at)
+expires_time.short_description = u&apos;授权过期时间&apos;
+
+def refresh(self,obj):
+    btn_str = &apos;&lt;a class=&quot;btn btn-xs btn-danger&quot; href=&quot;{}&quot;&gt;{}&lt;/a&gt;&apos;
+    return format_html(btn_str,&apos;http://www.google.com&apos;,obj.uid)
+refresh.short_description = u&apos;更新授权&apos;
+# 注意要记得把这个方法放到现实列表里
+list_display = (&apos;nick&apos;,&apos;uid&apos;,&apos;access_token&apos;,&apos;expires_time&apos;,&apos;refresh&apos;)
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://o2mmig5qb.qnssl.com/6aafb70c553c44c8856b3a2c0b00a6ee.png" alt="1459653892756" title="">
+                </div>
+                <div class="image-caption">1459653892756</div>
+            </figure> 
+<p>这样你的表单上就会出现列按钮，同样的，你可以为此定义一个显示头像的方法</p>
+<h2 id="3-下拉框列表过滤"><a href="#3-下拉框列表过滤" class="headerlink" title="3. 下拉框列表过滤"></a>3. 下拉框列表过滤</h2><pre><code>def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
+    # 是超级管理员就全部跳过
+    if request.user.is_superuser:
+        pass
+    # 不是超级管理员并且字段符合的话，就进行过滤
+    elif db_field.name == &apos;official&apos;:
+        kwargs[&apos;queryset&apos;] = Official.objects.filter(user=request.user)
+    return super(FilterAdmin, self).formfield_for_foreignkey(db_field, request=None, **kwargs)
+</code></pre><p>下拉框过滤</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://o2mmig5qb.qnssl.com/a70b07511a90489db64ee09a1a09c4b2.png" alt="1459746103458" title="">
+                </div>
+                <div class="image-caption">1459746103458</div>
+            </figure> 
+<p>竟然全部都是动态的字段，感觉很不安全啊</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-10-26T21:49:24.156Z" itemprop="dateUpdated">2019-10-27 05:49:24</time>
+</span><br>
+
+
+        
+        这里不可以写作者留言.
+        
+    </div>
+    <footer>
+        <a href="https://zh-h.github.io">
+            <img src="/img/avatar.jpg" alt="Zohar Hou">
+            Zohar Hou
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Django/">Django</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/">django</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2016/04/21/4/&title=《Django 之奇技淫巧 Admin》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2016/04/21/4/&title=《Django 之奇技淫巧 Admin》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2016/04/21/4/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Django 之奇技淫巧 Admin》 — Applehater&url=https://zh-h.github.io/2016/04/21/4/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2016/04/21/4/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2016/04/21/5/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Django 之奇技淫巧 View</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/04/14/6/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Django 部署 uWSGI or Gunicorn + Nginx + Supervisor</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'zh-h',
+            repo: 'zh-h.github.io.comment',
+            oauth: {
+                client_id: '3a6263282611b5518bd4',
+                client_secret: 'df06fc0681c7b83ceba630b8649f6cc80a0776ae',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+            <p>
+                
+                    <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+                    
+                        <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+            </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zohar Hou &copy; 2015 - 2019</span>
+            <span>
+                <a href="http://www.beian.gov.cn/portal/index" target="_blank">粤ICP备14081324号</a>
+            </span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2016/04/21/4/&title=《Django 之奇技淫巧 Admin》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2016/04/21/4/&title=《Django 之奇技淫巧 Admin》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2016/04/21/4/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Django 之奇技淫巧 Admin》 — Applehater&url=https://zh-h.github.io/2016/04/21/4/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2016/04/21/4/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zh-h.github.io/2016/04/21/4/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Look at me !';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Emmm ...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

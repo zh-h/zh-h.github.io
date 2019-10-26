@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>HTTP 请求 gzip 解压 | Applehater | developer ? operator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#009999">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="实际的 Web 项目中，会存在请求正文非常大的场景，例如发表长篇博客，提大量流水记录等等。这些数据如果能在本地压缩后再提交，就可以节省网络流量、减少传输时间。 一般采用的压缩方式是 gzip 请求正文会被gzip压缩过进行二进制传输，而 HTTP 头部依然是原始的文本，根据协议需要在头部注明编码 Content-Encoding: gzip 在服务端接收到请求后，如果支持这种格式的压缩，会把请求正">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP 请求 gzip 解压">
+<meta property="og:url" content="https://zh-h.github.io/2018/04/10/2018/04/10/gzip-request-deompress/index.html">
+<meta property="og:site_name" content="Applehater">
+<meta property="og:description" content="实际的 Web 项目中，会存在请求正文非常大的场景，例如发表长篇博客，提大量流水记录等等。这些数据如果能在本地压缩后再提交，就可以节省网络流量、减少传输时间。 一般采用的压缩方式是 gzip 请求正文会被gzip压缩过进行二进制传输，而 HTTP 头部依然是原始的文本，根据协议需要在头部注明编码 Content-Encoding: gzip 在服务端接收到请求后，如果支持这种格式的压缩，会把请求正">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2019-10-26T21:49:24.154Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HTTP 请求 gzip 解压">
+<meta name="twitter:description" content="实际的 Web 项目中，会存在请求正文非常大的场景，例如发表长篇博客，提大量流水记录等等。这些数据如果能在本地压缩后再提交，就可以节省网络流量、减少传输时间。 一般采用的压缩方式是 gzip 请求正文会被gzip压缩过进行二进制传输，而 HTTP 头部依然是原始的文本，根据协议需要在头部注明编码 Content-Encoding: gzip 在服务端接收到请求后，如果支持这种格式的压缩，会把请求正">
+    
+        <link rel="alternate" type="application/atom+xml" title="Applehater" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zohar Hou</h5>
+          <a href="mailto:emguaEBvdXRsb29rLmNvbQ==" title="emguaEBvdXRsb29rLmNvbQ==" class="mail">emguaEBvdXRsb29rLmNvbQ==</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories/Java/"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-weibo"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/links"  >
+                <i class="icon icon-lg icon-link"></i>
+                Links
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zh-h" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">HTTP 请求 gzip 解压</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">HTTP 请求 gzip 解压</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-04-09T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2018-04-10
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#解压-gzip-请求"><span class="post-toc-number">1.</span> <span class="post-toc-text"><a href="#&#x89E3;&#x538B;-gzip-&#x8BF7;&#x6C42;" class="headerlink" title="&#x89E3;&#x538B; gzip &#x8BF7;&#x6C42;"></a>&#x89E3;&#x538B; gzip &#x8BF7;&#x6C42;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Java"><span class="post-toc-number">1.1.</span> <span class="post-toc-text"><a href="#Java" class="headerlink" title="Java"></a>Java</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#OpenResty"><span class="post-toc-number">1.2.</span> <span class="post-toc-text"><a href="#OpenResty" class="headerlink" title="OpenResty"></a>OpenResty</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#使用-gzip-压缩请求"><span class="post-toc-number">2.</span> <span class="post-toc-text"><a href="#&#x4F7F;&#x7528;-gzip-&#x538B;&#x7F29;&#x8BF7;&#x6C42;" class="headerlink" title="&#x4F7F;&#x7528; gzip &#x538B;&#x7F29;&#x8BF7;&#x6C42;"></a>&#x4F7F;&#x7528; gzip &#x538B;&#x7F29;&#x8BF7;&#x6C42;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#CURL"><span class="post-toc-number">2.1.</span> <span class="post-toc-text"><a href="#CURL" class="headerlink" title="CURL"></a>CURL</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Java-1"><span class="post-toc-number">2.2.</span> <span class="post-toc-text"><a href="#Java-1" class="headerlink" title="Java"></a>Java</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-2018/04/10/gzip-request-deompress"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">HTTP 请求 gzip 解压</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-04-10 00:00:00" datetime="2018-04-09T16:00:00.000Z"  itemprop="datePublished">2018-04-10</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>实际的 Web 项目中，会存在请求正文非常大的场景，例如发表长篇博客，提大量流水记录等等。这些数据如果能在本地压缩后再提交，就可以节省网络流量、减少传输时间。</p>
+<p>一般采用的压缩方式是 gzip 请求正文会被gzip压缩过进行二进制传输，而 HTTP 头部依然是原始的文本，根据协议需要在头部注明编码 <code>Content-Encoding: gzip</code> 在服务端接收到请求后，如果支持这种格式的压缩，会把请求正文进行解压再处理。</p>
+<p>参考<a href="https://imququ.com/post/how-to-compress-http-request-body.html" target="_blank" rel="noopener">《如何压缩 HTTP 请求正文》</a></p>
+<h2 id="解压-gzip-请求"><a href="#解压-gzip-请求" class="headerlink" title="解压 gzip 请求"></a>解压 gzip 请求</h2><h3 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h3><p>Java 内置了解压缩的流， 使用流的单项管道模式，可以把 gzip 的输入流，包装成原始的输入流。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ByteArrayInputStream is = <span class="keyword">new</span> ByteArrayInputStream(someGzipBytes)  <span class="comment">// 放入压缩后的流</span></span><br><span class="line">GzipInputStream gis = <span class="keyword">new</span> GzipInputStream(is)</span><br><span class="line">String content = gis.text</span><br></pre></td></tr></table></figure>
+<p>翻看了一遍 Spring 的接口实现，实在没有找到合适的方法进行<code>httpServletRequset.inputStream</code>的替换。使用自定义的<code>MessageConverter</code>也是比较麻烦，需要把原本的配置覆盖替换，不得知对其他转换器的影响。</p>
+<p>另外一种方法就是使用 Servlet API 的 <code>Filter</code> 进行处理，在获取到 gzip 的请求正文时对他进行解压。<br><code>GunzipFilter.groovy</code></p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 处理gzip压缩过的请求体</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * 使用 web.xml 配置 filter</span></span><br><span class="line"><span class="comment"> * Spring Boot 需要在主类使用 <span class="doctag">@ServletComponentScan</span> 才能加载</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@WebFilter</span>(filterName = <span class="string">"gunzipFilter"</span>, urlPatterns = <span class="string">"/*"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GunzipFilter</span> <span class="keyword">implements</span> <span class="title">Filter</span> &#123;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger LOGGER = LoggerFactory.getLogger(GunzipFilter.<span class="keyword">class</span>);</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> init(FilterConfig filterConfig) <span class="keyword">throws</span> ServletException &#123;</span><br><span class="line">        LOGGER.info(<span class="string">"gunzip filter init"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) <span class="keyword">throws</span> IOException, ServletException &#123;</span><br><span class="line">        HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;</span><br><span class="line">        String requestURI = httpServletRequest.getRequestURI();</span><br><span class="line">        LOGGER.info(<span class="string">"request uri: &#123;&#125; Content-Encoding: &#123;&#125;"</span>, requestURI, httpServletRequest.getHeader(<span class="string">"Content-Encoding"</span>));</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">"/"</span>.equals(requestURI)) &#123;</span><br><span class="line">            LOGGER.info(<span class="string">"process gzip request"</span>);</span><br><span class="line">            httpServletRequest = <span class="keyword">new</span> GunzipInputStreamWrapper(httpServletRequest);</span><br><span class="line">        &#125;</span><br><span class="line">        filterChain.doFilter(httpServletRequest, servletResponse);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> destroy() &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">GunzipInputStreamWrapper</span> <span class="keyword">extends</span> <span class="title">HttpServletRequestWrapper</span> &#123;</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> ServletInputStream newServletInputStream;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> GunzipInputStreamWrapper(HttpServletRequest request) &#123;</span><br><span class="line">            <span class="keyword">super</span>(request);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> ServletInputStream getInputStream() <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">            <span class="keyword">if</span> (newServletInputStream == <span class="literal">null</span>) &#123;</span><br><span class="line">                ServletInputStream servletInputStream = <span class="keyword">super</span>.getInputStream();</span><br><span class="line">                GZIPInputStream gzipInputStream = <span class="keyword">new</span> GZIPInputStream(servletInputStream);</span><br><span class="line">                newServletInputStream = <span class="keyword">new</span> ServletInputStream() &#123;</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="keyword">public</span> <span class="keyword">boolean</span> isFinished() &#123;</span><br><span class="line">                        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="keyword">public</span> <span class="keyword">boolean</span> isReady() &#123;</span><br><span class="line">                        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="keyword">public</span> <span class="keyword">void</span> setReadListener(ReadListener readListener) &#123;&#125;</span><br><span class="line"></span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="keyword">public</span> <span class="keyword">int</span> read() <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">                        <span class="keyword">return</span> gzipInputStream.read();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> newServletInputStream;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="OpenResty"><a href="#OpenResty" class="headerlink" title="OpenResty"></a>OpenResty</h3><p>OpenResty 可以通过使用 Lua 书写逻辑，可以导入使用 Lua 的类库，也可以通过 FFI 调用 C 语言编写的动态链接库。</p>
+<p>需要下载 Lua 的 FFI zlib 库，然后通过 lua 脚本导入。</p>
+<ol>
+<li>下载 <a href="https://github.com/luapower/zlib/archive/master.tar.gz" target="_blank" rel="noopener">https://github.com/luapower/zlib/archive/master.tar.gz</a></li>
+<li>解压master.tar.gz</li>
+<li>将<code>linux64/libz.so</code> <code>zlib_h.lua</code> <code>zlib.lua</code>复制到<code>/usr/local/openresty/lualib/</code></li>
+<li>在<code>/usr/local/openresty/lualib/</code>创建<code>gunzip.lua</code>文件</li>
+<li><p>在文件中输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">local ffi  = require &quot;ffi&quot;</span><br><span class="line">local zlib = require &quot;zlib&quot;</span><br><span class="line"></span><br><span class="line">local function reader(s)</span><br><span class="line">    local done</span><br><span class="line">    return function()</span><br><span class="line">        if done then return end</span><br><span class="line">        done = true</span><br><span class="line">        return s</span><br><span class="line">    end</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">local function writer()</span><br><span class="line">    local t = &#123;&#125;</span><br><span class="line">    return function(data, sz)</span><br><span class="line">        if not data then return table.concat(t) end</span><br><span class="line">        t[#t + 1] = ffi.string(data, sz)</span><br><span class="line">    end</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">local encoding = ngx.req.get_headers()[&apos;Content-Encoding&apos;]</span><br><span class="line">ngx.log(ngx.INFO, &quot;encoding: &quot;..encoding)</span><br><span class="line"></span><br><span class="line">if encoding == &apos;gzip&apos; or encoding == &apos;deflate&apos; or encoding == &apos;deflate-raw&apos; then</span><br><span class="line">    ngx.req.clear_header(&apos;Content-Encoding&apos;);</span><br><span class="line">    ngx.req.read_body()</span><br><span class="line"></span><br><span class="line">    local body = ngx.req.get_body_data()</span><br><span class="line"></span><br><span class="line">    if body then</span><br><span class="line">        ngx.log(ngx.INFO, &quot;unzip body&quot;)</span><br><span class="line">        local write = writer()</span><br><span class="line">        local map = &#123;</span><br><span class="line">            gzip = &apos;gzip&apos;, </span><br><span class="line">            deflate = &apos;zlib&apos;, </span><br><span class="line">            [&apos;deflate-raw&apos;] = &apos;deflate&apos;</span><br><span class="line">        &#125;</span><br><span class="line">        local format = map[encoding]</span><br><span class="line">        zlib.inflate(reader(body), write, nil, format)</span><br><span class="line">        ngx.req.set_body_data(write())</span><br><span class="line">    end</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编辑<code>/usr/local/openresty/nginx/conf/nginx.conf</code>在<code>server</code>块插入一下内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># call request body to lua context</span><br><span class="line">location / &#123;</span><br><span class="line">    # 非常重要，否则大文件解压因为被放到文件里导致读取的时候乱码</span><br><span class="line">	client_body_buffer_size 2048k;  </span><br><span class="line">	access_by_lua_file /usr/local/openresty/lualib/resty/gunzip.lua;</span><br><span class="line">	proxy_pass http://192.168.150.226:8800;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>/usr/local/openresty/nginx/sbin/nginx -s reload</code> 重载更新脚本。</p>
+</li>
+</ol>
+<p>OpenResty 映射对应需要请求的 URL 然后在对应的处理或者转发前执行 Lua 脚本，Lua 脚本判断请求类型读取请求体，并且使用 zlib 将其解压，然后再写回请求体，最后再把 <code>Content-Encoding</code> 清除，放置后端再做错误处理。</p>
+<h2 id="使用-gzip-压缩请求"><a href="#使用-gzip-压缩请求" class="headerlink" title="使用 gzip 压缩请求"></a>使用 gzip 压缩请求</h2><h3 id="CURL"><a href="#CURL" class="headerlink" title="CURL"></a>CURL</h3><p>先用 gzip 工具压缩，然后 curl 命令行工具支持提交 gzip 的文件。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">"&#123;\"msg\":\"hello\"&#125;"</span> | gzip -c &gt; data.txt.gz</span><br><span class="line">curl -v --data-binary @data.txt.gz -H<span class="string">'Content-Type: application/json charset=UTF-8'</span> -H<span class="string">'Content-Encoding: gzip'</span> -X POST http://localhost:8800</span><br></pre></td></tr></table></figure></p>
+<h3 id="Java-1"><a href="#Java-1" class="headerlink" title="Java"></a>Java</h3><p>Java 同样提供了内置的 gzip 工具类，可以使用 <code>GzipOutputStream</code> 将输出流替换成压缩过的输出流，然后将压缩后的流通过 Socket 提交。</p>
+<p>OkHttP 提供自定义请求正文的方法，可以把请求正文的格式替换为 gzip<br><code>GzipRequest.groovy</code><br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GzipRequest</span> &#123;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> MediaType JSON = MediaType.parse(<span class="string">"application/json charset=utf-8"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span></span><br><span class="line">    <span class="keyword">final</span> String CONTENT = <span class="keyword">new</span> File(<span class="string">'C:\\Users\\Administrator\\Documents\\data-flow.json'</span>).text</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> OkHttpClient client = <span class="keyword">new</span> OkHttpClient.Builder()</span><br><span class="line">            .addInterceptor(<span class="keyword">new</span> GzipRequestInterceptor())</span><br><span class="line">            .build()</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> args</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) &#123;</span><br><span class="line">        String content = <span class="string">'''&#123;"msg":"hello"&#125;'''</span></span><br><span class="line">        content = CONTENT</span><br><span class="line">        RequestBody body = RequestBody.create(JSON, content)</span><br><span class="line">        Request request = <span class="keyword">new</span> Request.Builder()</span><br><span class="line">                .url(<span class="string">'http://localhost:8800/?name=age'</span>)</span><br><span class="line">                .post(body)</span><br><span class="line">                .build()</span><br><span class="line">        Response response = client.newCall(request).execute()</span><br><span class="line">        String responseBody = response.body().string()</span><br><span class="line">        log.info(responseBody)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">GzipRequestInterceptor</span> <span class="keyword">implements</span> <span class="title">Interceptor</span> &#123;</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> Response intercept(Chain chain) <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">            Request originalRequest = chain.request()</span><br><span class="line">            <span class="keyword">if</span> (originalRequest.body() == <span class="literal">null</span> || originalRequest.header(<span class="string">"Content-Encoding"</span>) != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> chain.proceed(originalRequest)</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            Request compressedRequest = originalRequest.newBuilder()</span><br><span class="line">                    .header(<span class="string">"Content-Encoding"</span>, <span class="string">"gzip"</span>)</span><br><span class="line">                    .method(originalRequest.method(), gzip(originalRequest.body()))</span><br><span class="line">                    .build()</span><br><span class="line">            <span class="keyword">return</span> chain.proceed(compressedRequest)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> RequestBody gzip(<span class="keyword">final</span> RequestBody body) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> RequestBody() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="keyword">public</span> MediaType contentType() &#123;</span><br><span class="line">                    <span class="keyword">return</span> body.contentType()</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="keyword">public</span> <span class="keyword">long</span> contentLength() &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="number">-1</span> <span class="comment">// We don't know the compressed length in advance!</span></span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="keyword">public</span> <span class="keyword">void</span> writeTo(BufferedSink sink) <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">                    BufferedSink gzipSink = Okio.buffer(<span class="keyword">new</span> GzipSink(sink))</span><br><span class="line">                    body.writeTo(gzipSink)</span><br><span class="line">                    gzipSink.close()</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-10-26T21:49:24.154Z" itemprop="dateUpdated">2019-10-27 05:49:24</time>
+</span><br>
+
+
+        
+        这里不可以写作者留言.
+        
+    </div>
+    <footer>
+        <a href="https://zh-h.github.io">
+            <img src="/img/avatar.jpg" alt="Zohar Hou">
+            Zohar Hou
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2018/04/10/2018/04/10/gzip-request-deompress/&title=《HTTP 请求 gzip 解压》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2018/04/10/2018/04/10/gzip-request-deompress/&title=《HTTP 请求 gzip 解压》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2018/04/10/2018/04/10/gzip-request-deompress/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《HTTP 请求 gzip 解压》 — Applehater&url=https://zh-h.github.io/2018/04/10/2018/04/10/gzip-request-deompress/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2018/04/10/2018/04/10/gzip-request-deompress/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/12/15/2017/12/15/spring-data-mongo-map-reduce/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">MongoDB MapReduce</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'zh-h',
+            repo: 'zh-h.github.io.comment',
+            oauth: {
+                client_id: '3a6263282611b5518bd4',
+                client_secret: 'df06fc0681c7b83ceba630b8649f6cc80a0776ae',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+            <p>
+                
+                    <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+                    
+                        <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+            </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zohar Hou &copy; 2015 - 2019</span>
+            <span>
+                <a href="http://www.beian.gov.cn/portal/index" target="_blank">粤ICP备14081324号</a>
+            </span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2018/04/10/2018/04/10/gzip-request-deompress/&title=《HTTP 请求 gzip 解压》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2018/04/10/2018/04/10/gzip-request-deompress/&title=《HTTP 请求 gzip 解压》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2018/04/10/2018/04/10/gzip-request-deompress/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《HTTP 请求 gzip 解压》 — Applehater&url=https://zh-h.github.io/2018/04/10/2018/04/10/gzip-request-deompress/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2018/04/10/2018/04/10/gzip-request-deompress/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zh-h.github.io/2018/04/10/2018/04/10/gzip-request-deompress/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Look at me !';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Emmm ...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

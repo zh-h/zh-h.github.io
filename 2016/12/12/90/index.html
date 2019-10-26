@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Ngrok 快速编译配置 | Applehater | developer ? operator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#009999">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="域名解析dev.applehater.cn 解析A记录到服务器 *.dev.applehater.cn 解析A记录到服务器 不使用泛域名就只能指定若干固定域名，以下配置将会使用到域名 以下步骤均使用 root 权限执行 编译安装编译过程可能需要下载蔷外的资源，请做好准备。 1. 安装 Go 环境1234wget https://storage.googleapis.com/golang/go1.7">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ngrok 快速编译配置">
+<meta property="og:url" content="https://zh-h.github.io/2016/12/12/90/index.html">
+<meta property="og:site_name" content="Applehater">
+<meta property="og:description" content="域名解析dev.applehater.cn 解析A记录到服务器 *.dev.applehater.cn 解析A记录到服务器 不使用泛域名就只能指定若干固定域名，以下配置将会使用到域名 以下步骤均使用 root 权限执行 编译安装编译过程可能需要下载蔷外的资源，请做好准备。 1. 安装 Go 环境1234wget https://storage.googleapis.com/golang/go1.7">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2019-10-26T21:49:24.160Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ngrok 快速编译配置">
+<meta name="twitter:description" content="域名解析dev.applehater.cn 解析A记录到服务器 *.dev.applehater.cn 解析A记录到服务器 不使用泛域名就只能指定若干固定域名，以下配置将会使用到域名 以下步骤均使用 root 权限执行 编译安装编译过程可能需要下载蔷外的资源，请做好准备。 1. 安装 Go 环境1234wget https://storage.googleapis.com/golang/go1.7">
+    
+        <link rel="alternate" type="application/atom+xml" title="Applehater" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zohar Hou</h5>
+          <a href="mailto:emguaEBvdXRsb29rLmNvbQ==" title="emguaEBvdXRsb29rLmNvbQ==" class="mail">emguaEBvdXRsb29rLmNvbQ==</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories/Java/"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-weibo"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/links"  >
+                <i class="icon icon-lg icon-link"></i>
+                Links
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zh-h" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Ngrok 快速编译配置</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Ngrok 快速编译配置</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-12-12T07:14:27.000Z" itemprop="datePublished" class="page-time">
+  2016-12-12
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/">Linux</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/ngrok/">ngrok</a></li></ul></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#域名解析"><span class="post-toc-number">1.</span> <span class="post-toc-text"><a href="#&#x57DF;&#x540D;&#x89E3;&#x6790;" class="headerlink" title="&#x57DF;&#x540D;&#x89E3;&#x6790;"></a>&#x57DF;&#x540D;&#x89E3;&#x6790;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#编译安装"><span class="post-toc-number">2.</span> <span class="post-toc-text"><a href="#&#x7F16;&#x8BD1;&#x5B89;&#x88C5;" class="headerlink" title="&#x7F16;&#x8BD1;&#x5B89;&#x88C5;"></a>&#x7F16;&#x8BD1;&#x5B89;&#x88C5;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-安装-Go-环境"><span class="post-toc-number">2.1.</span> <span class="post-toc-text"><a href="#1-&#x5B89;&#x88C5;-Go-&#x73AF;&#x5883;" class="headerlink" title="1. &#x5B89;&#x88C5; Go &#x73AF;&#x5883;"></a>1. &#x5B89;&#x88C5; Go &#x73AF;&#x5883;</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-安装-Ngrok"><span class="post-toc-number">2.2.</span> <span class="post-toc-text"><a href="#2-&#x5B89;&#x88C5;-Ngrok" class="headerlink" title="2. &#x5B89;&#x88C5; Ngrok"></a>2. &#x5B89;&#x88C5; Ngrok</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3-Nginx-配置"><span class="post-toc-number">2.3.</span> <span class="post-toc-text"><a href="#3-Nginx-&#x914D;&#x7F6E;" class="headerlink" title="3. Nginx &#x914D;&#x7F6E;"></a>3. Nginx &#x914D;&#x7F6E;</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4-客户端配置"><span class="post-toc-number">2.4.</span> <span class="post-toc-text"><a href="#4-&#x5BA2;&#x6237;&#x7AEF;&#x914D;&#x7F6E;" class="headerlink" title="4. &#x5BA2;&#x6237;&#x7AEF;&#x914D;&#x7F6E;"></a>4. &#x5BA2;&#x6237;&#x7AEF;&#x914D;&#x7F6E;</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#使用-docker-运行-ngrok"><span class="post-toc-number">3.</span> <span class="post-toc-text"><a href="#&#x4F7F;&#x7528;-docker-&#x8FD0;&#x884C;-ngrok" class="headerlink" title="&#x4F7F;&#x7528; docker &#x8FD0;&#x884C; ngrok"></a>&#x4F7F;&#x7528; docker &#x8FD0;&#x884C; ngrok</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#编译ngrok"><span class="post-toc-number">3.1.</span> <span class="post-toc-text"><a href="#&#x7F16;&#x8BD1;ngrok" class="headerlink" title="&#x7F16;&#x8BD1;ngrok"></a>&#x7F16;&#x8BD1;ngrok</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#运行ngrok"><span class="post-toc-number">3.2.</span> <span class="post-toc-text"><a href="#&#x8FD0;&#x884C;ngrok" class="headerlink" title="&#x8FD0;&#x884C;ngrok"></a>&#x8FD0;&#x884C;ngrok</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-90"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Ngrok 快速编译配置</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-12-12 15:14:27" datetime="2016-12-12T07:14:27.000Z"  itemprop="datePublished">2016-12-12</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/">Linux</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/ngrok/">ngrok</a></li></ul></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="域名解析"><a href="#域名解析" class="headerlink" title="域名解析"></a>域名解析</h2><p>dev.applehater.cn 解析A记录到服务器</p>
+<p>*.dev.applehater.cn 解析A记录到服务器</p>
+<p>不使用泛域名就只能指定若干固定域名，以下配置将会使用到域名</p>
+<p>以下步骤均使用 root 权限执行</p>
+<h2 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h2><p>编译过程可能需要下载蔷外的资源，请做好准备。</p>
+<h3 id="1-安装-Go-环境"><a href="#1-安装-Go-环境" class="headerlink" title="1. 安装 Go 环境"></a>1. 安装 Go 环境</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wget https://storage.googleapis.com/golang/go1.7.4.linux-amd64.tar.gz \</span><br><span class="line">&amp;&amp; tar -xvf go1.7.4.linux-amd64.tar.gz -C /usr/local \</span><br><span class="line">&amp;&amp; export GOROOT=/usr/local/go \</span><br><span class="line">&amp;&amp; export PATH=$GOROOT/bin:$PATH</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go version</span><br></pre></td></tr></table></figure>
+<h3 id="2-安装-Ngrok"><a href="#2-安装-Ngrok" class="headerlink" title="2. 安装 Ngrok"></a>2. 安装 Ngrok</h3><p>创建目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir /opt/ngrok</span><br><span class="line">cd /opt/ngrok</span><br><span class="line">git clone https://github.com/inconshreveable/ngrok.git</span><br></pre></td></tr></table></figure>
+<p>生成密钥<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd ngrok</span><br><span class="line">export NGROK_DOMAIN=&quot;dev.applehater.cn&quot; #设置你的域名</span><br></pre></td></tr></table></figure></p>
+<p>一行执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">openssl genrsa -out base.key 2048 \</span><br><span class="line">&amp;&amp; openssl req -new -x509 -nodes -key base.key -days 10000 -subj &quot;/CN=$NGROK_DOMAIN&quot; -out base.pem \</span><br><span class="line">&amp;&amp; openssl genrsa -out server.key 2048 \</span><br><span class="line">&amp;&amp; openssl req -new -key server.key -subj &quot;/CN=$NGROK_DOMAIN&quot; -out server.csr \</span><br><span class="line">&amp;&amp; openssl x509 -req -in server.csr -CA base.pem -CAkey base.key -CAcreateserial -days 10000 -out server.crt \</span><br><span class="line">&amp;&amp; cp base.pem assets/client/tls/ngrokroot.crt</span><br></pre></td></tr></table></figure></p>
+<p>编译<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GOOS=linux GOARCH=amd64 make release-server \</span><br><span class="line">&amp;&amp; GOOS=linux GOARCH=amd64 make release-client \</span><br><span class="line">&amp;&amp; GOOS=windows GOARCH=amd64 make release-client \</span><br><span class="line">&amp;&amp; GOOS=darwin GOARCH=amd64 make release-client</span><br></pre></td></tr></table></figure></p>
+<p>运行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup ./bin/ngrokd -domain=&quot;dev.applehater.cn&quot; -tlsKey=server.key -tlsCrt=keserver.crt -httpAddr=&quot;:9000&quot; -httpsAddr=&quot;:9001&quot; &gt; out.log &amp;</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-Nginx-配置"><a href="#3-Nginx-配置" class="headerlink" title="3. Nginx 配置"></a>3. Nginx 配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">	listen 80;</span><br><span class="line">	root /usr/share/nginx/html;</span><br><span class="line">	index index.html index.htm;</span><br><span class="line">	server_name *.dev.applehater.cn;# 泛域名解析</span><br><span class="line"></span><br><span class="line">	location / &#123;</span><br><span class="line">                proxy_pass http://localhost:9000;</span><br><span class="line">                proxy_set_header    X-Real-IP $remote_addr;</span><br><span class="line">                proxy_set_header    Host $http_host;</span><br><span class="line">                proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="4-客户端配置"><a href="#4-客户端配置" class="headerlink" title="4. 客户端配置"></a>4. 客户端配置</h3><p>创建文件夹 <code>ngrok</code> 放进<code>ngrok</code>进去</p>
+<p>创建启动脚本 <code>start.sh</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./ngrok -config ngrok.cfg start localhost</span><br></pre></td></tr></table></figure></p>
+<p>创建配置文件 <code>ngrok.cfg</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">server_addr: &quot;dev.applehater.cn:4443&quot;</span><br><span class="line">tunnels:</span><br><span class="line">  localhost:</span><br><span class="line">   hostname: &quot;zohar.dev.applehater.cn&quot; #定义子子域名</span><br><span class="line">   proto:</span><br><span class="line">    http: 127.0.0.1:8081 #映射端口，不加ip默认本机</span><br><span class="line">    https: 1127.0.0.1:443</span><br></pre></td></tr></table></figure></p>
+<p>赋予可执行权限<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod a+x ngrok</span><br></pre></td></tr></table></figure></p>
+<p>运行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./start.sh</span><br></pre></td></tr></table></figure></p>
+<p>在开发调试基于 Oauth 的接口（微信，微博等）非常有用。</p>
+<h2 id="使用-docker-运行-ngrok"><a href="#使用-docker-运行-ngrok" class="headerlink" title="使用 docker 运行 ngrok"></a>使用 docker 运行 ngrok</h2><p>把<code>dev.applehater.cn</code>改成你需要的域名</p>
+<h3 id="编译ngrok"><a href="#编译ngrok" class="headerlink" title="编译ngrok"></a>编译ngrok</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker run -idt --name ngrok-server \</span><br><span class="line">-v /opt/ngrok:/myfiles \</span><br><span class="line">-p 9000:80 \</span><br><span class="line">-p 9001:443 \</span><br><span class="line">-p 4443:4443 \</span><br><span class="line">-e DOMAIN=&apos;dev.applehater.cn&apos; hteen/ngrok /bin/sh /server.sh</span><br></pre></td></tr></table></figure>
+<h3 id="运行ngrok"><a href="#运行ngrok" class="headerlink" title="运行ngrok"></a>运行ngrok</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run --rm -it -e DOMAIN=&quot;dev.applehater.cn&quot; \</span><br><span class="line">-v /opt/ngrok:/myfiles hteen/ngrok /bin/sh /build.sh</span><br></pre></td></tr></table></figure>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-10-26T21:49:24.160Z" itemprop="dateUpdated">2019-10-27 05:49:24</time>
+</span><br>
+
+
+        
+        这里不可以写作者留言.
+        
+    </div>
+    <footer>
+        <a href="https://zh-h.github.io">
+            <img src="/img/avatar.jpg" alt="Zohar Hou">
+            Zohar Hou
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2016/12/12/90/&title=《Ngrok 快速编译配置》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2016/12/12/90/&title=《Ngrok 快速编译配置》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2016/12/12/90/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Ngrok 快速编译配置》 — Applehater&url=https://zh-h.github.io/2016/12/12/90/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2016/12/12/90/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2016/12/17/91/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">ESP8266 实现 Http 服务器控制 IO</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/11/23/89/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Docker &amp;amp; Spring Boot 实践</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'zh-h',
+            repo: 'zh-h.github.io.comment',
+            oauth: {
+                client_id: '3a6263282611b5518bd4',
+                client_secret: 'df06fc0681c7b83ceba630b8649f6cc80a0776ae',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+            <p>
+                
+                    <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+                    
+                        <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+            </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zohar Hou &copy; 2015 - 2019</span>
+            <span>
+                <a href="http://www.beian.gov.cn/portal/index" target="_blank">粤ICP备14081324号</a>
+            </span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2016/12/12/90/&title=《Ngrok 快速编译配置》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2016/12/12/90/&title=《Ngrok 快速编译配置》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2016/12/12/90/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Ngrok 快速编译配置》 — Applehater&url=https://zh-h.github.io/2016/12/12/90/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2016/12/12/90/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zh-h.github.io/2016/12/12/90/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Look at me !';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Emmm ...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

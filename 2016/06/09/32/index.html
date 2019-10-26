@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Java 类装载与资源路径的获取 | Applehater | developer ? operator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#009999">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="类加载当程序需要的某个类,那么需要通过类加载器把类的二进制加载到内存中,位于堆区。类加载器是Java类或者是C++类（Boostrap） 123456789101112131415161718192021+----------------+                    | Boostrap       |   JRE/lib/rt.jar   +--------+-------+">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 类装载与资源路径的获取">
+<meta property="og:url" content="https://zh-h.github.io/2016/06/09/32/index.html">
+<meta property="og:site_name" content="Applehater">
+<meta property="og:description" content="类加载当程序需要的某个类,那么需要通过类加载器把类的二进制加载到内存中,位于堆区。类加载器是Java类或者是C++类（Boostrap） 123456789101112131415161718192021+----------------+                    | Boostrap       |   JRE/lib/rt.jar   +--------+-------+">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2019-10-26T21:49:24.155Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 类装载与资源路径的获取">
+<meta name="twitter:description" content="类加载当程序需要的某个类,那么需要通过类加载器把类的二进制加载到内存中,位于堆区。类加载器是Java类或者是C++类（Boostrap） 123456789101112131415161718192021+----------------+                    | Boostrap       |   JRE/lib/rt.jar   +--------+-------+">
+    
+        <link rel="alternate" type="application/atom+xml" title="Applehater" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zohar Hou</h5>
+          <a href="mailto:emguaEBvdXRsb29rLmNvbQ==" title="emguaEBvdXRsb29rLmNvbQ==" class="mail">emguaEBvdXRsb29rLmNvbQ==</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories/Java/"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-weibo"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/links"  >
+                <i class="icon icon-lg icon-link"></i>
+                Links
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zh-h" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Java 类装载与资源路径的获取</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Java 类装载与资源路径的获取</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-06-09T03:20:00.000Z" itemprop="datePublished" class="page-time">
+  2016-06-09
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/原理/">原理</a></li></ul></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#类加载"><span class="post-toc-number">1.</span> <span class="post-toc-text"><a href="#&#x7C7B;&#x52A0;&#x8F7D;" class="headerlink" title="&#x7C7B;&#x52A0;&#x8F7D;"></a>&#x7C7B;&#x52A0;&#x8F7D;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#双亲委派机制"><span class="post-toc-number">1.1.</span> <span class="post-toc-text"><a href="#&#x53CC;&#x4EB2;&#x59D4;&#x6D3E;&#x673A;&#x5236;" class="headerlink" title="&#x53CC;&#x4EB2;&#x59D4;&#x6D3E;&#x673A;&#x5236;"></a>&#x53CC;&#x4EB2;&#x59D4;&#x6D3E;&#x673A;&#x5236;</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#加载并实例化类"><span class="post-toc-number">1.2.</span> <span class="post-toc-text"><a href="#&#x52A0;&#x8F7D;&#x5E76;&#x5B9E;&#x4F8B;&#x5316;&#x7C7B;" class="headerlink" title="&#x52A0;&#x8F7D;&#x5E76;&#x5B9E;&#x4F8B;&#x5316;&#x7C7B;"></a>&#x52A0;&#x8F7D;&#x5E76;&#x5B9E;&#x4F8B;&#x5316;&#x7C7B;</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#资源获取"><span class="post-toc-number">2.</span> <span class="post-toc-text"><a href="#&#x8D44;&#x6E90;&#x83B7;&#x53D6;" class="headerlink" title="&#x8D44;&#x6E90;&#x83B7;&#x53D6;"></a>&#x8D44;&#x6E90;&#x83B7;&#x53D6;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Spring-Resources"><span class="post-toc-number">3.</span> <span class="post-toc-text"><a href="#Spring-Resources" class="headerlink" title="Spring Resources"></a>Spring Resources</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Interface"><span class="post-toc-number">3.1.</span> <span class="post-toc-text"><a href="#Interface" class="headerlink" title="Interface"></a>Interface</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Default-implement"><span class="post-toc-number">3.2.</span> <span class="post-toc-text"><a href="#Default-implement" class="headerlink" title="Default implement"></a>Default implement</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Usage"><span class="post-toc-number">3.3.</span> <span class="post-toc-text"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-32"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Java 类装载与资源路径的获取</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-06-09 11:20:00" datetime="2016-06-09T03:20:00.000Z"  itemprop="datePublished">2016-06-09</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/原理/">原理</a></li></ul></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a>类加载</h2><p>当程序需要的某个类,那么需要通过类加载器把类的二进制加载到内存中,位于堆区。<br>类加载器是Java类或者是C++类（Boostrap）</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">+----------------+                    </span><br><span class="line">| Boostrap       |   JRE/lib/rt.jar   </span><br><span class="line">+--------+-------+                    </span><br><span class="line">         ^                            </span><br><span class="line">         |                            </span><br><span class="line">         |                            </span><br><span class="line">+--------+-------+                    </span><br><span class="line">| ExtClassLoader |   JRE/lib/ext/*.jar</span><br><span class="line">+--------+-------+                    </span><br><span class="line">         ^                            </span><br><span class="line">         |                            </span><br><span class="line">         |                            </span><br><span class="line">+--------+-------+                    </span><br><span class="line">| AppClassLoader |   ClassPath        </span><br><span class="line">+--------+-------+                    </span><br><span class="line">         ^                            </span><br><span class="line">         |                            </span><br><span class="line">         |                            </span><br><span class="line">+--------+-------+                    </span><br><span class="line">| YoursClassLoade|   Custom           </span><br><span class="line">+----------------+</span><br></pre></td></tr></table></figure>
+<p><strong>1. 启动（Bootstrap）类加载器</strong>：引导类装入器是用本地代码实现的类装入器，它负责将<code>JRE/lib</code>下面的类库加载到内存中。由于引导类加载器涉及到虚拟机本地实现细节，开发者无法直接获取到启动类加载器的引用，所以不允许直接通过引用进行操作。</p>
+<p><strong>2. 标准扩展（Extension）类加载器</strong>：扩展类加载器是由 Sun 的<code>ExtClassLoader(sun.misc.Launcher$ExtClassLoader)</code>实现的。它负责将<code>JRE/lib/ext</code>或者由系统变量 <code>java.ext.dir</code>指定位置中的类库加载到内存中。</p>
+<p><strong>3. 系统（System）类加载器</strong>：系统类加载器是由 Sun 的<code>AppClassLoader(sun.misc.Launcher$AppClassLoader)</code>实现的。它负责将系统类路径<code>CLASSPATH</code>中指定的类库加载到内存中。</p>
+<p><strong>4. 自定义的类加载器</strong>：使用<code>ClassLoader.loadClass()</code>方法。</p>
+<h3 id="双亲委派机制"><a href="#双亲委派机制" class="headerlink" title="双亲委派机制"></a>双亲委派机制</h3><p>当某个类加载器执行加载类任务时，首先将加载任务委托给父类加载器，一直上交，当父父父类加载器完成类加载任务，就成功返回；当父类加载器无法完成此加载任务时，由自身去加载。</p>
+<h3 id="加载并实例化类"><a href="#加载并实例化类" class="headerlink" title="加载并实例化类"></a>加载并实例化类</h3><p>在SQL操作中<code>Class.forName(&quot;com.mysql.jdbc.Driver&quot;);</code>加载了驱动类，并实例化。<code>DriverManager.getConnection()</code>依赖驱动，在内从中获取驱动的实例，然后执行相应的操作。</p>
+<h2 id="资源获取"><a href="#资源获取" class="headerlink" title="资源获取"></a>资源获取</h2><p>类加载器中的方法可以用来获取<code>*.java</code>文件的一些信息。<br>如读取类路径的文件，如 Maven 项目中的 resources 目录下的文件。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">readTranslateJsonFileToString</span><span class="params">(String resourceName)</span> </span>&#123;</span><br><span class="line">    ClassLoader classLoader = LocationTranslateUtil.class.getClassLoader();</span><br><span class="line">    URL resource = classLoader.getResource(resourceName);</span><br><span class="line">    StringBuilder content = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    <span class="keyword">if</span> (resource != <span class="keyword">null</span>) &#123;</span><br><span class="line">        File file = <span class="keyword">new</span> File(resource.getFile());</span><br><span class="line">        InputStream is;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            is = <span class="keyword">new</span> FileInputStream(file);</span><br><span class="line">            InputStreamReader isr = <span class="keyword">new</span> InputStreamReader(is, <span class="string">"UTF-8"</span>);</span><br><span class="line">            BufferedReader br = <span class="keyword">new</span> BufferedReader(isr);</span><br><span class="line">            String temp;</span><br><span class="line">            <span class="keyword">while</span> ((temp = br.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">                content.append(temp);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            <span class="comment">// TODO</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> content.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>ClassLoader</code>的作用</p>
+<h2 id="Spring-Resources"><a href="#Spring-Resources" class="headerlink" title="Spring Resources"></a>Spring Resources</h2><h3 id="Interface"><a href="#Interface" class="headerlink" title="Interface"></a>Interface</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public interface Resource extends InputStreamSource &#123;</span><br><span class="line"></span><br><span class="line">    boolean exists();</span><br><span class="line"></span><br><span class="line">    boolean isOpen();</span><br><span class="line"></span><br><span class="line">    URL getURL() throws IOException;</span><br><span class="line"></span><br><span class="line">    File getFile() throws IOException;</span><br><span class="line"></span><br><span class="line">    Resource createRelative(String relativePath) throws IOException;</span><br><span class="line"></span><br><span class="line">    String getFilename();</span><br><span class="line"></span><br><span class="line">    String getDescription();</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Default-implement"><a href="#Default-implement" class="headerlink" title="Default implement"></a>Default implement</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public Resource getResource(String location) &#123;</span><br><span class="line">        Assert.notNull(location, &quot;Location must not be null&quot;);</span><br><span class="line">        if(location.startsWith(&quot;classpath:&quot;)) &#123;</span><br><span class="line">            return new ClassPathResource(location.substring(&quot;classpath:&quot;.length()), this.getClassLoader());</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                URL url = new URL(location);</span><br><span class="line">                return new UrlResource(url);</span><br><span class="line">            &#125; catch (MalformedURLException var3) &#123;</span><br><span class="line">                return this.getResourceByPath(location);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">	</span><br><span class="line">classpath:com/myapp/config.xml // Loaded from the classpath.</span><br><span class="line"></span><br><span class="line">file:///data/config.xml // Loaded as a URL, from the filesystem. [1]</span><br><span class="line"></span><br><span class="line">http://myserver/logo.png // Loaded as a URL.</span><br><span class="line">	</span><br><span class="line">/data/config.xml // Depends on the underlying ApplicationContext. Base on webapp while running on IDE</span><br></pre></td></tr></table></figure>
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-10-26T21:49:24.155Z" itemprop="dateUpdated">2019-10-27 05:49:24</time>
+</span><br>
+
+
+        
+        这里不可以写作者留言.
+        
+    </div>
+    <footer>
+        <a href="https://zh-h.github.io">
+            <img src="/img/avatar.jpg" alt="Zohar Hou">
+            Zohar Hou
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2016/06/09/32/&title=《Java 类装载与资源路径的获取》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2016/06/09/32/&title=《Java 类装载与资源路径的获取》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2016/06/09/32/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java 类装载与资源路径的获取》 — Applehater&url=https://zh-h.github.io/2016/06/09/32/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2016/06/09/32/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2016/06/11/33/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">BUG!HttpServletRequest#getCookies()在iPhone的Safari浏览器浏览时出现null异常</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/05/22/30/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Django 返回图片流</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'zh-h',
+            repo: 'zh-h.github.io.comment',
+            oauth: {
+                client_id: '3a6263282611b5518bd4',
+                client_secret: 'df06fc0681c7b83ceba630b8649f6cc80a0776ae',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+            <p>
+                
+                    <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+                    
+                        <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+            </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zohar Hou &copy; 2015 - 2019</span>
+            <span>
+                <a href="http://www.beian.gov.cn/portal/index" target="_blank">粤ICP备14081324号</a>
+            </span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2016/06/09/32/&title=《Java 类装载与资源路径的获取》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2016/06/09/32/&title=《Java 类装载与资源路径的获取》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2016/06/09/32/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java 类装载与资源路径的获取》 — Applehater&url=https://zh-h.github.io/2016/06/09/32/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2016/06/09/32/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zh-h.github.io/2016/06/09/32/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Look at me !';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Emmm ...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

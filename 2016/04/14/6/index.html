@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Django 部署 uWSGI or Gunicorn + Nginx + Supervisor | Applehater | developer ? operator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#009999">
+    
+    
+    <meta name="keywords" content="nginx,python,django,Django,Python,supervisor,uwsgi">
+    <meta name="description" content="附上对比 来源UWSGI VS. GUNICORN, OR HOW TO MAKE PYTHON GO FASTER THAN NODE 使用pip镜像编辑 ~/.pip/pip.conf     [global]    index-url=https://pypi.tuna.tsinghua.edu.cn/simple/  *windows* 编辑 %APPDATA%\pip\pip.ini">
+<meta name="keywords" content="nginx,python,django,Django,Python,supervisor,uwsgi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django 部署 uWSGI or Gunicorn + Nginx + Supervisor">
+<meta property="og:url" content="https://zh-h.github.io/2016/04/14/6/index.html">
+<meta property="og:site_name" content="Applehater">
+<meta property="og:description" content="附上对比 来源UWSGI VS. GUNICORN, OR HOW TO MAKE PYTHON GO FASTER THAN NODE 使用pip镜像编辑 ~/.pip/pip.conf     [global]    index-url=https://pypi.tuna.tsinghua.edu.cn/simple/  *windows* 编辑 %APPDATA%\pip\pip.ini">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="http://applehater.cn/usr/uploads/2016/09/2617750867.png">
+<meta property="og:updated_time" content="2019-10-26T21:49:24.158Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Django 部署 uWSGI or Gunicorn + Nginx + Supervisor">
+<meta name="twitter:description" content="附上对比 来源UWSGI VS. GUNICORN, OR HOW TO MAKE PYTHON GO FASTER THAN NODE 使用pip镜像编辑 ~/.pip/pip.conf     [global]    index-url=https://pypi.tuna.tsinghua.edu.cn/simple/  *windows* 编辑 %APPDATA%\pip\pip.ini">
+<meta name="twitter:image" content="http://applehater.cn/usr/uploads/2016/09/2617750867.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Applehater" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zohar Hou</h5>
+          <a href="mailto:emguaEBvdXRsb29rLmNvbQ==" title="emguaEBvdXRsb29rLmNvbQ==" class="mail">emguaEBvdXRsb29rLmNvbQ==</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories/Java/"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-weibo"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/links"  >
+                <i class="icon icon-lg icon-link"></i>
+                Links
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zh-h" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Django 部署 uWSGI or Gunicorn + Nginx + Supervisor</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Django 部署 uWSGI or Gunicorn + Nginx + Supervisor</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-04-14T06:16:00.000Z" itemprop="datePublished" class="page-time">
+  2016-04-14
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#使用pip镜像"><span class="post-toc-number">1.</span> <span class="post-toc-text"><a href="#&#x4F7F;&#x7528;pip&#x955C;&#x50CF;" class="headerlink" title="&#x4F7F;&#x7528;pip&#x955C;&#x50CF;"></a>&#x4F7F;&#x7528;pip&#x955C;&#x50CF;</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#更新依赖"><span class="post-toc-number">2.</span> <span class="post-toc-text"><a href="#&#x66F4;&#x65B0;&#x4F9D;&#x8D56;" class="headerlink" title="&#x66F4;&#x65B0;&#x4F9D;&#x8D56;"></a>&#x66F4;&#x65B0;&#x4F9D;&#x8D56;</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#编辑配置文件-uwsgi-ini"><span class="post-toc-number">3.</span> <span class="post-toc-text"><a href="#&#x7F16;&#x8F91;&#x914D;&#x7F6E;&#x6587;&#x4EF6;-uwsgi-ini" class="headerlink" title="&#x7F16;&#x8F91;&#x914D;&#x7F6E;&#x6587;&#x4EF6; uwsgi.ini"></a>&#x7F16;&#x8F91;&#x914D;&#x7F6E;&#x6587;&#x4EF6; <code>uwsgi.ini</code></span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#执行命令"><span class="post-toc-number">4.</span> <span class="post-toc-text"><a href="#&#x6267;&#x884C;&#x547D;&#x4EE4;" class="headerlink" title="&#x6267;&#x884C;&#x547D;&#x4EE4;"></a>&#x6267;&#x884C;&#x547D;&#x4EE4;</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#运行情况"><span class="post-toc-number">5.</span> <span class="post-toc-text"><a href="#&#x8FD0;&#x884C;&#x60C5;&#x51B5;" class="headerlink" title="&#x8FD0;&#x884C;&#x60C5;&#x51B5;"></a>&#x8FD0;&#x884C;&#x60C5;&#x51B5;</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#nginx-配置-文件-etc-nginx-site-avaiable-test"><span class="post-toc-number">6.</span> <span class="post-toc-text"><a href="#nginx-&#x914D;&#x7F6E;-&#x6587;&#x4EF6;-etc-nginx-site-avaiable-test" class="headerlink" title="nginx &#x914D;&#x7F6E; &#x6587;&#x4EF6; /etc/nginx/site-avaiable/test"></a>nginx &#x914D;&#x7F6E; &#x6587;&#x4EF6; <code>/etc/nginx/site-avaiable/test</code></span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#supervisor-配置文件-etc-supervisor-supervisor-conf"><span class="post-toc-number">7.</span> <span class="post-toc-text"><a href="#supervisor-&#x914D;&#x7F6E;&#x6587;&#x4EF6;-etc-supervisor-supervisor-conf" class="headerlink" title="supervisor &#x914D;&#x7F6E;&#x6587;&#x4EF6; /etc/supervisor/supervisor.conf"></a>supervisor &#x914D;&#x7F6E;&#x6587;&#x4EF6; <code>/etc/supervisor/supervisor.conf</code></span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#使用-uwsgi"><span class="post-toc-number">7.1.</span> <span class="post-toc-text"><a href="#&#x4F7F;&#x7528;-uwsgi" class="headerlink" title="&#x4F7F;&#x7528; uwsgi"></a>&#x4F7F;&#x7528; uwsgi</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#使用-gunicorn"><span class="post-toc-number">7.2.</span> <span class="post-toc-text"><a href="#&#x4F7F;&#x7528;-gunicorn" class="headerlink" title="&#x4F7F;&#x7528; gunicorn"></a>&#x4F7F;&#x7528; gunicorn</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#查看状态"><span class="post-toc-number">8.</span> <span class="post-toc-text"><a href="#&#x67E5;&#x770B;&#x72B6;&#x6001;" class="headerlink" title="&#x67E5;&#x770B;&#x72B6;&#x6001;"></a>&#x67E5;&#x770B;&#x72B6;&#x6001;</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#启动"><span class="post-toc-number">9.</span> <span class="post-toc-text"><a href="#&#x542F;&#x52A8;" class="headerlink" title="&#x542F;&#x52A8;"></a>&#x542F;&#x52A8;</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-6"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Django 部署 uWSGI or Gunicorn + Nginx + Supervisor</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-04-14 14:16:00" datetime="2016-04-14T06:16:00.000Z"  itemprop="datePublished">2016-04-14</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>附上对比<br><img src="http://applehater.cn/usr/uploads/2016/09/2617750867.png" alt="benchmark.png"></p>
+<p>来源<a href="http://blog.kgriffs.com/2012/12/18/uwsgi-vs-gunicorn-vs-node-benchmarks.html" target="_blank" rel="noopener">UWSGI VS. GUNICORN, OR HOW TO MAKE PYTHON GO FASTER THAN NODE</a></p>
+<h1 id="使用pip镜像"><a href="#使用pip镜像" class="headerlink" title="使用pip镜像"></a>使用pip镜像</h1><pre><code>编辑 ~/.pip/pip.conf
+
+   [global]
+   index-url=https://pypi.tuna.tsinghua.edu.cn/simple/
+
+*windows*
+编辑 %APPDATA%\pip\pip.ini
+    [global]
+    timeout = 6000
+    index-url = http://pypi.douban.com/simple
+    trusted-host = pypi.douban.com
+</code></pre><h1 id="更新依赖"><a href="#更新依赖" class="headerlink" title="更新依赖"></a>更新依赖</h1><pre><code>pip install uwsgi
+</code></pre><h1 id="编辑配置文件-uwsgi-ini"><a href="#编辑配置文件-uwsgi-ini" class="headerlink" title="编辑配置文件 uwsgi.ini"></a>编辑配置文件 <code>uwsgi.ini</code></h1><pre><code>[uwsgi]
+# Django-related settings
+chdir           = /home/zonghua/Documents/test_project
+module          = test_project.wsgi:application
+env             = DJANGO_SETTINGS_MODULE=test_project.settings_production
+home            = /home/zonghua/Documents/test_project/venv
+reload-mercy    = 10
+user            = zonghua
+uid             = zonghua
+pcre-jit
+thunder-lock
+enable-threads
+master          = True
+threads         = 2
+processes       = 4
+socket          = 127.0.0.1:8001
+chmod-socket    = 664
+vacuum          = true
+</code></pre><h1 id="执行命令"><a href="#执行命令" class="headerlink" title="执行命令"></a>执行命令</h1><pre><code>uwsgi --ini uwsgi.ini 
+</code></pre><h1 id="运行情况"><a href="#运行情况" class="headerlink" title="运行情况"></a>运行情况</h1><pre><code>[uWSGI] getting INI configuration from /home/zonghua/Documents/test_project/uwsgi.ini
+*** Starting uWSGI 2.0.12 (64bit) on [Tue Apr  5 13:59:02 2016] ***
+compiled with version: 5.2.1 20151010 on 04 April 2016 01:12:07
+os: Linux-4.2.0-34-generic #39-Ubuntu SMP Thu Mar 10 22:13:01 UTC 2016
+nodename: x
+machine: x86_64
+clock source: unix
+pcre jit enabled
+detected number of CPU cores: 4
+current working directory: /home/zonghua/Documents/test_project
+detected binary path: /home/zonghua/Documents/test_project/venv/bin/uwsgi
+chdir() to /home/zonghua/Documents/test_project
+your processes number limit is 11829
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: enabled
+uwsgi socket 0 bound to TCP address 127.0.0.1:8001 fd 3
+Python version: 2.7.10 (default, Oct 14 2015, 16:09:02)  [GCC 5.2.1 20151010]
+Set PythonHome to /home/zonghua/Documents/test_project/venv
+Python main interpreter initialized at 0x93b180
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 415360 bytes (405 KB) for 8 cores
+*** Operational MODE: preforking+threaded ***
+WSGI app 0 (mountpoint=&apos;&apos;) ready in 1 seconds on interpreter 0x93b180 pid: 2781 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 2781)
+spawned uWSGI worker 1 (pid: 2784, cores: 2)
+spawned uWSGI worker 2 (pid: 2785, cores: 2)
+spawned uWSGI worker 3 (pid: 2787, cores: 2)
+spawned uWSGI worker 4 (pid: 2789, cores: 2)
+</code></pre><p><a href="https://uwsgi-docs.readthedocs.io/en/latest/" target="_blank" rel="noopener">uWSGI 文档</a></p>
+<h1 id="nginx-配置-文件-etc-nginx-site-avaiable-test"><a href="#nginx-配置-文件-etc-nginx-site-avaiable-test" class="headerlink" title="nginx 配置 文件 /etc/nginx/site-avaiable/test"></a>nginx 配置 文件 <code>/etc/nginx/site-avaiable/test</code></h1><pre><code>server {
+    listen 80;
+    charset utf-8;
+    client_max_body_size 75M;
+    location /media {
+        alias /path/to/project/media;
+    }
+    location /static {
+       alias /path/to/project/static;
+   }
+    location / {
+        uwsgi_pass 127.0.0.1:8001;
+        include uwsgi_params;
+    }
+}
+</code></pre><h1 id="supervisor-配置文件-etc-supervisor-supervisor-conf"><a href="#supervisor-配置文件-etc-supervisor-supervisor-conf" class="headerlink" title="supervisor 配置文件 /etc/supervisor/supervisor.conf"></a>supervisor 配置文件 <code>/etc/supervisor/supervisor.conf</code></h1><h2 id="使用-uwsgi"><a href="#使用-uwsgi" class="headerlink" title="使用 uwsgi"></a>使用 uwsgi</h2><pre><code>[program:test]
+directory= /home/zonghua/Documents/test_project
+command = /home/zonghua/Documents/test_project/venv/bin/uwsgi --ini /home/zonghua/Documents/test_project/uwsgi.ini
+user = zonghua
+autostart = true
+autorestart = true
+stopsignal = QUIT
+redirect_stderr = true
+loglevel = error
+stdout_logfile = /home/zonghua/Documents/test_project/logs/uwsgi_out.log
+stderr_logfile = /home/zonghua/Documents/test_project/logs/uwsgi_err.log
+logfile_maxbytes = 1M
+</code></pre><h2 id="使用-gunicorn"><a href="#使用-gunicorn" class="headerlink" title="使用 gunicorn"></a>使用 gunicorn</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">directory= /home/py/www/thesis</span><br><span class="line">command = gunicorn thesis_mis.wsgi --workers 6 --bind 0.0.0.0:8001 --env DJANGO_SETTINGS_MODULE=thesis_mis.settings_production</span><br><span class="line">user = li</span><br><span class="line">autostart = true</span><br><span class="line">autorestart = true</span><br><span class="line">stopsignal = QUIT</span><br><span class="line">redirect_stderr = true</span><br><span class="line">loglevel = error</span><br><span class="line">stdout_logfile = /home/py/www/uwsgi_out.log</span><br><span class="line">stderr_logfile = /home/py/www/uwsgi_err.log</span><br><span class="line">logfile_maxbytes = 1M</span><br></pre></td></tr></table></figure>
+<h1 id="查看状态"><a href="#查看状态" class="headerlink" title="查看状态"></a>查看状态</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">supervisorctl status all</span><br></pre></td></tr></table></figure>
+<h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">supervisorctl [start|stop|restart|status] test</span><br></pre></td></tr></table></figure>
+<p><a href="http://supervisord.org/running.html" target="_blank" rel="noopener">Supervisor 文档</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-10-26T21:49:24.158Z" itemprop="dateUpdated">2019-10-27 05:49:24</time>
+</span><br>
+
+
+        
+        这里不可以写作者留言.
+        
+    </div>
+    <footer>
+        <a href="https://zh-h.github.io">
+            <img src="/img/avatar.jpg" alt="Zohar Hou">
+            Zohar Hou
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Django/">Django</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/">django</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx/">nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/supervisor/">supervisor</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/uwsgi/">uwsgi</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2016/04/14/6/&title=《Django 部署 uWSGI or Gunicorn + Nginx + Supervisor》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2016/04/14/6/&title=《Django 部署 uWSGI or Gunicorn + Nginx + Supervisor》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2016/04/14/6/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Django 部署 uWSGI or Gunicorn + Nginx + Supervisor》 — Applehater&url=https://zh-h.github.io/2016/04/14/6/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2016/04/14/6/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2016/04/21/4/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Django 之奇技淫巧 Admin</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/03/29/3/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Django 之奇技淫巧 Model</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'zh-h',
+            repo: 'zh-h.github.io.comment',
+            oauth: {
+                client_id: '3a6263282611b5518bd4',
+                client_secret: 'df06fc0681c7b83ceba630b8649f6cc80a0776ae',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+            <p>
+                
+                    <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+                    
+                        <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+            </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zohar Hou &copy; 2015 - 2019</span>
+            <span>
+                <a href="http://www.beian.gov.cn/portal/index" target="_blank">粤ICP备14081324号</a>
+            </span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2016/04/14/6/&title=《Django 部署 uWSGI or Gunicorn + Nginx + Supervisor》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2016/04/14/6/&title=《Django 部署 uWSGI or Gunicorn + Nginx + Supervisor》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2016/04/14/6/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Django 部署 uWSGI or Gunicorn + Nginx + Supervisor》 — Applehater&url=https://zh-h.github.io/2016/04/14/6/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2016/04/14/6/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zh-h.github.io/2016/04/14/6/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Look at me !';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Emmm ...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

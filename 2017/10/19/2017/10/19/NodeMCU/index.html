@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>NodeMCU with MicroPython | Applehater | developer ? operator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#009999">
+    
+    
+    <meta name="keywords" content="python,IoT">
+    <meta name="description" content="刷入固件准备 使用 USB 连接 NodeMCU 到 PC 下载 MicroPython for ESP8266 的固件 下载安装 CP210x_Windows_Drivers 使用 pip 安装 esptool 和 ampy  擦除Flash 在设备管理器中找到串口连接串口号（比如 COM3） 运行esptool.py --port COM3 erase_flash把先前固件的数据都删掉，防止出">
+<meta name="keywords" content="python,IoT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NodeMCU with MicroPython">
+<meta property="og:url" content="https://zh-h.github.io/2017/10/19/2017/10/19/NodeMCU/index.html">
+<meta property="og:site_name" content="Applehater">
+<meta property="og:description" content="刷入固件准备 使用 USB 连接 NodeMCU 到 PC 下载 MicroPython for ESP8266 的固件 下载安装 CP210x_Windows_Drivers 使用 pip 安装 esptool 和 ampy  擦除Flash 在设备管理器中找到串口连接串口号（比如 COM3） 运行esptool.py --port COM3 erase_flash把先前固件的数据都删掉，防止出">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="http://wx4.sinaimg.cn/large/e7c91439ly1fknxp6kjmqj20ck0c5myu.jpg">
+<meta property="og:image" content="http://wx2.sinaimg.cn/large/e7c91439ly1fknxp6h5s0j20ck0c5t9y.jpg">
+<meta property="og:updated_time" content="2019-10-26T21:49:24.153Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="NodeMCU with MicroPython">
+<meta name="twitter:description" content="刷入固件准备 使用 USB 连接 NodeMCU 到 PC 下载 MicroPython for ESP8266 的固件 下载安装 CP210x_Windows_Drivers 使用 pip 安装 esptool 和 ampy  擦除Flash 在设备管理器中找到串口连接串口号（比如 COM3） 运行esptool.py --port COM3 erase_flash把先前固件的数据都删掉，防止出">
+<meta name="twitter:image" content="http://wx4.sinaimg.cn/large/e7c91439ly1fknxp6kjmqj20ck0c5myu.jpg">
+    
+        <link rel="alternate" type="application/atom+xml" title="Applehater" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zohar Hou</h5>
+          <a href="mailto:emguaEBvdXRsb29rLmNvbQ==" title="emguaEBvdXRsb29rLmNvbQ==" class="mail">emguaEBvdXRsb29rLmNvbQ==</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories/Java/"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-weibo"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/links"  >
+                <i class="icon icon-lg icon-link"></i>
+                Links
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zh-h" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">NodeMCU with MicroPython</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">NodeMCU with MicroPython</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-18T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2017-10-19
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/">Linux</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#刷入固件"><span class="post-toc-number">1.</span> <span class="post-toc-text"><a href="#&#x5237;&#x5165;&#x56FA;&#x4EF6;" class="headerlink" title="&#x5237;&#x5165;&#x56FA;&#x4EF6;"></a>&#x5237;&#x5165;&#x56FA;&#x4EF6;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#准备"><span class="post-toc-number">1.1.</span> <span class="post-toc-text"><a href="#&#x51C6;&#x5907;" class="headerlink" title="&#x51C6;&#x5907;"></a>&#x51C6;&#x5907;</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#擦除Flash"><span class="post-toc-number">1.2.</span> <span class="post-toc-text"><a href="#&#x64E6;&#x9664;Flash" class="headerlink" title="&#x64E6;&#x9664;Flash"></a>&#x64E6;&#x9664;Flash</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#刷入"><span class="post-toc-number">1.3.</span> <span class="post-toc-text"><a href="#&#x5237;&#x5165;" class="headerlink" title="&#x5237;&#x5165;"></a>&#x5237;&#x5165;</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#REPL"><span class="post-toc-number">2.</span> <span class="post-toc-text"><a href="#REPL" class="headerlink" title="REPL"></a>REPL</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#putty"><span class="post-toc-number">2.1.</span> <span class="post-toc-text"><a href="#putty" class="headerlink" title="putty"></a>putty</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#ampy"><span class="post-toc-number">2.2.</span> <span class="post-toc-text"><a href="#ampy" class="headerlink" title="ampy"></a>ampy</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#node-serialport"><span class="post-toc-number">2.3.</span> <span class="post-toc-text"><a href="#node-serialport" class="headerlink" title="node-serialport"></a>node-serialport</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#使用-MicroPython-进行编程"><span class="post-toc-number">3.</span> <span class="post-toc-text"><a href="#&#x4F7F;&#x7528;-MicroPython-&#x8FDB;&#x884C;&#x7F16;&#x7A0B;" class="headerlink" title="&#x4F7F;&#x7528; MicroPython &#x8FDB;&#x884C;&#x7F16;&#x7A0B;"></a>&#x4F7F;&#x7528; MicroPython &#x8FDB;&#x884C;&#x7F16;&#x7A0B;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#串口编程"><span class="post-toc-number">4.</span> <span class="post-toc-text"><a href="#&#x4E32;&#x53E3;&#x7F16;&#x7A0B;" class="headerlink" title="&#x4E32;&#x53E3;&#x7F16;&#x7A0B;"></a>&#x4E32;&#x53E3;&#x7F16;&#x7A0B;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#使用-node-serialport"><span class="post-toc-number">4.1.</span> <span class="post-toc-text"><a href="#&#x4F7F;&#x7528;-node-serialport" class="headerlink" title="&#x4F7F;&#x7528; node-serialport"></a>&#x4F7F;&#x7528; node-serialport</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#non-blocking-input-raw-input"><span class="post-toc-number">5.</span> <span class="post-toc-text"><a href="#non-blocking-input-raw-input" class="headerlink" title="non-blocking input | raw input"></a>non-blocking input | raw input</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-2017/10/19/NodeMCU"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">NodeMCU with MicroPython</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-19 00:00:00" datetime="2017-10-18T16:00:00.000Z"  itemprop="datePublished">2017-10-19</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/">Linux</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="刷入固件"><a href="#刷入固件" class="headerlink" title="刷入固件"></a>刷入固件</h2><h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><ol>
+<li>使用 USB 连接 NodeMCU 到 PC</li>
+<li>下载 MicroPython for ESP8266 的固件</li>
+<li>下载安装 CP210x_Windows_Drivers</li>
+<li>使用 pip 安装 esptool 和 ampy</li>
+</ol>
+<h3 id="擦除Flash"><a href="#擦除Flash" class="headerlink" title="擦除Flash"></a>擦除Flash</h3><ol>
+<li>在设备管理器中找到串口连接串口号（比如 COM3）</li>
+<li>运行<code>esptool.py --port COM3 erase_flash</code>把先前固件的数据都删掉，防止出现一些问题<br>运行正确的话输出如下<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ esptool.py --port COM3 erase_flash</span><br><span class="line">esptool.py v2.1</span><br><span class="line">Connecting....</span><br><span class="line">Detecting chip <span class="built_in">type</span>... ESP8266</span><br><span class="line">Chip is ESP8266</span><br><span class="line">Uploading stub...</span><br><span class="line">Running stub...</span><br><span class="line">Stub running...</span><br><span class="line">Erasing flash (this may take a <span class="keyword">while</span>)...</span><br><span class="line">Chip erase completed successfully <span class="keyword">in</span> 10.6s</span><br><span class="line">Hard resetting...</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="刷入"><a href="#刷入" class="headerlink" title="刷入"></a>刷入</h3><ol>
+<li><p>运行<code>esptool.py --port COM3 write_flash -fm qio 0x00000 esp8266-20170823-v1.9.2.bin</code><br>默认的<code>-fm</code>写入模式是<code>dio</code>对于大于 4M 的 Flash 会有更好的兼容，但是速率受限。</p>
+<blockquote>
+<p>multi I/O SPI设备是有从单一设备支持增加带宽或throughput的能力。相对于标准的串行Flash存储设备，一个dual I/O接口能够使能双倍的速率。quad I/O接口能提升throughput四次。</p>
+</blockquote>
+</li>
+<li><p>运行成功的输出如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">$ esptool.py --port COM3 write_flash -fm qio 0x00000 esp8266-20170823-v1.9.2.bin</span><br><span class="line">8266-20170823-v1.9.2.bin</span><br><span class="line">esptool.py v2.1</span><br><span class="line">Connecting....</span><br><span class="line">Detecting chip <span class="built_in">type</span>... ESP8266</span><br><span class="line">Chip is ESP8266</span><br><span class="line">Uploading stub...</span><br><span class="line">Running stub...</span><br><span class="line">Stub running...</span><br><span class="line">Configuring flash size...</span><br><span class="line">Auto-detected Flash size: 4MB</span><br><span class="line">Flash params <span class="built_in">set</span> to 0x0240</span><br><span class="line">Compressed 601136 bytes to 392067...</span><br><span class="line">Wrote 601136 bytes (392067 compressed) at 0x00000000 <span class="keyword">in</span> 34.7 seconds (effective 138.7 kbit/s)...</span><br><span class="line">Hash of data verified.</span><br><span class="line"></span><br><span class="line">Leaving...</span><br><span class="line">Hard resetting...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>按下板子的 RST 键重启</p>
+</li>
+</ol>
+<h2 id="REPL"><a href="#REPL" class="headerlink" title="REPL"></a>REPL</h2><blockquote>
+<p>REPL — 交互式解释器环境。<br>R(read)、E(evaluate)、P(print)、L(loop)<br>输入值，交互式解释器会读取输入内容并对它求值，再返回结果，并重复此过程。</p>
+</blockquote>
+<p>Micropython 提供REPL，但是为了能够人机交互，需要其他的软件接收信号发送给开发板。</p>
+<h3 id="putty"><a href="#putty" class="headerlink" title="putty"></a>putty</h3><ol>
+<li>设置串口号和波特率</li>
+</ol>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://wx4.sinaimg.cn/large/e7c91439ly1fknxp6kjmqj20ck0c5myu.jpg" alt="设置串口号和波特率" title="">
+                </div>
+                <div class="image-caption">设置串口号和波特率</div>
+            </figure>
+<ol>
+<li>设置其他参数</li>
+</ol>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://wx2.sinaimg.cn/large/e7c91439ly1fknxp6h5s0j20ck0c5t9y.jpg" alt="设置其他参数" title="">
+                </div>
+                <div class="image-caption">设置其他参数</div>
+            </figure>
+<ol>
+<li>打开连接<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">l▒<span class="string">"rdr<span class="variable">$r</span>▒n▒▒▒▒▒oܟ▒▒#r▒▒b쏜#$▒#$▒▒l#$▒▒ln▒p&#123;l▒l▒▒|▒▒▒#4 ets_task(40100164, 3, 3fff837c, 4)</span></span><br><span class="line"><span class="string">OSError: [Errno 2] ENOENT</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">MicroPython v1.9.2-8-gbf8f45cf on 2017-08-23; ESP module with ESP8266</span></span><br><span class="line"><span class="string">Type "</span><span class="built_in">help</span>()<span class="string">" for more information.</span></span><br><span class="line"><span class="string">&gt;&gt;&gt; help()</span></span><br><span class="line"><span class="string">Welcome to MicroPython!</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="ampy"><a href="#ampy" class="headerlink" title="ampy"></a>ampy</h3><p>Adafruit MicroPython Tool 通过串口连接 MicroPython 单板的的工具，支持获取、罗列、删除、提交文件以及运行脚本的功能。</p>
+<ol>
+<li>运行<code>ampy --port COM3 get boot.py</code>获取<code>boot.py</code>的内容<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ ampy --port COM3 get boot.py</span><br><span class="line"># This file is executed on every boot (including wake-boot from deepsleep)</span><br><span class="line">#import esp</span><br><span class="line">#esp.osdebug(None)</span><br><span class="line">import gc</span><br><span class="line">#import webrepl</span><br><span class="line">#webrepl.start()</span><br><span class="line">gc.collect()</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>或者设置终端的环境变量<code>export AMPY_PORT=COM3</code>(Windows CMD: set AMPY_PORT=COM3)指定端口<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ampy get boot.py</span><br></pre></td></tr></table></figure></p>
+<h3 id="node-serialport"><a href="#node-serialport" class="headerlink" title="node-serialport"></a>node-serialport</h3><p>一个 Node.js 库，支持Linux、Windows和MacOS，使用 Javascript 事件驱动编程，支持命令行打开模拟终端连接串口</p>
+<ol>
+<li><p>罗列所有串口</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PS C:\&gt;serialport-term.cmd</span><br><span class="line">COM3    USB\VID_10C4&amp;PID_EA60\0001      Silicon Labs</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>进入终端</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">PS C:\&gt;serialport-term.cmd -p COM3 -b 115200</span><br><span class="line">l▒<span class="string">"rdr<span class="variable">$r</span>▒n▒▒▒▒▒oܟ▒▒#r▒▒b쏜#$▒#$▒▒l#$▒▒ln▒p&#123;l▒l▒▒|▒▒▒#4 ets_task(40100164, 3, 3fff837c, 4)</span></span><br><span class="line"><span class="string">OSError: [Errno 2] ENOENT</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">MicroPython v1.9.2-8-gbf8f45cf on 2017-08-23; ESP module with ESP8266</span></span><br><span class="line"><span class="string">Type "</span><span class="built_in">help</span>()<span class="string">" for more information.</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="使用-MicroPython-进行编程"><a href="#使用-MicroPython-进行编程" class="headerlink" title="使用 MicroPython 进行编程"></a>使用 MicroPython 进行编程</h2><p>// TODO</p>
+<h2 id="串口编程"><a href="#串口编程" class="headerlink" title="串口编程"></a>串口编程</h2><h3 id="使用-node-serialport"><a href="#使用-node-serialport" class="headerlink" title="使用 node-serialport"></a>使用 node-serialport</h3><ol>
+<li>使用<code>process.stdin.setRawMod(true)</code>获取所有按键输入，包括控制按键等,实现串口连接的模拟<a href="#REPL">终端</a><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> PORT_NAME = <span class="string">'COM3'</span></span><br><span class="line"><span class="keyword">const</span> BAUD_RATE = <span class="number">115200</span> <span class="comment">// config those</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> colors = <span class="built_in">require</span>(<span class="string">'colors'</span>)</span><br><span class="line"><span class="keyword">const</span> SerialPort = <span class="built_in">require</span>(<span class="string">'serialport'</span>);</span><br><span class="line"><span class="keyword">const</span> port = <span class="keyword">new</span> SerialPort(PORT_NAME, &#123;</span><br><span class="line">    baudRate: <span class="number">115200</span>,</span><br><span class="line">    autoOpen: <span class="literal">false</span>,</span><br><span class="line">    rtscts: <span class="literal">true</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> itOut = <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">    process.stdout.write(data.toString())</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> itError = <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">    process.stdout.write(data.toString())</span><br><span class="line">&#125;</span><br><span class="line">port.open(<span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">    port.write(<span class="string">'import os;os.listdir()\r'</span>) <span class="comment">// '\r' is return means next line, in Windows is '\r\n'</span></span><br><span class="line"></span><br><span class="line">    port.on(<span class="string">'error'</span>, err =&gt; &#123;</span><br><span class="line">        itError(err)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    port.on(<span class="string">'end'</span>, (s) =&gt; &#123;</span><br><span class="line">        port.flush()</span><br><span class="line">        port.close();</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    port.on(<span class="string">'readable'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        itOut(port.read())</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    process.stdin.setRawMode(<span class="literal">true</span>)</span><br><span class="line">    <span class="keyword">let</span> exitCounter = <span class="number">0</span></span><br><span class="line">    process.stdin.on(<span class="string">'data'</span>, (s) =&gt; &#123;</span><br><span class="line">        <span class="keyword">if</span> (s[<span class="number">0</span>] === <span class="number">0x03</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (exitCounter == <span class="number">1</span>) &#123;</span><br><span class="line">                itOut(<span class="string">'bye\n'</span>)</span><br><span class="line">                port.close();</span><br><span class="line">                process.exit(<span class="number">0</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                itOut(<span class="string">'Wanna exit? ctrl+c continue.\n'</span>)</span><br><span class="line">                port.write(s)  <span class="comment">// ctrl+c 终止当前运行的程序</span></span><br><span class="line">                exitCounter++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            exitCounter = <span class="number">0</span></span><br><span class="line">            port.write(s)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (s[<span class="number">0</span>] === <span class="number">0x0d</span>) &#123;</span><br><span class="line">            itOut(<span class="string">'\n'</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="non-blocking-input-raw-input"><a href="#non-blocking-input-raw-input" class="headerlink" title="non-blocking input | raw input"></a>non-blocking input | raw input</h2><p><strong>类似 node.js process.stdin.setRawMode(true) 的操作</strong>，不需要回车，获取所有包括ctrl+B等不可见字符</p>
+<ul>
+<li>Python<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 参考 Django createsuperuser 的时候输入密码的功能</span></span><br><span class="line"><span class="keyword">import</span> platform</span><br><span class="line"><span class="keyword">from</span> sys <span class="keyword">import</span> stdout</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Getcher</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.__getch = <span class="keyword">None</span></span><br><span class="line">        <span class="keyword">if</span> platform.system() == <span class="string">'Windows'</span>:</span><br><span class="line">            <span class="keyword">import</span> msvcrt</span><br><span class="line"></span><br><span class="line">            <span class="function"><span class="keyword">def</span> <span class="title">getch_func</span><span class="params">()</span>:</span></span><br><span class="line">                <span class="keyword">return</span> int.from_bytes(msvcrt.getch(), byteorder=<span class="string">'little'</span>)</span><br><span class="line">            self.__getch = getch_func</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="function"><span class="keyword">def</span> <span class="title">getch_func_cursor</span><span class="params">()</span>:</span></span><br><span class="line">                <span class="keyword">import</span> curses</span><br><span class="line"></span><br><span class="line">                window = curses.initscr()</span><br><span class="line">                curses.noecho()</span><br><span class="line">                window.keypad(<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line">                <span class="function"><span class="keyword">def</span> <span class="title">getch_func</span><span class="params">()</span>:</span></span><br><span class="line">                    <span class="keyword">try</span>:</span><br><span class="line">                        stdout.write(<span class="string">'\r'</span>)  <span class="comment"># return line first position</span></span><br><span class="line">                        key = window.getch()</span><br><span class="line">                        <span class="keyword">return</span> key</span><br><span class="line">                    <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">                        curses.endwin()</span><br><span class="line">                        <span class="keyword">return</span> <span class="number">3</span></span><br><span class="line">                    <span class="keyword">except</span> Exception:</span><br><span class="line">                        curses.endwin()</span><br><span class="line">                <span class="keyword">return</span> getch_func</span><br><span class="line"></span><br><span class="line">            self.__getch = getch_func_cursor()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getch</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.__getch()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">g = Getcher()</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">    k = g.getch()</span><br><span class="line">    <span class="keyword">if</span> k == <span class="number">3</span>:</span><br><span class="line">        exit(<span class="number">0</span>)</span><br><span class="line">    print(chr(k))</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-10-26T21:49:24.153Z" itemprop="dateUpdated">2019-10-27 05:49:24</time>
+</span><br>
+
+
+        
+        这里不可以写作者留言.
+        
+    </div>
+    <footer>
+        <a href="https://zh-h.github.io">
+            <img src="/img/avatar.jpg" alt="Zohar Hou">
+            Zohar Hou
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IoT/">IoT</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2017/10/19/2017/10/19/NodeMCU/&title=《NodeMCU with MicroPython》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2017/10/19/2017/10/19/NodeMCU/&title=《NodeMCU with MicroPython》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2017/10/19/2017/10/19/NodeMCU/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《NodeMCU with MicroPython》 — Applehater&url=https://zh-h.github.io/2017/10/19/2017/10/19/NodeMCU/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2017/10/19/2017/10/19/NodeMCU/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/10/25/2017/10/25/decomplie-kotlin-and-inspect-object-type/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Kotlin objct 单例与反编译探究</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/10/14/2017/10/14/spring-boot-embedded-tomcat-tunning/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Spring Boot 内嵌 tomcat 调优</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'zh-h',
+            repo: 'zh-h.github.io.comment',
+            oauth: {
+                client_id: '3a6263282611b5518bd4',
+                client_secret: 'df06fc0681c7b83ceba630b8649f6cc80a0776ae',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+            <p>
+                
+                    <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+                    
+                        <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+            </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zohar Hou &copy; 2015 - 2019</span>
+            <span>
+                <a href="http://www.beian.gov.cn/portal/index" target="_blank">粤ICP备14081324号</a>
+            </span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2017/10/19/2017/10/19/NodeMCU/&title=《NodeMCU with MicroPython》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2017/10/19/2017/10/19/NodeMCU/&title=《NodeMCU with MicroPython》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2017/10/19/2017/10/19/NodeMCU/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《NodeMCU with MicroPython》 — Applehater&url=https://zh-h.github.io/2017/10/19/2017/10/19/NodeMCU/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2017/10/19/2017/10/19/NodeMCU/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zh-h.github.io/2017/10/19/2017/10/19/NodeMCU/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Look at me !';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Emmm ...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

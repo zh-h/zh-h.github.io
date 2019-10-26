@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>教务系统爬虫的微信小程序 | Applehater | developer ? operator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#009999">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="之前在路由器上装的 node.js 运行环境运行的一个抓取脚本现在派上用了。 那么问题来了1. GBK 编码 首先要解决的教务系统网站 GBK 编码问题，参考过去的记录 《node get post提交中文参数》  更新发现微信的 wx.request(OBJECT) API 可以直接向 GBK 网站请求，返回的就是 UTF8 字符12345678910111213wx.request(&amp;#123">
+<meta property="og:type" content="article">
+<meta property="og:title" content="教务系统爬虫的微信小程序">
+<meta property="og:url" content="https://zh-h.github.io/2017/03/29/81/index.html">
+<meta property="og:site_name" content="Applehater">
+<meta property="og:description" content="之前在路由器上装的 node.js 运行环境运行的一个抓取脚本现在派上用了。 那么问题来了1. GBK 编码 首先要解决的教务系统网站 GBK 编码问题，参考过去的记录 《node get post提交中文参数》  更新发现微信的 wx.request(OBJECT) API 可以直接向 GBK 网站请求，返回的就是 UTF8 字符12345678910111213wx.request(&amp;#123">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="http://applehater.cn/usr/uploads/2016/10/1756218430.jpg">
+<meta property="og:updated_time" content="2019-10-26T21:49:24.159Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="教务系统爬虫的微信小程序">
+<meta name="twitter:description" content="之前在路由器上装的 node.js 运行环境运行的一个抓取脚本现在派上用了。 那么问题来了1. GBK 编码 首先要解决的教务系统网站 GBK 编码问题，参考过去的记录 《node get post提交中文参数》  更新发现微信的 wx.request(OBJECT) API 可以直接向 GBK 网站请求，返回的就是 UTF8 字符12345678910111213wx.request(&amp;#123">
+<meta name="twitter:image" content="http://applehater.cn/usr/uploads/2016/10/1756218430.jpg">
+    
+        <link rel="alternate" type="application/atom+xml" title="Applehater" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zohar Hou</h5>
+          <a href="mailto:emguaEBvdXRsb29rLmNvbQ==" title="emguaEBvdXRsb29rLmNvbQ==" class="mail">emguaEBvdXRsb29rLmNvbQ==</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories/Java/"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-weibo"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/links"  >
+                <i class="icon icon-lg icon-link"></i>
+                Links
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zh-h" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">教务系统爬虫的微信小程序</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">教务系统爬虫的微信小程序</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-03-28T23:49:00.000Z" itemprop="datePublished" class="page-time">
+  2017-03-29
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/默认分类/">默认分类</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/默认分类/微信小程序/">微信小程序</a></li></ul></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#那么问题来了"><span class="post-toc-number">1.</span> <span class="post-toc-text"><a href="#&#x90A3;&#x4E48;&#x95EE;&#x9898;&#x6765;&#x4E86;" class="headerlink" title="&#x90A3;&#x4E48;&#x95EE;&#x9898;&#x6765;&#x4E86;"></a>&#x90A3;&#x4E48;&#x95EE;&#x9898;&#x6765;&#x4E86;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-GBK-编码"><span class="post-toc-number">1.1.</span> <span class="post-toc-text"><a href="#1-GBK-&#x7F16;&#x7801;" class="headerlink" title="1. GBK &#x7F16;&#x7801;"></a>1. GBK &#x7F16;&#x7801;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-使用-npm-package"><span class="post-toc-number">1.2.</span> <span class="post-toc-text"><a href="#2-&#x4F7F;&#x7528;-npm-package" class="headerlink" title="2. &#x4F7F;&#x7528; npm package"></a>2. &#x4F7F;&#x7528; npm package</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3-获取二进制的图片对象"><span class="post-toc-number">1.3.</span> <span class="post-toc-text"><a href="#3-&#x83B7;&#x53D6;&#x4E8C;&#x8FDB;&#x5236;&#x7684;&#x56FE;&#x7247;&#x5BF9;&#x8C61;" class="headerlink" title="3. &#x83B7;&#x53D6;&#x4E8C;&#x8FDB;&#x5236;&#x7684;&#x56FE;&#x7247;&#x5BF9;&#x8C61;"></a>3. &#x83B7;&#x53D6;&#x4E8C;&#x8FDB;&#x5236;&#x7684;&#x56FE;&#x7247;&#x5BF9;&#x8C61;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#4-微信小程序跨域限制"><span class="post-toc-number">1.4.</span> <span class="post-toc-text"><a href="#4-&#x5FAE;&#x4FE1;&#x5C0F;&#x7A0B;&#x5E8F;&#x8DE8;&#x57DF;&#x9650;&#x5236;" class="headerlink" title="4. &#x5FAE;&#x4FE1;&#x5C0F;&#x7A0B;&#x5E8F;&#x8DE8;&#x57DF;&#x9650;&#x5236;"></a>4. &#x5FAE;&#x4FE1;&#x5C0F;&#x7A0B;&#x5E8F;&#x8DE8;&#x57DF;&#x9650;&#x5236;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#5-Nginx-反向代理解决跨域问题"><span class="post-toc-number">1.5.</span> <span class="post-toc-text"><a href="#5-Nginx-&#x53CD;&#x5411;&#x4EE3;&#x7406;&#x89E3;&#x51B3;&#x8DE8;&#x57DF;&#x95EE;&#x9898;" class="headerlink" title="5. Nginx &#x53CD;&#x5411;&#x4EE3;&#x7406;&#x89E3;&#x51B3;&#x8DE8;&#x57DF;&#x95EE;&#x9898;"></a>5. Nginx &#x53CD;&#x5411;&#x4EE3;&#x7406;&#x89E3;&#x51B3;&#x8DE8;&#x57DF;&#x95EE;&#x9898;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#还是写个服务端吧，客户端不适合做这么多处理"><span class="post-toc-number">1.6.</span> <span class="post-toc-text"><a href="#&#x8FD8;&#x662F;&#x5199;&#x4E2A;&#x670D;&#x52A1;&#x7AEF;&#x5427;&#xFF0C;&#x5BA2;&#x6237;&#x7AEF;&#x4E0D;&#x9002;&#x5408;&#x505A;&#x8FD9;&#x4E48;&#x591A;&#x5904;&#x7406;" class="headerlink" title="&#x8FD8;&#x662F;&#x5199;&#x4E2A;&#x670D;&#x52A1;&#x7AEF;&#x5427;&#xFF0C;&#x5BA2;&#x6237;&#x7AEF;&#x4E0D;&#x9002;&#x5408;&#x505A;&#x8FD9;&#x4E48;&#x591A;&#x5904;&#x7406;"></a>&#x8FD8;&#x662F;&#x5199;&#x4E2A;&#x670D;&#x52A1;&#x7AEF;&#x5427;&#xFF0C;&#x5BA2;&#x6237;&#x7AEF;&#x4E0D;&#x9002;&#x5408;&#x505A;&#x8FD9;&#x4E48;&#x591A;&#x5904;&#x7406;</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#黑客马拉松"><span class="post-toc-number">2.</span> <span class="post-toc-text"><a href="#&#x9ED1;&#x5BA2;&#x9A6C;&#x62C9;&#x677E;" class="headerlink" title="&#x9ED1;&#x5BA2;&#x9A6C;&#x62C9;&#x677E;"></a>&#x9ED1;&#x5BA2;&#x9A6C;&#x62C9;&#x677E;</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-81"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">教务系统爬虫的微信小程序</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-03-29 07:49:00" datetime="2017-03-28T23:49:00.000Z"  itemprop="datePublished">2017-03-29</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/默认分类/">默认分类</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/默认分类/微信小程序/">微信小程序</a></li></ul></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>之前在路由器上装的 node.js 运行环境运行的一个抓取脚本现在派上用了。</p>
+<h1 id="那么问题来了"><a href="#那么问题来了" class="headerlink" title="那么问题来了"></a>那么问题来了</h1><h2 id="1-GBK-编码"><a href="#1-GBK-编码" class="headerlink" title="1. GBK 编码"></a>1. GBK 编码</h2><hr>
+<p>首先要解决的教务系统网站 GBK 编码问题，参考过去的记录 <a href="https://applehater.cn/2015/10/04/9.html" target="_blank" rel="noopener">《node get post提交中文参数》</a></p>
+<hr>
+<p><strong>更新</strong><br>发现微信的 <code>wx.request(OBJECT)</code> API 可以直接向 GBK 网站请求，返回的就是 UTF8 字符<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">wx.request(&#123;</span><br><span class="line">  url: &apos;test.php&apos;,</span><br><span class="line">  data: &#123;</span><br><span class="line">     x: &apos;&apos; ,</span><br><span class="line">     y: &apos;&apos;</span><br><span class="line">  &#125;,</span><br><span class="line">  header: &#123;</span><br><span class="line">      &apos;Content-Type&apos;: &apos;application/json&apos;</span><br><span class="line">  &#125;,</span><br><span class="line">  success: function(res) &#123;</span><br><span class="line">    console.log(res.data) // 自动编码转换</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<h2 id="2-使用-npm-package"><a href="#2-使用-npm-package" class="headerlink" title="2. 使用 npm package"></a>2. 使用 npm package</h2><p>MINA 框架带有require函数加载依赖，但并不是完整的 CommonJS，require 函数仅仅能够加载项目中的文件，而且必须严格定义 JS 文件路径，路径不支持 CommonJS 的路径风格。</p>
+<p>需要直接使用相对路径，并且需要指定后缀。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">require(&apos;node_modules/lodash/map.js&apos;);</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-获取二进制的图片对象"><a href="#3-获取二进制的图片对象" class="headerlink" title="3. 获取二进制的图片对象"></a>3. 获取二进制的图片对象</h2><p>内置的 <code>wx.request(OBJECT)</code> 对象只有返回 Date 和 errorMSg 无法满足需求。</p>
+<p>还好 JScore 环境依然提供了本地的 XMLHttpRequest 对象，可以直接调用原生办法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">var getBase64File = function( url, callback ) &#123;</span><br><span class="line">  var xhr = new XMLHttpRequest();</span><br><span class="line">  xhr.responseType = &apos;blob&apos;;</span><br><span class="line">  xhr.onload = function() &#123;</span><br><span class="line">    var reader = new FileReader();</span><br><span class="line">    reader.onloadend = function() &#123;</span><br><span class="line">      var headers = xhr.getAllResponseHeaders();</span><br><span class="line">      callback( reader.result, headers );</span><br><span class="line">    &#125;</span><br><span class="line">    reader.readAsDataURL( xhr.response );</span><br><span class="line">  &#125;;</span><br><span class="line">  xhr.open( &apos;GET&apos;, url );</span><br><span class="line">  xhr.send();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">getBase64(&apos;test.jpg&apos;, function (base64, headers)&#123;</span><br><span class="line">  console.log(headers);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="4-微信小程序跨域限制"><a href="#4-微信小程序跨域限制" class="headerlink" title="4. 微信小程序跨域限制"></a>4. 微信小程序跨域限制</h2><p>这是从 Chrome 控制台看到的响应头<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Date: Fri, 30 Sep 2016 12:46:33 GMT</span><br><span class="line">Server: Microsoft-IIS/6.0</span><br><span class="line">MicrosoftOfficeWebServer: 5.0_Pub</span><br><span class="line">X-Powered-By: ASP.NET</span><br><span class="line">X-AspNet-Version: 1.1.4322</span><br><span class="line">Set-Cookie: ASP.NET_SessionId=hw4tpo55f4005ojii14d2e3r; path=/</span><br><span class="line">Cache-Control: private</span><br><span class="line">Content-Type: image/Gif; charset=gb2312</span><br><span class="line">Content-Length: 2245</span><br></pre></td></tr></table></figure></p>
+<p>这是从 <code>XMLHttpRequest.getAllResponseHeaders()</code> 获取到的信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Date: Fri, 30 Sep 2016 12:46:33 GMT</span><br><span class="line">Server: Microsoft-IIS/6.0</span><br><span class="line">X-AspNet-Version: 1.1.4322</span><br><span class="line">X-Powered-By: ASP.NET</span><br><span class="line">MicrosoftOfficeWebServer: 5.0_Pub</span><br><span class="line">Content-Type: image/Gif; charset=gb2312</span><br><span class="line">Access-Control-Allow-Origin: *</span><br><span class="line">Cache-Control: private</span><br><span class="line">Access-Control-Allow-Headers: X-Requested-With, Content-Type</span><br><span class="line">Content-Length: 2245</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>浏览器同源策略，为了安全，同源策略限制了一个源（origin）中加载文本或脚本与来自其它源（origin）中资源的交互方式</p>
+<p>CORS（Cross-Origin Resource Sharing）跨域资源共享，定义了必须在访问跨域资源时，浏览器与服务器应该如何沟通。CORS背后的基本思想就是使用自定义的HTTP头部让浏览器与服务器进行沟通，从而决定请求或响应是应该成功还是失败。</p>
+</blockquote>
+<p>因为跨域限制，暂时没找到小程序去获取 Cookie 的办法，当然这里指的是是仅仅依靠小程序而不依赖自己的应用服务器去处理的情况（实际上小程序也不应当有过多的逻辑处理，仅仅当作一个显示的层面）。</p>
+<h2 id="5-Nginx-反向代理解决跨域问题"><a href="#5-Nginx-反向代理解决跨域问题" class="headerlink" title="5. Nginx 反向代理解决跨域问题"></a>5. Nginx 反向代理解决跨域问题</h2><p>参考阮一峰的<a href="http://www.ruanyifeng.com/blog/2016/04/cors.html" target="_blank" rel="noopener">《跨域资源共享 CORS 详解》</a></p>
+<p>解决方案是在服务端响应头加入允许跨域的字段说明<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">location ~/ &#123;</span><br><span class="line">    add_header &apos;Access-Control-Allow-Origin&apos; &apos;https://docs.domain.com&apos;;  </span><br><span class="line">    add_header &apos;Access-Control-Allow-Credentials&apos; &apos;true&apos;;  </span><br><span class="line">    add_header &apos;Access-Control-Allow-Methods&apos; &apos;GET, POST, PUT, DELETE, PATCH, OPTIONS&apos;; </span><br><span class="line">    proxy_pass http://target.com;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果需要匹配所有访问域名可以使用 <code>add_header &#39;Access-Control-Allow-Origin&#39; &#39;*&#39;</code></p>
+<h2 id="还是写个服务端吧，客户端不适合做这么多处理"><a href="#还是写个服务端吧，客户端不适合做这么多处理" class="headerlink" title="还是写个服务端吧，客户端不适合做这么多处理"></a>还是写个服务端吧，客户端不适合做这么多处理</h2><h1 id="黑客马拉松"><a href="#黑客马拉松" class="headerlink" title="黑客马拉松"></a>黑客马拉松</h1><p><img src="http://applehater.cn/usr/uploads/2016/10/1756218430.jpg" alt="QQ图片20161007204633.jpg"></p>
+<p>这几天参加了 ifanr 和 segmentfault 举办的未来小程序为主题的和黑客马拉松活动，作为一名志愿者围观了几十位参赛选手的开发过程，见识到了八个短短二十个小时内完成的设计别出心裁新颖的项目。</p>
+<p>关于技术：</p>
+<ol>
+<li>ECMAScript 6 在 iOS 10 上出现兼容问题问题，模拟器上运行正常，真机演示却出现了问题；</li>
+<li>限制访问域名，只有五个安全域名可以授权，可能需要反代解决外部资源引用的问题；</li>
+<li>突出“小”的内容，微信小程序限制打包资源 1MB，如果使用图片资源最好使用矢量图或者使用适当的压缩，如果使用外部资源，也只能够提供 5MB 的本地存储，过多的资源也会导致首次使用的时候加载过慢；</li>
+<li>由于还是在内测阶段，内置的地图控件（原生控件，不在 WebView）仅仅开放提供了定位显示的功能，根本无法添加其他视图层实现地理标签等功能</li>
+</ol>
+<p>无关技术：</p>
+<ol>
+<li>场地很有互联网公司的范，绿树掩映、陈旧厂房、新潮装修、文艺十足；</li>
+<li>有一半参赛选手是学生，大一的新生表现突出，可见微信的想象力宽泛，早早影响到了初生代</li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-10-26T21:49:24.159Z" itemprop="dateUpdated">2019-10-27 05:49:24</time>
+</span><br>
+
+
+        
+        这里不可以写作者留言.
+        
+    </div>
+    <footer>
+        <a href="https://zh-h.github.io">
+            <img src="/img/avatar.jpg" alt="Zohar Hou">
+            Zohar Hou
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2017/03/29/81/&title=《教务系统爬虫的微信小程序》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2017/03/29/81/&title=《教务系统爬虫的微信小程序》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2017/03/29/81/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《教务系统爬虫的微信小程序》 — Applehater&url=https://zh-h.github.io/2017/03/29/81/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2017/03/29/81/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/04/19/107/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">不想上班</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/03/15/102/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">使用 Shipyar 管理 Docker</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'zh-h',
+            repo: 'zh-h.github.io.comment',
+            oauth: {
+                client_id: '3a6263282611b5518bd4',
+                client_secret: 'df06fc0681c7b83ceba630b8649f6cc80a0776ae',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+            <p>
+                
+                    <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+                    
+                        <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+            </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zohar Hou &copy; 2015 - 2019</span>
+            <span>
+                <a href="http://www.beian.gov.cn/portal/index" target="_blank">粤ICP备14081324号</a>
+            </span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2017/03/29/81/&title=《教务系统爬虫的微信小程序》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2017/03/29/81/&title=《教务系统爬虫的微信小程序》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2017/03/29/81/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《教务系统爬虫的微信小程序》 — Applehater&url=https://zh-h.github.io/2017/03/29/81/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2017/03/29/81/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zh-h.github.io/2017/03/29/81/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Look at me !';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Emmm ...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

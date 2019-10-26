@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Spring Boot 使用内嵌 Mongo 进行测试 | Applehater | developer ? operator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#009999">
+    
+    
+    <meta name="keywords" content="Spring Boot">
+    <meta name="description" content="如何进行数据库操作层的单元测试如何进行测试保证数据库操作层的语法正确，如果使用外部链接的数据库，不仅速度慢，数据定义麻烦而且违反了单元测试无外部依赖的规范。因此需要指定模拟的类库进行数据库操作，并且这个数据库是可以对语法进行检查。 Embedded MongoDB引入依赖build.gradle1234567dependencies &amp;#123;    compile &quot;org.mongodb:m">
+<meta name="keywords" content="Spring Boot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Boot 使用内嵌 Mongo 进行测试">
+<meta property="og:url" content="https://zh-h.github.io/2017/11/26/2017/11/26/Spring-Boot-With-Embedded-MongoDB-for-testing/index.html">
+<meta property="og:site_name" content="Applehater">
+<meta property="og:description" content="如何进行数据库操作层的单元测试如何进行测试保证数据库操作层的语法正确，如果使用外部链接的数据库，不仅速度慢，数据定义麻烦而且违反了单元测试无外部依赖的规范。因此需要指定模拟的类库进行数据库操作，并且这个数据库是可以对语法进行检查。 Embedded MongoDB引入依赖build.gradle1234567dependencies &amp;#123;    compile &quot;org.mongodb:m">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2019-10-26T21:49:24.154Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring Boot 使用内嵌 Mongo 进行测试">
+<meta name="twitter:description" content="如何进行数据库操作层的单元测试如何进行测试保证数据库操作层的语法正确，如果使用外部链接的数据库，不仅速度慢，数据定义麻烦而且违反了单元测试无外部依赖的规范。因此需要指定模拟的类库进行数据库操作，并且这个数据库是可以对语法进行检查。 Embedded MongoDB引入依赖build.gradle1234567dependencies &amp;#123;    compile &quot;org.mongodb:m">
+    
+        <link rel="alternate" type="application/atom+xml" title="Applehater" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zohar Hou</h5>
+          <a href="mailto:emguaEBvdXRsb29rLmNvbQ==" title="emguaEBvdXRsb29rLmNvbQ==" class="mail">emguaEBvdXRsb29rLmNvbQ==</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories/Java/"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-weibo"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/links"  >
+                <i class="icon icon-lg icon-link"></i>
+                Links
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zh-h" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Spring Boot 使用内嵌 Mongo 进行测试</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Spring Boot 使用内嵌 Mongo 进行测试</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-11-25T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2017-11-26
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#如何进行数据库操作层的单元测试"><span class="post-toc-number">1.</span> <span class="post-toc-text"><a href="#&#x5982;&#x4F55;&#x8FDB;&#x884C;&#x6570;&#x636E;&#x5E93;&#x64CD;&#x4F5C;&#x5C42;&#x7684;&#x5355;&#x5143;&#x6D4B;&#x8BD5;" class="headerlink" title="&#x5982;&#x4F55;&#x8FDB;&#x884C;&#x6570;&#x636E;&#x5E93;&#x64CD;&#x4F5C;&#x5C42;&#x7684;&#x5355;&#x5143;&#x6D4B;&#x8BD5;"></a>&#x5982;&#x4F55;&#x8FDB;&#x884C;&#x6570;&#x636E;&#x5E93;&#x64CD;&#x4F5C;&#x5C42;&#x7684;&#x5355;&#x5143;&#x6D4B;&#x8BD5;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Embedded-MongoDB"><span class="post-toc-number">2.</span> <span class="post-toc-text"><a href="#Embedded-MongoDB" class="headerlink" title="Embedded MongoDB"></a>Embedded MongoDB</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#引入依赖"><span class="post-toc-number">2.1.</span> <span class="post-toc-text"><a href="#&#x5F15;&#x5165;&#x4F9D;&#x8D56;" class="headerlink" title="&#x5F15;&#x5165;&#x4F9D;&#x8D56;"></a>&#x5F15;&#x5165;&#x4F9D;&#x8D56;</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#脚手架MongodbBaseTest"><span class="post-toc-number">2.2.</span> <span class="post-toc-text"><a href="#&#x811A;&#x624B;&#x67B6;MongodbBaseTest" class="headerlink" title="&#x811A;&#x624B;&#x67B6;MongodbBaseTest"></a>&#x811A;&#x624B;&#x67B6;MongodbBaseTest</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#编写UserTest"><span class="post-toc-number">2.3.</span> <span class="post-toc-text"><a href="#&#x7F16;&#x5199;UserTest" class="headerlink" title="&#x7F16;&#x5199;UserTest"></a>&#x7F16;&#x5199;UserTest</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Embedded-MongoDB-与-Spring-Test-结合"><span class="post-toc-number">3.</span> <span class="post-toc-text"><a href="#Embedded-MongoDB-&#x4E0E;-Spring-Test-&#x7ED3;&#x5408;" class="headerlink" title="Embedded MongoDB &#x4E0E; Spring Test &#x7ED3;&#x5408;"></a>Embedded MongoDB &#x4E0E; Spring Test &#x7ED3;&#x5408;</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-2017/11/26/Spring-Boot-With-Embedded-MongoDB-for-testing"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Spring Boot 使用内嵌 Mongo 进行测试</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-11-26 00:00:00" datetime="2017-11-25T16:00:00.000Z"  itemprop="datePublished">2017-11-26</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="如何进行数据库操作层的单元测试"><a href="#如何进行数据库操作层的单元测试" class="headerlink" title="如何进行数据库操作层的单元测试"></a>如何进行数据库操作层的单元测试</h2><p>如何进行测试保证数据库操作层的语法正确，如果使用外部链接的数据库，不仅速度慢，数据定义麻烦而且违反了单元测试无外部依赖的规范。因此需要指定模拟的类库进行数据库操作，并且这个数据库是可以对语法进行检查。</p>
+<h2 id="Embedded-MongoDB"><a href="#Embedded-MongoDB" class="headerlink" title="Embedded MongoDB"></a>Embedded MongoDB</h2><h3 id="引入依赖"><a href="#引入依赖" class="headerlink" title="引入依赖"></a>引入依赖</h3><p>build.gradle<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">    compile <span class="string">"org.mongodb:mongo-java-driver:2.12.2"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    testCompile <span class="string">"junit:junit:4.11"</span></span><br><span class="line">    testCompile <span class="string">"de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.46.0"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="脚手架MongodbBaseTest"><a href="#脚手架MongodbBaseTest" class="headerlink" title="脚手架MongodbBaseTest"></a>脚手架MongodbBaseTest</h3><p>编写一个MongoBaseTest，这样所有需要Mongo的测试，可以继承这个类，就可以获取db了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MongodbBaseTest</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> MongodStarter starter = MongodStarter.getDefaultInstance();</span><br><span class="line">    <span class="keyword">protected</span> MongoClient mongo;</span><br><span class="line">    <span class="keyword">protected</span> DB db;</span><br><span class="line">    <span class="keyword">private</span> MongodExecutable mongodExecutable;</span><br><span class="line">    <span class="keyword">private</span> MongodProcess mongod;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Before</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUp</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        mongodExecutable = starter.prepare(<span class="keyword">new</span> MongodConfigBuilder()</span><br><span class="line">                .version(Version.Main.PRODUCTION)</span><br><span class="line">                .net(<span class="keyword">new</span> Net(<span class="number">12345</span>, Network.localhostIsIPv6())).build());</span><br><span class="line">        mongod = mongodExecutable.start();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        mongo = <span class="keyword">new</span> MongoClient(<span class="string">"localhost"</span>, <span class="number">12345</span>);</span><br><span class="line">        db = mongo.getDB(<span class="string">"embedded-mongo"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@After</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">tearDown</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        mongod.stop();</span><br><span class="line">        mongodExecutable.stop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="编写UserTest"><a href="#编写UserTest" class="headerlink" title="编写UserTest"></a>编写UserTest</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserTest</span> <span class="keyword">extends</span> <span class="title">MongodbBaseTest</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> DBCollection users;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="meta">@Before</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUp</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.setUp();</span><br><span class="line">        users = db.getCollection(<span class="string">"users"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">should_insert_and_get_user</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> DBObject userDocument = <span class="keyword">new</span> BasicDBObjectBuilder()</span><br><span class="line">                .add(<span class="string">"name"</span>, <span class="string">"kiwi"</span>)</span><br><span class="line">                .get();</span><br><span class="line">        users.insert(userDocument);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> DBObject userDocumentFromDb = users.findOne(<span class="keyword">new</span> BasicDBObject(<span class="string">"_id"</span>, userDocument.get(<span class="string">"_id"</span>)));</span><br><span class="line"></span><br><span class="line">        assertThat(userDocumentFromDb.get(<span class="string">"name"</span>), is(<span class="string">"kiwi"</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>自此单元测试中有关数据库层都是 Embedded MongoDB 进行模拟，这样保证语法验证的同时避免了外部资源的依赖。</p>
+<h2 id="Embedded-MongoDB-与-Spring-Test-结合"><a href="#Embedded-MongoDB-与-Spring-Test-结合" class="headerlink" title="Embedded MongoDB 与 Spring Test 结合"></a>Embedded MongoDB 与 Spring Test 结合</h2>
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-10-26T21:49:24.154Z" itemprop="dateUpdated">2019-10-27 05:49:24</time>
+</span><br>
+
+
+        
+        这里不可以写作者留言.
+        
+    </div>
+    <footer>
+        <a href="https://zh-h.github.io">
+            <img src="/img/avatar.jpg" alt="Zohar Hou">
+            Zohar Hou
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring-Boot/">Spring Boot</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2017/11/26/2017/11/26/Spring-Boot-With-Embedded-MongoDB-for-testing/&title=《Spring Boot 使用内嵌 Mongo 进行测试》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2017/11/26/2017/11/26/Spring-Boot-With-Embedded-MongoDB-for-testing/&title=《Spring Boot 使用内嵌 Mongo 进行测试》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2017/11/26/2017/11/26/Spring-Boot-With-Embedded-MongoDB-for-testing/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Spring Boot 使用内嵌 Mongo 进行测试》 — Applehater&url=https://zh-h.github.io/2017/11/26/2017/11/26/Spring-Boot-With-Embedded-MongoDB-for-testing/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2017/11/26/2017/11/26/Spring-Boot-With-Embedded-MongoDB-for-testing/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/12/01/2017/12/1/rabbit-mq-properties/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">RabbitMQ 的消息属性说明</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/17/2017/11/17/java-promise/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Java Promise 实现</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'zh-h',
+            repo: 'zh-h.github.io.comment',
+            oauth: {
+                client_id: '3a6263282611b5518bd4',
+                client_secret: 'df06fc0681c7b83ceba630b8649f6cc80a0776ae',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+            <p>
+                
+                    <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+                    
+                        <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+            </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zohar Hou &copy; 2015 - 2019</span>
+            <span>
+                <a href="http://www.beian.gov.cn/portal/index" target="_blank">粤ICP备14081324号</a>
+            </span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2017/11/26/2017/11/26/Spring-Boot-With-Embedded-MongoDB-for-testing/&title=《Spring Boot 使用内嵌 Mongo 进行测试》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2017/11/26/2017/11/26/Spring-Boot-With-Embedded-MongoDB-for-testing/&title=《Spring Boot 使用内嵌 Mongo 进行测试》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2017/11/26/2017/11/26/Spring-Boot-With-Embedded-MongoDB-for-testing/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Spring Boot 使用内嵌 Mongo 进行测试》 — Applehater&url=https://zh-h.github.io/2017/11/26/2017/11/26/Spring-Boot-With-Embedded-MongoDB-for-testing/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2017/11/26/2017/11/26/Spring-Boot-With-Embedded-MongoDB-for-testing/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zh-h.github.io/2017/11/26/2017/11/26/Spring-Boot-With-Embedded-MongoDB-for-testing/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Look at me !';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Emmm ...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

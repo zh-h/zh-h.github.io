@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Dockerfile 中 CMD 和 ENTRYPONINT 的区别 | Applehater | developer ? operator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#009999">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="CMD在容器运行的时候会将这个参数作为命令运行。 Dockerfile 1CMD [&amp;apos;date&amp;apos;] 运行 1docker run -it image 输出 1Wed, Aug  9, 2017  3:10:37 PM 这个参数可以被覆盖 运行 1docker run -it image df 输出 12Filesystem           1K-blocks     Use">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dockerfile 中 CMD 和 ENTRYPONINT 的区别">
+<meta property="og:url" content="https://zh-h.github.io/2017/06/09/2017/06/09/differrent-between-cmd-and-entrypoint/index.html">
+<meta property="og:site_name" content="Applehater">
+<meta property="og:description" content="CMD在容器运行的时候会将这个参数作为命令运行。 Dockerfile 1CMD [&amp;apos;date&amp;apos;] 运行 1docker run -it image 输出 1Wed, Aug  9, 2017  3:10:37 PM 这个参数可以被覆盖 运行 1docker run -it image df 输出 12Filesystem           1K-blocks     Use">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2019-10-26T21:49:24.151Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dockerfile 中 CMD 和 ENTRYPONINT 的区别">
+<meta name="twitter:description" content="CMD在容器运行的时候会将这个参数作为命令运行。 Dockerfile 1CMD [&amp;apos;date&amp;apos;] 运行 1docker run -it image 输出 1Wed, Aug  9, 2017  3:10:37 PM 这个参数可以被覆盖 运行 1docker run -it image df 输出 12Filesystem           1K-blocks     Use">
+    
+        <link rel="alternate" type="application/atom+xml" title="Applehater" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zohar Hou</h5>
+          <a href="mailto:emguaEBvdXRsb29rLmNvbQ==" title="emguaEBvdXRsb29rLmNvbQ==" class="mail">emguaEBvdXRsb29rLmNvbQ==</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories/Java/"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-weibo"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/links"  >
+                <i class="icon icon-lg icon-link"></i>
+                Links
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zh-h" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Dockerfile 中 CMD 和 ENTRYPONINT 的区别</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Dockerfile 中 CMD 和 ENTRYPONINT 的区别</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-06-09T07:05:00.000Z" itemprop="datePublished" class="page-time">
+  2017-06-09
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/docker/">docker</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#CMD"><span class="post-toc-number">1.</span> <span class="post-toc-text"><a href="#CMD" class="headerlink" title="CMD"></a>CMD</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#ENTRYPOINT"><span class="post-toc-number">2.</span> <span class="post-toc-text"><a href="#ENTRYPOINT" class="headerlink" title="ENTRYPOINT"></a>ENTRYPOINT</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#优先级"><span class="post-toc-number">3.</span> <span class="post-toc-text"><a href="#&#x4F18;&#x5148;&#x7EA7;" class="headerlink" title="&#x4F18;&#x5148;&#x7EA7;"></a>&#x4F18;&#x5148;&#x7EA7;</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-2017/06/09/differrent-between-cmd-and-entrypoint"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Dockerfile 中 CMD 和 ENTRYPONINT 的区别</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-06-09 15:05:00" datetime="2017-06-09T07:05:00.000Z"  itemprop="datePublished">2017-06-09</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/docker/">docker</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="CMD"><a href="#CMD" class="headerlink" title="CMD"></a>CMD</h2><p>在容器运行的时候会将这个参数作为命令运行。</p>
+<p><code>Dockerfile</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CMD [&apos;date&apos;]</span><br></pre></td></tr></table></figure>
+<p>运行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it image</span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Wed, Aug  9, 2017  3:10:37 PM</span><br></pre></td></tr></table></figure>
+<p><strong>这个参数可以被覆盖</strong></p>
+<p>运行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it image df</span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Filesystem           1K-blocks     Used Available Use% Mounted on</span><br><span class="line">C:/Program Files/Git 116639740 42583436  74056304  37% /</span><br></pre></td></tr></table></figure>
+<h2 id="ENTRYPOINT"><a href="#ENTRYPOINT" class="headerlink" title="ENTRYPOINT"></a>ENTRYPOINT</h2><p>功能与<code>CMD</code>非常类似，但是容器运行时会将参数当作参数运行，原有的命令不会被覆盖</p>
+<p><code>Dockerfile</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ENTRYPOINT [&apos;date&apos;]</span><br></pre></td></tr></table></figure>
+<p>运行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it image --help</span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line">Usage: date [OPTION]... [+FORMAT]</span><br><span class="line">  or:  date [-u|--utc|--universal] [MMDDhhmm[[CC]YY][.ss]]</span><br><span class="line">Display the current time in the given FORMAT, or set the system date.</span><br><span class="line"></span><br><span class="line">Mandatory arguments to long options are mandatory for short options too.</span><br><span class="line">  -d, --date=STRING          display time described by STRING, not &apos;now&apos;</span><br><span class="line">      --debug                annotate the parsed date,</span><br><span class="line">                              and warn about questionable usage to stderr</span><br><span class="line">  -f, --file=DATEFILE        like --date; once for each line of DATEFILE</span><br><span class="line">  -I[FMT], --iso-8601[=FMT]  output date/time in ISO 8601 format.</span><br><span class="line">                               FMT=&apos;date&apos; for date only (the default),</span><br><span class="line">                               &apos;hours&apos;, &apos;minutes&apos;, &apos;seconds&apos;, or &apos;ns&apos;</span><br><span class="line">                               for date and time to the indicated precision.</span><br><span class="line">                               Example: 2006-08-14T02:34:56-06:00</span><br><span class="line">  -R, --rfc-2822             output date and time in RFC 2822 format.</span><br><span class="line">                               Example: Mon, 14 Aug 2006 02:34:56 -0600</span><br><span class="line">      --rfc-3339=FMT         output date/time in RFC 3339 format.</span><br><span class="line">                               FMT=&apos;date&apos;, &apos;seconds&apos;, or &apos;ns&apos;</span><br><span class="line">                               for date and time to the indicated precision.</span><br><span class="line">                               Example: 2006-08-14 02:34:56-06:00</span><br><span class="line">  -r, --reference=FILE       display the last modification time of FILE</span><br><span class="line">  -s, --set=STRING           set time described by STRING</span><br><span class="line">  -u, --utc, --universal     print or set Coordinated Universal Time (UTC)</span><br><span class="line">      --help     display this help and exit</span><br><span class="line">      --version  output version information and exit</span><br><span class="line"></span><br><span class="line">FORMAT controls the output.  Interpreted sequences are:</span><br><span class="line"></span><br><span class="line">  %%   a literal %</span><br><span class="line">  %a   locale&apos;s abbreviated weekday name (e.g., Sun)</span><br><span class="line">  %A   locale&apos;s full weekday name (e.g., Sunday)</span><br><span class="line">  %b   locale&apos;s abbreviated month name (e.g., Jan)</span><br><span class="line">  %B   locale&apos;s full month name (e.g., January)</span><br><span class="line">  %c   locale&apos;s date and time (e.g., Thu Mar  3 23:05:25 2005)</span><br><span class="line">  %C   century; like %Y, except omit last two digits (e.g., 20)</span><br><span class="line">  %d   day of month (e.g., 01)</span><br><span class="line">  %D   date; same as %m/%d/%y</span><br><span class="line">  %e   day of month, space padded; same as %_d</span><br><span class="line">  %F   full date; same as %Y-%m-%d</span><br><span class="line">  %g   last two digits of year of ISO week number (see %G)</span><br><span class="line">  %G   year of ISO week number (see %V); normally useful only with %V</span><br><span class="line">  %h   same as %b</span><br><span class="line">  %H   hour (00..23)</span><br><span class="line">  %I   hour (01..12)</span><br><span class="line">  %j   day of year (001..366)</span><br><span class="line">  %k   hour, space padded ( 0..23); same as %_H</span><br><span class="line">  %l   hour, space padded ( 1..12); same as %_I</span><br><span class="line">  %m   month (01..12)</span><br><span class="line">  %M   minute (00..59)</span><br><span class="line">  %n   a newline</span><br><span class="line">  %N   nanoseconds (000000000..999999999)</span><br><span class="line">  %p   locale&apos;s equivalent of either AM or PM; blank if not known</span><br><span class="line">  %P   like %p, but lower case</span><br><span class="line">  %q   quarter of year (1..4)</span><br><span class="line">  %r   locale&apos;s 12-hour clock time (e.g., 11:11:04 PM)</span><br><span class="line">  %R   24-hour hour and minute; same as %H:%M</span><br><span class="line">  %s   seconds since 1970-01-01 00:00:00 UTC</span><br><span class="line">  %S   second (00..60)</span><br><span class="line">  %t   a tab</span><br><span class="line">  %T   time; same as %H:%M:%S</span><br><span class="line">  %u   day of week (1..7); 1 is Monday</span><br><span class="line">  %U   week number of year, with Sunday as first day of week (00..53)</span><br><span class="line">  %V   ISO week number, with Monday as first day of week (01..53)</span><br><span class="line">  %w   day of week (0..6); 0 is Sunday</span><br><span class="line">  %W   week number of year, with Monday as first day of week (00..53)</span><br><span class="line">  %x   locale&apos;s date representation (e.g., 12/31/99)</span><br><span class="line">  %X   locale&apos;s time representation (e.g., 23:13:48)</span><br><span class="line">  %y   last two digits of year (00..99)</span><br><span class="line">  %Y   year</span><br><span class="line">  %z   +hhmm numeric time zone (e.g., -0400)</span><br><span class="line">  %:z  +hh:mm numeric time zone (e.g., -04:00)</span><br><span class="line">  %::z  +hh:mm:ss numeric time zone (e.g., -04:00:00)</span><br><span class="line">  %:::z  numeric time zone with : to necessary precision (e.g., -04, +05:30)</span><br><span class="line">  %Z   alphabetic time zone abbreviation (e.g., EDT)</span><br><span class="line"></span><br><span class="line">By default, date pads numeric fields with zeroes.</span><br><span class="line">The following optional flags may follow &apos;%&apos;:</span><br><span class="line"></span><br><span class="line">  -  (hyphen) do not pad the field</span><br><span class="line">  _  (underscore) pad with spaces</span><br><span class="line">  0  (zero) pad with zeros</span><br><span class="line">  ^  use upper case if possible</span><br><span class="line">  #  use opposite case if possible</span><br><span class="line"></span><br><span class="line">After any flags comes an optional field width, as a decimal number;</span><br><span class="line">then an optional modifier, which is either</span><br><span class="line">E to use the locale&apos;s alternate representations if available, or</span><br><span class="line">O to use the locale&apos;s alternate numeric symbols if available.</span><br><span class="line"></span><br><span class="line">Examples:</span><br><span class="line">Convert seconds since the epoch (1970-01-01 UTC) to a date</span><br><span class="line">  $ date --date=&apos;@2147483647&apos;</span><br><span class="line"></span><br><span class="line">Show the time on the west coast of the US (use tzselect(1) to find TZ)</span><br><span class="line">  $ TZ=&apos;America/Los_Angeles&apos; date</span><br><span class="line"></span><br><span class="line">Show the local time for 9AM next Friday on the west coast of the US</span><br><span class="line">  $ date --date=&apos;TZ=&quot;America/Los_Angeles&quot; 09:00 next Fri&apos;</span><br><span class="line"></span><br><span class="line">GNU coreutils online help: &lt;http://www.gnu.org/software/coreutils/&gt;</span><br><span class="line">Full documentation at: &lt;http://www.gnu.org/software/coreutils/date&gt;</span><br><span class="line">or available locally via: info &apos;(coreutils) date invocation&apos;</span><br></pre></td></tr></table></figure>
+<h2 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h2><p>docker 会使用最后声明的的<code>CMD</code>或者<code>ENTRYPOINT</code>， 在引入外部的镜像的时候，可以使用自定义的声明进行覆盖。</p>
+<p>如果两者均配置，那么<code>CMD</code>就相当于提供了一个默认参数。</p>
+<p><code>Dockerfile</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ENTRYPOINT [&apos;df&apos;]</span><br><span class="line">CMD [&apos;-m&apos;]</span><br></pre></td></tr></table></figure>
+<p>运行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it image</span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Filesystem           1M-blocks  Used Available Use% Mounted on</span><br><span class="line">C:/Program Files/Git    113906 41589     72318  37% /</span><br></pre></td></tr></table></figure>
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-10-26T21:49:24.151Z" itemprop="dateUpdated">2019-10-27 05:49:24</time>
+</span><br>
+
+
+        
+        这里不可以写作者留言.
+        
+    </div>
+    <footer>
+        <a href="https://zh-h.github.io">
+            <img src="/img/avatar.jpg" alt="Zohar Hou">
+            Zohar Hou
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2017/06/09/2017/06/09/differrent-between-cmd-and-entrypoint/&title=《Dockerfile 中 CMD 和 ENTRYPONINT 的区别》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2017/06/09/2017/06/09/differrent-between-cmd-and-entrypoint/&title=《Dockerfile 中 CMD 和 ENTRYPONINT 的区别》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2017/06/09/2017/06/09/differrent-between-cmd-and-entrypoint/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Dockerfile 中 CMD 和 ENTRYPONINT 的区别》 — Applehater&url=https://zh-h.github.io/2017/06/09/2017/06/09/differrent-between-cmd-and-entrypoint/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2017/06/09/2017/06/09/differrent-between-cmd-and-entrypoint/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/08/08/hello-world/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Hello World</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/05/15/2017/05/15/remove-windows-eof-in-dockerfile/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Docker 构建时移除文件中 Windows 换行符</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'zh-h',
+            repo: 'zh-h.github.io.comment',
+            oauth: {
+                client_id: '3a6263282611b5518bd4',
+                client_secret: 'df06fc0681c7b83ceba630b8649f6cc80a0776ae',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+            <p>
+                
+                    <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+                    
+                        <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+            </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zohar Hou &copy; 2015 - 2019</span>
+            <span>
+                <a href="http://www.beian.gov.cn/portal/index" target="_blank">粤ICP备14081324号</a>
+            </span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2017/06/09/2017/06/09/differrent-between-cmd-and-entrypoint/&title=《Dockerfile 中 CMD 和 ENTRYPONINT 的区别》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2017/06/09/2017/06/09/differrent-between-cmd-and-entrypoint/&title=《Dockerfile 中 CMD 和 ENTRYPONINT 的区别》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2017/06/09/2017/06/09/differrent-between-cmd-and-entrypoint/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Dockerfile 中 CMD 和 ENTRYPONINT 的区别》 — Applehater&url=https://zh-h.github.io/2017/06/09/2017/06/09/differrent-between-cmd-and-entrypoint/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2017/06/09/2017/06/09/differrent-between-cmd-and-entrypoint/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zh-h.github.io/2017/06/09/2017/06/09/differrent-between-cmd-and-entrypoint/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Look at me !';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Emmm ...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

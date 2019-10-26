@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Django 之奇技淫巧 Model | Applehater | developer ? operator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#009999">
+    
+    
+    <meta name="keywords" content="python,django,Django,Python">
+    <meta name="description" content="Django Model1. RuntimeWarning: DateTimeField received a naive datetimeUSE_TZ = False 禁用掉时区设置，通通使用系统时间，所以要保证设置了正确的系统时间    TIME_ZONE = ‘Asia/Shanghai如果启用了时区设置，可以设置应用独立的时间 2. 级联删除wechat_user = models.For">
+<meta name="keywords" content="python,django,Django,Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django 之奇技淫巧 Model">
+<meta property="og:url" content="https://zh-h.github.io/2016/03/29/3/index.html">
+<meta property="og:site_name" content="Applehater">
+<meta property="og:description" content="Django Model1. RuntimeWarning: DateTimeField received a naive datetimeUSE_TZ = False 禁用掉时区设置，通通使用系统时间，所以要保证设置了正确的系统时间    TIME_ZONE = ‘Asia/Shanghai如果启用了时区设置，可以设置应用独立的时间 2. 级联删除wechat_user = models.For">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2019-10-26T21:49:24.155Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Django 之奇技淫巧 Model">
+<meta name="twitter:description" content="Django Model1. RuntimeWarning: DateTimeField received a naive datetimeUSE_TZ = False 禁用掉时区设置，通通使用系统时间，所以要保证设置了正确的系统时间    TIME_ZONE = ‘Asia/Shanghai如果启用了时区设置，可以设置应用独立的时间 2. 级联删除wechat_user = models.For">
+    
+        <link rel="alternate" type="application/atom+xml" title="Applehater" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zohar Hou</h5>
+          <a href="mailto:emguaEBvdXRsb29rLmNvbQ==" title="emguaEBvdXRsb29rLmNvbQ==" class="mail">emguaEBvdXRsb29rLmNvbQ==</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories/Java/"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-weibo"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/links"  >
+                <i class="icon icon-lg icon-link"></i>
+                Links
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zh-h" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Django 之奇技淫巧 Model</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Django 之奇技淫巧 Model</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-03-29T06:13:00.000Z" itemprop="datePublished" class="page-time">
+  2016-03-29
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Django-Model"><span class="post-toc-number">1.</span> <span class="post-toc-text"><a href="#Django-Model" class="headerlink" title="Django Model"></a>Django Model</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-RuntimeWarning-DateTimeField-received-a-naive-datetime"><span class="post-toc-number">1.1.</span> <span class="post-toc-text"><a href="#1-RuntimeWarning-DateTimeField-received-a-naive-datetime" class="headerlink" title="1. RuntimeWarning: DateTimeField received a naive datetime"></a>1. RuntimeWarning: DateTimeField received a naive datetime</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-级联删除"><span class="post-toc-number">1.2.</span> <span class="post-toc-text"><a href="#2-&#x7EA7;&#x8054;&#x5220;&#x9664;" class="headerlink" title="2. &#x7EA7;&#x8054;&#x5220;&#x9664;"></a>2. &#x7EA7;&#x8054;&#x5220;&#x9664;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3-关联查询"><span class="post-toc-number">1.3.</span> <span class="post-toc-text"><a href="#3-&#x5173;&#x8054;&#x67E5;&#x8BE2;" class="headerlink" title="3. &#x5173;&#x8054;&#x67E5;&#x8BE2;"></a>3. &#x5173;&#x8054;&#x67E5;&#x8BE2;</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-3"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Django 之奇技淫巧 Model</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-03-29 14:13:00" datetime="2016-03-29T06:13:00.000Z"  itemprop="datePublished">2016-03-29</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="Django-Model"><a href="#Django-Model" class="headerlink" title="Django Model"></a>Django Model</h1><h2 id="1-RuntimeWarning-DateTimeField-received-a-naive-datetime"><a href="#1-RuntimeWarning-DateTimeField-received-a-naive-datetime" class="headerlink" title="1. RuntimeWarning: DateTimeField received a naive datetime"></a>1. RuntimeWarning: DateTimeField received a naive datetime</h2><pre><code>USE_TZ = False
+</code></pre><p>禁用掉时区设置，通通使用系统时间，所以要保证设置了正确的系统时间<br>    TIME_ZONE = ‘Asia/Shanghai<br>如果启用了时区设置，可以设置应用独立的时间</p>
+<h2 id="2-级联删除"><a href="#2-级联删除" class="headerlink" title="2. 级联删除"></a>2. 级联删除</h2><pre><code>wechat_user = models.ForeignKey(Wechat_User,verbose_name=u&apos;微信&apos;,blank=True,null=True,on_delete=models.SET_NULL)
+</code></pre><p>CASCADE: 默认级联删除<br>PROTECT: 通过抛出django.db.models.ProtectedErrordjango.db.models.ProtectedError错误来阻止删除关联的对象<br>SET_NULL: 前置条件需要设定null=True，设置ForeignKey 为 Null<br>SET_DEFAULT: 前置条件需要先设定默认值，设置 ForeignKey 为默认值<br>SET: 设置为某个方法返回的值<br>DO_NOTHING: 保留原样，如果再次把外键的对象添加回来，会再次显示。如果数据库设置必须关联则会报IntegrityError错。</p>
+<pre><code>||13    ||哈哈哈哈哈                        ||2016-04-02 23:50:51    ||2 || 1||
+|| 14    ||哈哈哈哈哈哈                 || 2016-04-02 23:56:19     ||2 ||    1||
+||15    ||恍恍惚惚恍恍惚惚机会    ||2016-04-03 11:47:21  ||2  ||
+</code></pre><p>上表中13 14 是设定了<code>DO_NOTHING</code>；15 是设定了<code>SET_NULL</code></p>
+<h2 id="3-关联查询"><a href="#3-关联查询" class="headerlink" title="3. 关联查询"></a>3. 关联查询</h2><p><code>models.py</code></p>
+<pre><code>class School(models.Model):
+    name = models.CharField(max_length=30, verbose_name=&apos;school&apos;)
+
+class Deparment(models.Model):
+    name = models.CharField(max_length=30, verbose_name=&apos;department&apos;)
+    school = models.ForeignKey(School, verbose_name=&apos;school&apos;)
+
+class StudentClass(models.Model):
+    name = models.CharField(max_length=30, verbose_name=&apos;class&apos;)
+    department = models.ForeignKey(Deparment, verbose_name=&apos;department&apos;)
+
+class StudentYear(models.Model):
+    year = models.CharField(max_length=30, verbose_name=&apos;year&apos;)
+
+class Student(models.Model):
+    name = models.CharField(max_length=30, verbose_name=&apos;student&apos;)
+    studentClass = models.ForeignKey(StudentClass, verbose_name=&apos;class&apos;)
+    year = models.ForeignKey(StudentYear, verbose_name=&apos;year&apos;)
+</code></pre><p>查询的使用用双下划线去关联外键属性，只能过滤<code>id</code>的值</p>
+<pre><code>&gt;&gt;&gt;school_ids = School.objects.filter(name=&apos;EE&apos;).values(&apos;id&apos;)
+&gt;&gt;&gt;year_ids = StudentYear.objects.filter(year=&apos;2016&apos;).values(&apos;id&apos;)
+&gt;&gt;&gt;student = Student.objects.filter(studentClass__department__school_id__in=school_ids, year_id__in=year_ids).first()
+        &lt;Student object&gt;
+</code></pre><p>查询是懒惰的，只会在最终序列的时候执行拼接后的语句</p>
+<pre><code>utils-89 DEBUG : (0.001) QUERY 
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-10-26T21:49:24.155Z" itemprop="dateUpdated">2019-10-27 05:49:24</time>
+</span><br>
+
+
+        
+        这里不可以写作者留言.
+        
+    </div>
+    <footer>
+        <a href="https://zh-h.github.io">
+            <img src="/img/avatar.jpg" alt="Zohar Hou">
+            Zohar Hou
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Django/">Django</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/">django</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2016/03/29/3/&title=《Django 之奇技淫巧 Model》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2016/03/29/3/&title=《Django 之奇技淫巧 Model》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2016/03/29/3/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Django 之奇技淫巧 Model》 — Applehater&url=https://zh-h.github.io/2016/03/29/3/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2016/03/29/3/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2016/04/14/6/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Django 部署 uWSGI or Gunicorn + Nginx + Supervisor</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/03/12/7/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Hacpai Sync Wordpress 插件</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'zh-h',
+            repo: 'zh-h.github.io.comment',
+            oauth: {
+                client_id: '3a6263282611b5518bd4',
+                client_secret: 'df06fc0681c7b83ceba630b8649f6cc80a0776ae',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+            <p>
+                
+                    <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+                    
+                        <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+            </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zohar Hou &copy; 2015 - 2019</span>
+            <span>
+                <a href="http://www.beian.gov.cn/portal/index" target="_blank">粤ICP备14081324号</a>
+            </span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2016/03/29/3/&title=《Django 之奇技淫巧 Model》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2016/03/29/3/&title=《Django 之奇技淫巧 Model》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2016/03/29/3/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Django 之奇技淫巧 Model》 — Applehater&url=https://zh-h.github.io/2016/03/29/3/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2016/03/29/3/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zh-h.github.io/2016/03/29/3/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Look at me !';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Emmm ...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

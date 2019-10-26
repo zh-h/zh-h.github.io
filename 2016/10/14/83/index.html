@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>微信 AirKiss 技术 | Applehater | developer ? operator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#009999">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="Airkiss顾名思义是飞吻的意思，即手机发送的SSID和密码经过路由转发出去，被目前wifi设备所检测并截获到。无线网络协议一般场景都规定station只能和AP通信，而不能station和station通信（这种场景叫做AD-Hoc点对点）。接下来我们分析SSID和pwd怎么利用Length进行编码的过程。 通信协议1. 物理层发送4个字节的前导码序列，{1,2,3,4}。即发送4个数据帧，帧">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微信 AirKiss 技术">
+<meta property="og:url" content="https://zh-h.github.io/2016/10/14/83/index.html">
+<meta property="og:site_name" content="Applehater">
+<meta property="og:description" content="Airkiss顾名思义是飞吻的意思，即手机发送的SSID和密码经过路由转发出去，被目前wifi设备所检测并截获到。无线网络协议一般场景都规定station只能和AP通信，而不能station和station通信（这种场景叫做AD-Hoc点对点）。接下来我们分析SSID和pwd怎么利用Length进行编码的过程。 通信协议1. 物理层发送4个字节的前导码序列，{1,2,3,4}。即发送4个数据帧，帧">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="http://iot.weixin.qq.com/wiki/static/image/11_1_c-12.png">
+<meta property="og:image" content="http://applehater.cn/usr/uploads/2016/10/1525426596.png">
+<meta property="og:updated_time" content="2019-10-26T21:49:24.159Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="微信 AirKiss 技术">
+<meta name="twitter:description" content="Airkiss顾名思义是飞吻的意思，即手机发送的SSID和密码经过路由转发出去，被目前wifi设备所检测并截获到。无线网络协议一般场景都规定station只能和AP通信，而不能station和station通信（这种场景叫做AD-Hoc点对点）。接下来我们分析SSID和pwd怎么利用Length进行编码的过程。 通信协议1. 物理层发送4个字节的前导码序列，{1,2,3,4}。即发送4个数据帧，帧">
+<meta name="twitter:image" content="http://iot.weixin.qq.com/wiki/static/image/11_1_c-12.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Applehater" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zohar Hou</h5>
+          <a href="mailto:emguaEBvdXRsb29rLmNvbQ==" title="emguaEBvdXRsb29rLmNvbQ==" class="mail">emguaEBvdXRsb29rLmNvbQ==</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories/Java/"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-weibo"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/links"  >
+                <i class="icon icon-lg icon-link"></i>
+                Links
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zh-h" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">微信 AirKiss 技术</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">微信 AirKiss 技术</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-10-14T06:34:00.000Z" itemprop="datePublished" class="page-time">
+  2016-10-14
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/IoT/">IoT</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/IoT/微信/">微信</a></li></ul></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#通信协议"><span class="post-toc-number">1.</span> <span class="post-toc-text"><a href="#&#x901A;&#x4FE1;&#x534F;&#x8BAE;" class="headerlink" title="&#x901A;&#x4FE1;&#x534F;&#x8BAE;"></a>&#x901A;&#x4FE1;&#x534F;&#x8BAE;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-物理层"><span class="post-toc-number">1.1.</span> <span class="post-toc-text"><a href="#1-&#x7269;&#x7406;&#x5C42;" class="headerlink" title="1. &#x7269;&#x7406;&#x5C42;"></a>1. &#x7269;&#x7406;&#x5C42;</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-数据链路层"><span class="post-toc-number">1.2.</span> <span class="post-toc-text"><a href="#2-&#x6570;&#x636E;&#x94FE;&#x8DEF;&#x5C42;" class="headerlink" title="2. &#x6570;&#x636E;&#x94FE;&#x8DEF;&#x5C42;"></a>2. &#x6570;&#x636E;&#x94FE;&#x8DEF;&#x5C42;</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3-应用层"><span class="post-toc-number">1.3.</span> <span class="post-toc-text"><a href="#3-&#x5E94;&#x7528;&#x5C42;" class="headerlink" title="3. &#x5E94;&#x7528;&#x5C42;"></a>3. &#x5E94;&#x7528;&#x5C42;</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#UE"><span class="post-toc-number">2.</span> <span class="post-toc-text"><a href="#UE" class="headerlink" title="UE"></a>UE</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#响应微信服务器消息"><span class="post-toc-number">3.</span> <span class="post-toc-text"><a href="#&#x54CD;&#x5E94;&#x5FAE;&#x4FE1;&#x670D;&#x52A1;&#x5668;&#x6D88;&#x606F;" class="headerlink" title="&#x54CD;&#x5E94;&#x5FAE;&#x4FE1;&#x670D;&#x52A1;&#x5668;&#x6D88;&#x606F;"></a>&#x54CD;&#x5E94;&#x5FAE;&#x4FE1;&#x670D;&#x52A1;&#x5668;&#x6D88;&#x606F;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#消息处理"><span class="post-toc-number">4.</span> <span class="post-toc-text"><a href="#&#x6D88;&#x606F;&#x5904;&#x7406;" class="headerlink" title="&#x6D88;&#x606F;&#x5904;&#x7406;"></a>&#x6D88;&#x606F;&#x5904;&#x7406;</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-83"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">微信 AirKiss 技术</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-10-14 14:34:00" datetime="2016-10-14T06:34:00.000Z"  itemprop="datePublished">2016-10-14</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/IoT/">IoT</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/IoT/微信/">微信</a></li></ul></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>Airkiss顾名思义是飞吻的意思，即手机发送的SSID和密码经过路由转发出去，被目前wifi设备所检测并截获到。无线网络协议一般场景都规定station只能和AP通信，而不能station和station通信（这种场景叫做AD-Hoc点对点）。接下来我们分析SSID和pwd怎么利用Length进行编码的过程。</p>
+<h2 id="通信协议"><a href="#通信协议" class="headerlink" title="通信协议"></a>通信协议</h2><h3 id="1-物理层"><a href="#1-物理层" class="headerlink" title="1. 物理层"></a>1. 物理层</h3><p>发送4个字节的前导码序列，{1,2,3,4}。即发送4个数据帧，帧长度分别是1,2,3,4.其要解决两个问题：</p>
+<ol>
+<li><p>空中充满无线信号，通过前导码来识别出符合airkiss协议的数据包的开始。</p>
+</li>
+<li><p>数据包的数据是经过加密的，发送方的数据帧的有效数据的长度是1，经过编码后的长度会发送变化。假设加密后的长度为N，那接收方接收到的数据长度是N。以后所有的数据帧接收的长度是M时，那发送方真正的数据长度是M-N+1。</p>
+</li>
+</ol>
+<p>Airkiss规定数据的长度使用9个bit进行编码。</p>
+<h3 id="2-数据链路层"><a href="#2-数据链路层" class="headerlink" title="2. 数据链路层"></a>2. 数据链路层</h3><p>数据链路层的包括控制字段和数据字段。</p>
+<ol>
+<li><p>Magic为4个数据帧，两个帧的两个9bit记录将要发送的数据（PWD+Ramdon+SSID）的长度；两个帧的两个9bit记录SSID的CRC校验值。路由器的SSID是会被路由器广播出来的，例如我们手机wifi扫描到路由器的名称就是SSID。因此wifi设备也能得到路由器的SSID，其只要计算目前所能获取到的SSID的CRC值跟MAGIC的SSID CRC值一样，那之后的SSID数据就不用接收了，这样能够提高配置上网速度。Magic很重要，因此发送5遍。</p>
+</li>
+<li><p>PrefixCode为4个数据帧，两个帧的两个9bit记录PWD的数据长度，另外两个帧的两个9bit记录PWD长度的CRC校验值。Magic中发送的长度是所有数据的长度，包括密码PWD、随机数（wifi配置成功后要回复该随机数作为回复）和SSID。而这里是PWD的长度，用于对接收到的数据进行分段。</p>
+</li>
+<li><p>一个序列包括一个序列索引和一个序列数据。协议规定将有效数据以4个字节进行划分，不够补0。如我家路由的PWD是8313huang，那其会分为3个序列，分别是“8313”、“huan”“g\0\0\0”进行发送。Sequence header包括索引值和CRC值，而Data field就是4个数据帧，包含要发送的数据，如“8313”等。</p>
+</li>
+</ol>
+<p>4）如何区分Magic、Prefix、Sequence和Data，是由9bit的最高几个bit来区分的。例如最高bit为1时表示是Data，其他是控制字段。</p>
+<h3 id="3-应用层"><a href="#3-应用层" class="headerlink" title="3. 应用层"></a>3. 应用层</h3><p>应用层即是手机配置上网APP要发送的数据，包括三部分的数据。分别是：</p>
+<ol>
+<li><p>PWD。其先被发送是因为其是最重要的，而SSID已经在MAGIC字段中所确认。</p>
+</li>
+<li><p>1个字节的随机数。wifi配置成功后要发送以该随机数为内容的UDP广播包作为回复，APP收到后即认为wifi设备已经成功联网。</p>
+</li>
+<li><p>SSID。</p>
+</li>
+</ol>
+<h2 id="UE"><a href="#UE" class="headerlink" title="UE"></a>UE</h2><h2 id="响应微信服务器消息"><a href="#响应微信服务器消息" class="headerlink" title="响应微信服务器消息"></a>响应微信服务器消息</h2><p>应用服务器接入<br><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://iot.weixin.qq.com/wiki/static/image/11_1_c-12.png" alt="http://iot.weixin.qq.com/wiki/static/image/11_1_c-12.png" title="">
+                </div>
+                <div class="image-caption">http://iot.weixin.qq.com/wiki/static/image/11_1_c-12.png</div>
+            </figure></p>
+<p>绑定消息<br><img src="http://applehater.cn/usr/uploads/2016/10/1525426596.png" alt="QQ图片20161009182846.png"></p>
+<h2 id="消息处理"><a href="#消息处理" class="headerlink" title="消息处理"></a>消息处理</h2><p>用户通过扫描设备二维码绑定设备后，微信会推送设备绑定事件给第三方。<br>用户通过取消关注设备公众号解绑设备后，微信会推送设备解绑事件给第三方。<br>微信用户绑定设备后，设备会通过微信给第三方发送消息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;xml&gt;</span><br><span class="line">    &lt;ToUserName&gt;&lt;![CDATA[%s]]&gt;&lt;/ToUserName&gt;</span><br><span class="line">    &lt;FromUserName&gt;&lt;![CDATA[%s]]&gt;&lt;/FromUserName&gt;</span><br><span class="line">    &lt;CreateTime&gt;%u&lt;/CreateTime&gt;</span><br><span class="line">    &lt;MsgType&gt;&lt;![CDATA[%s]]&gt;&lt;/MsgType&gt;</span><br><span class="line">    &lt;DeviceType&gt;&lt;![CDATA[%s]]&gt;&lt;/DeviceType&gt;</span><br><span class="line">    &lt;DeviceID&gt;&lt;![CDATA[%s]]&gt;&lt;/DeviceID&gt;</span><br><span class="line">    &lt;Content&gt;&lt;![CDATA[%s]]&gt;&lt;/Content&gt;</span><br><span class="line">    &lt;SessionID&gt;%lu&lt;/SessionID&gt;</span><br><span class="line">    &lt;MsgID&gt;%lu&lt;/MsgID&gt;</span><br><span class="line">    &lt;OpenID&gt;&lt;![CDATA[%s]]&gt;&lt;/OpenID&gt;</span><br><span class="line">&lt;/xml&gt;</span><br></pre></td></tr></table></figure>
+<p>应用服务器接收消息进行机智云平台的绑定<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">    @RequestMapping(value = &quot;/api&quot;, method = RequestMethod.POST)</span><br><span class="line">    @ResponseBody</span><br><span class="line">    public String dispose(HttpServletRequest request, HttpServletResponse response) throws IOException &#123;</span><br><span class="line">        /* 消息的接收、响应、处理 */</span><br><span class="line">        logger.info(&quot;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; 接受请求&quot;);</span><br><span class="line"></span><br><span class="line">        // 调用核心业务类接收消息、处理消息</span><br><span class="line">        return messageHandler.processRequest(request);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">public void handle(String xml) &#123;</span><br><span class="line">        logger.info(&quot; --------&gt;  开始处理设备事件&quot;);</span><br><span class="line">        WxEventDeviceBind device = (WxEventDeviceBind) XMLUtil.getWxMsg(WxEventDeviceBind.class, xml);</span><br><span class="line">        logger.info(&quot; --------&gt;  解析成功：\n&#123;&#125;\n&quot;, device);</span><br><span class="line"></span><br><span class="line">        switch (device.getEvent()) &#123;</span><br><span class="line">            case &quot;bind&quot;:</span><br><span class="line">                bindDevice(device);</span><br><span class="line">                break;</span><br><span class="line">            case &quot;unbind&quot;:</span><br><span class="line">                unbindDevice(device);</span><br><span class="line">                break;</span><br><span class="line">            default:</span><br><span class="line">                logger.info(&quot; --------&gt;  发现事件：\n&#123;&#125;\n&quot;, device);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-10-26T21:49:24.159Z" itemprop="dateUpdated">2019-10-27 05:49:24</time>
+</span><br>
+
+
+        
+        这里不可以写作者留言.
+        
+    </div>
+    <footer>
+        <a href="https://zh-h.github.io">
+            <img src="/img/avatar.jpg" alt="Zohar Hou">
+            Zohar Hou
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2016/10/14/83/&title=《微信 AirKiss 技术》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2016/10/14/83/&title=《微信 AirKiss 技术》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2016/10/14/83/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《微信 AirKiss 技术》 — Applehater&url=https://zh-h.github.io/2016/10/14/83/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2016/10/14/83/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2016/11/05/86/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Javascript 周索引</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/09/30/80/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Elasticsearch 笔记</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'zh-h',
+            repo: 'zh-h.github.io.comment',
+            oauth: {
+                client_id: '3a6263282611b5518bd4',
+                client_secret: 'df06fc0681c7b83ceba630b8649f6cc80a0776ae',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+            <p>
+                
+                    <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+                    
+                        <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+            </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zohar Hou &copy; 2015 - 2019</span>
+            <span>
+                <a href="http://www.beian.gov.cn/portal/index" target="_blank">粤ICP备14081324号</a>
+            </span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2016/10/14/83/&title=《微信 AirKiss 技术》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2016/10/14/83/&title=《微信 AirKiss 技术》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2016/10/14/83/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《微信 AirKiss 技术》 — Applehater&url=https://zh-h.github.io/2016/10/14/83/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2016/10/14/83/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zh-h.github.io/2016/10/14/83/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Look at me !';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Emmm ...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

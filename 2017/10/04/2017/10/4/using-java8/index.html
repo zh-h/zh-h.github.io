@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Java 8 的一些使用技巧 | Applehater | developer ? operator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#009999">
+    
+    
+    <meta name="keywords" content="Java">
+    <meta name="description" content="Java 8 发布三年后，今年年底将要发布 Java 9。然而对于很多使用者来说，受限与旧项目的稳定性考虑以及框架封装隐藏底层 API，很多 Java 8 的特性都没有使用上。 刚刚受封为 Android 官方语言的 Kotlin 似乎热潮已经冷却，虽然 Kotlin 有着甜蜜蜜的语法糖，但是表面易用的语法实际上却埋下了很多坑（解毒 Kotlin Koans: 02 震惊！你的 Java 代码居然">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 8 的一些使用技巧">
+<meta property="og:url" content="https://zh-h.github.io/2017/10/04/2017/10/4/using-java8/index.html">
+<meta property="og:site_name" content="Applehater">
+<meta property="og:description" content="Java 8 发布三年后，今年年底将要发布 Java 9。然而对于很多使用者来说，受限与旧项目的稳定性考虑以及框架封装隐藏底层 API，很多 Java 8 的特性都没有使用上。 刚刚受封为 Android 官方语言的 Kotlin 似乎热潮已经冷却，虽然 Kotlin 有着甜蜜蜜的语法糖，但是表面易用的语法实际上却埋下了很多坑（解毒 Kotlin Koans: 02 震惊！你的 Java 代码居然">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2019-10-26T21:49:24.153Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 8 的一些使用技巧">
+<meta name="twitter:description" content="Java 8 发布三年后，今年年底将要发布 Java 9。然而对于很多使用者来说，受限与旧项目的稳定性考虑以及框架封装隐藏底层 API，很多 Java 8 的特性都没有使用上。 刚刚受封为 Android 官方语言的 Kotlin 似乎热潮已经冷却，虽然 Kotlin 有着甜蜜蜜的语法糖，但是表面易用的语法实际上却埋下了很多坑（解毒 Kotlin Koans: 02 震惊！你的 Java 代码居然">
+    
+        <link rel="alternate" type="application/atom+xml" title="Applehater" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zohar Hou</h5>
+          <a href="mailto:emguaEBvdXRsb29rLmNvbQ==" title="emguaEBvdXRsb29rLmNvbQ==" class="mail">emguaEBvdXRsb29rLmNvbQ==</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories/Java/"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-weibo"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/links"  >
+                <i class="icon icon-lg icon-link"></i>
+                Links
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zh-h" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Java 8 的一些使用技巧</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Java 8 的一些使用技巧</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-03T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2017-10-04
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#文件操作"><span class="post-toc-number">1.</span> <span class="post-toc-text"><a href="#&#x6587;&#x4EF6;&#x64CD;&#x4F5C;" class="headerlink" title="&#x6587;&#x4EF6;&#x64CD;&#x4F5C;"></a>&#x6587;&#x4EF6;&#x64CD;&#x4F5C;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#时间日期"><span class="post-toc-number">2.</span> <span class="post-toc-text"><a href="#&#x65F6;&#x95F4;&#x65E5;&#x671F;" class="headerlink" title="&#x65F6;&#x95F4;&#x65E5;&#x671F;"></a>&#x65F6;&#x95F4;&#x65E5;&#x671F;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#时间格式化"><span class="post-toc-number">2.1.</span> <span class="post-toc-text"><a href="#&#x65F6;&#x95F4;&#x683C;&#x5F0F;&#x5316;" class="headerlink" title="&#x65F6;&#x95F4;&#x683C;&#x5F0F;&#x5316;"></a>&#x65F6;&#x95F4;&#x683C;&#x5F0F;&#x5316;</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#明天，去年"><span class="post-toc-number">2.2.</span> <span class="post-toc-text"><a href="#&#x660E;&#x5929;&#xFF0C;&#x53BB;&#x5E74;" class="headerlink" title="&#x660E;&#x5929;&#xFF0C;&#x53BB;&#x5E74;"></a>&#x660E;&#x5929;&#xFF0C;&#x53BB;&#x5E74;</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#时间差"><span class="post-toc-number">2.3.</span> <span class="post-toc-text"><a href="#&#x65F6;&#x95F4;&#x5DEE;" class="headerlink" title="&#x65F6;&#x95F4;&#x5DEE;"></a>&#x65F6;&#x95F4;&#x5DEE;</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#早晚"><span class="post-toc-number">2.4.</span> <span class="post-toc-text"><a href="#&#x65E9;&#x665A;" class="headerlink" title="&#x65E9;&#x665A;"></a>&#x65E9;&#x665A;</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#时区"><span class="post-toc-number">2.5.</span> <span class="post-toc-text"><a href="#&#x65F6;&#x533A;" class="headerlink" title="&#x65F6;&#x533A;"></a>&#x65F6;&#x533A;</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#转换"><span class="post-toc-number">2.6.</span> <span class="post-toc-text"><a href="#&#x8F6C;&#x6362;" class="headerlink" title="&#x8F6C;&#x6362;"></a>&#x8F6C;&#x6362;</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#默认方法的接口"><span class="post-toc-number">3.</span> <span class="post-toc-text"><a href="#&#x9ED8;&#x8BA4;&#x65B9;&#x6CD5;&#x7684;&#x63A5;&#x53E3;" class="headerlink" title="&#x9ED8;&#x8BA4;&#x65B9;&#x6CD5;&#x7684;&#x63A5;&#x53E3;"></a>&#x9ED8;&#x8BA4;&#x65B9;&#x6CD5;&#x7684;&#x63A5;&#x53E3;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#defaut关键字"><span class="post-toc-number">3.1.</span> <span class="post-toc-text"><a href="#defaut&#x5173;&#x952E;&#x5B57;" class="headerlink" title="defaut&#x5173;&#x952E;&#x5B57;"></a><code>defaut</code>&#x5173;&#x952E;&#x5B57;</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Java-多继承"><span class="post-toc-number">3.2.</span> <span class="post-toc-text"><a href="#Java-&#x591A;&#x7EE7;&#x627F;" class="headerlink" title="Java &#x591A;&#x7EE7;&#x627F;"></a>Java &#x591A;&#x7EE7;&#x627F;</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Lambda"><span class="post-toc-number">4.</span> <span class="post-toc-text"><a href="#Lambda" class="headerlink" title="Lambda"></a>Lambda</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#函数式接口"><span class="post-toc-number">5.</span> <span class="post-toc-text"><a href="#&#x51FD;&#x6570;&#x5F0F;&#x63A5;&#x53E3;" class="headerlink" title="&#x51FD;&#x6570;&#x5F0F;&#x63A5;&#x53E3;"></a>&#x51FD;&#x6570;&#x5F0F;&#x63A5;&#x53E3;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#FunctionalInterface-注解"><span class="post-toc-number">5.1.</span> <span class="post-toc-text"><a href="#FunctionalInterface-&#x6CE8;&#x89E3;" class="headerlink" title="@FunctionalInterface &#x6CE8;&#x89E3;"></a>@FunctionalInterface &#x6CE8;&#x89E3;</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#方法引用"><span class="post-toc-number">5.2.</span> <span class="post-toc-text"><a href="#&#x65B9;&#x6CD5;&#x5F15;&#x7528;" class="headerlink" title="&#x65B9;&#x6CD5;&#x5F15;&#x7528;"></a>&#x65B9;&#x6CD5;&#x5F15;&#x7528;</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#作用域"><span class="post-toc-number">5.3.</span> <span class="post-toc-text"><a href="#&#x4F5C;&#x7528;&#x57DF;" class="headerlink" title="&#x4F5C;&#x7528;&#x57DF;"></a>&#x4F5C;&#x7528;&#x57DF;</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#内嵌函数式接口"><span class="post-toc-number">6.</span> <span class="post-toc-text"><a href="#&#x5185;&#x5D4C;&#x51FD;&#x6570;&#x5F0F;&#x63A5;&#x53E3;" class="headerlink" title="&#x5185;&#x5D4C;&#x51FD;&#x6570;&#x5F0F;&#x63A5;&#x53E3;"></a>&#x5185;&#x5D4C;&#x51FD;&#x6570;&#x5F0F;&#x63A5;&#x53E3;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Functions"><span class="post-toc-number">6.1.</span> <span class="post-toc-text"><a href="#Functions" class="headerlink" title="Functions"></a>Functions</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Predicates"><span class="post-toc-number">6.2.</span> <span class="post-toc-text"><a href="#Predicates" class="headerlink" title="Predicates"></a>Predicates</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Suppliers"><span class="post-toc-number">6.3.</span> <span class="post-toc-text"><a href="#Suppliers" class="headerlink" title="Suppliers"></a>Suppliers</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Consumers"><span class="post-toc-number">6.4.</span> <span class="post-toc-text"><a href="#Consumers" class="headerlink" title="Consumers"></a>Consumers</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Comparators"><span class="post-toc-number">6.5.</span> <span class="post-toc-text"><a href="#Comparators" class="headerlink" title="Comparators"></a>Comparators</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Optionals"><span class="post-toc-number">6.6.</span> <span class="post-toc-text"><a href="#Optionals" class="headerlink" title="Optionals"></a>Optionals</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#流处理"><span class="post-toc-number">7.</span> <span class="post-toc-text"><a href="#&#x6D41;&#x5904;&#x7406;" class="headerlink" title="&#x6D41;&#x5904;&#x7406;"></a>&#x6D41;&#x5904;&#x7406;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Filter"><span class="post-toc-number">7.1.</span> <span class="post-toc-text"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Sorted"><span class="post-toc-number">7.2.</span> <span class="post-toc-text"><a href="#Sorted" class="headerlink" title="Sorted"></a>Sorted</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Map"><span class="post-toc-number">7.3.</span> <span class="post-toc-text"><a href="#Map" class="headerlink" title="Map"></a>Map</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#anyMatch"><span class="post-toc-number">7.4.</span> <span class="post-toc-text"><a href="#anyMatch" class="headerlink" title="anyMatch"></a>anyMatch</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Reduce"><span class="post-toc-number">7.5.</span> <span class="post-toc-text"><a href="#Reduce" class="headerlink" title="Reduce"></a>Reduce</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Count"><span class="post-toc-number">7.6.</span> <span class="post-toc-text"><a href="#Count" class="headerlink" title="Count"></a>Count</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#并行化"><span class="post-toc-number">7.7.</span> <span class="post-toc-text"><a href="#&#x5E76;&#x884C;&#x5316;" class="headerlink" title="&#x5E76;&#x884C;&#x5316;"></a>&#x5E76;&#x884C;&#x5316;</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-2017/10/4/using-java8"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Java 8 的一些使用技巧</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-04 00:00:00" datetime="2017-10-03T16:00:00.000Z"  itemprop="datePublished">2017-10-04</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>Java 8 发布三年后，今年年底将要发布 Java 9。然而对于很多使用者来说，受限与旧项目的稳定性考虑以及框架封装隐藏底层 API，很多 Java 8 的特性都没有使用上。</p>
+<p>刚刚受封为 Android 官方语言的 Kotlin 似乎热潮已经冷却，虽然 Kotlin 有着甜蜜蜜的语法糖，但是表面易用的语法实际上却埋下了很多坑（<a href="https://blog.kotliner.cn/2017/07/30/KotlinKoans-02-Java-Kotlin-Conversion/" target="_blank" rel="noopener">解毒 Kotlin Koans: 02 震惊！你的 Java 代码居然被转换成了这样…</a>），上线使用还要做很多深入学习。</p>
+<p>为了迎接 Java 9，还是先把 Java 8 用熟。。。</p>
+<h2 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h2><p>以往为了读取一个文本文件的内容可能需要需要十几行代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">readTranslateJsonFileToString</span><span class="params">(String resourceName)</span> </span>&#123;</span><br><span class="line">    ClassLoader classLoader = LocationTranslateUtil.class.getClassLoader();</span><br><span class="line">    URL resource = classLoader.getResource(resourceName);</span><br><span class="line">    StringBuilder content = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    <span class="keyword">if</span> (resource != <span class="keyword">null</span>) &#123;</span><br><span class="line">        File file = <span class="keyword">new</span> File(resource.getFile());</span><br><span class="line">        InputStream is;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            is = <span class="keyword">new</span> FileInputStream(file);</span><br><span class="line">            InputStreamReader isr = <span class="keyword">new</span> InputStreamReader(is, <span class="string">"UTF-8"</span>);</span><br><span class="line">            BufferedReader br = <span class="keyword">new</span> BufferedReader(isr);</span><br><span class="line">            String temp;</span><br><span class="line">            <span class="keyword">while</span> ((temp = br.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">                content.append(temp);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            <span class="comment">// TODO</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> content.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用 <code>java.nio.*</code> 缩短为四行，读取类路径中的文件。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">readPropertiesStr</span><span class="params">()</span> <span class="keyword">throws</span> IOException, URISyntaxException</span>&#123;</span><br><span class="line">    ClassLoader classLoader = <span class="keyword">this</span>.getClass().getClassLoader();</span><br><span class="line">    URL resource = classLoader.getResource(<span class="string">"config.properties"</span>);</span><br><span class="line">    Path path = Paths.get(resource.toURI());</span><br><span class="line">    <span class="keyword">byte</span>[] data = Files.readAllBytes(path);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> String(data, StandardCharsets.UTF_8);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="时间日期"><a href="#时间日期" class="headerlink" title="时间日期"></a>时间日期</h2><h3 id="时间格式化"><a href="#时间格式化" class="headerlink" title="时间格式化"></a>时间格式化</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">DateTimeFormatter df = DateTimeFormatter.ISO_LOCAL_DATE_TIME; <span class="comment">// 线程安全</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getDateTimeString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    LocalDateTime now = LocalDateTime.now();</span><br><span class="line">    <span class="keyword">return</span> df.format(now);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> LocalDateTime <span class="title">parseToLocalDateTime</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> LocalDateTime.parse(<span class="string">"2017-08-14T12:49:44.133"</span>, df);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>新增的 <code>DateTimeFormatter</code> 是不可变，而且是线程安全的类，因此可以直接使用在成员变量中。</p>
+<h3 id="明天，去年"><a href="#明天，去年" class="headerlink" title="明天，去年"></a>明天，去年</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> LocalDateTime <span class="title">nextDate</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> LocalDateTime.now().plusDays(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> LocalDateTime <span class="title">previousYear</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> LocalDateTime.now().minusYears(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="时间差"><a href="#时间差" class="headerlink" title="时间差"></a>时间差</h3><p>快速计算两个本地时间的时间差，包括<code>NANOS, MICROS, MILLIS, SECONDS, MINUTES, HOURS, HALF_DAYS, DAYS, WEEKS, MONTHS, YEARS, DECADES, CENTURIES, MILLENNIA, ERAS</code> 时间单位</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public long differDates() &#123;</span><br><span class="line">    for(ChronoUnit unit : ChronoUnit.values())&#123;</span><br><span class="line">        System.out.println(unit.name());</span><br><span class="line">    &#125;</span><br><span class="line">    return ChronoUnit.DAYS.between(previousYear(),LocalDateTime.now());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="早晚"><a href="#早晚" class="headerlink" title="早晚"></a>早晚</h3><p>比较两个日期/时间的早晚，可以使用<code>isAfter</code>或者<code>isBefore</code> 方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">LocalDate tomorrow = LocalDate.of(2017, 8, 15);</span><br><span class="line">if(tommorow.isAfter(LocalDate.now()))&#123;</span><br><span class="line">    System.out.println(&quot;Tomorrow comes after today&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="时区"><a href="#时区" class="headerlink" title="时区"></a>时区</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public LocalDateTime utcNow()&#123;</span><br><span class="line">    return LocalDateTime.now(ZoneId.of(&quot;Europe/Berlin&quot;));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="转换"><a href="#转换" class="headerlink" title="转换"></a>转换</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public Date toOldStyleDate()&#123;</span><br><span class="line">    Instant instance = LocalDateTime.now().atZone(ZoneId.of(&quot;Asia/Shanghai&quot;)).toInstant();</span><br><span class="line">    return Date.from(instance);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="默认方法的接口"><a href="#默认方法的接口" class="headerlink" title="默认方法的接口"></a>默认方法的接口</h2><p>Java 8 允许我们使用default关键字，为接口声明添加非抽象的方法实现。这个特性又被称为扩展方法。</p>
+<h3 id="defaut关键字"><a href="#defaut关键字" class="headerlink" title="defaut关键字"></a><code>defaut</code>关键字</h3><p>接口也可以有多个方法实现，使用<code>defaut</code>关键字修饰。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">USB</span> </span>&#123;</span><br><span class="line">    <span class="function">String <span class="title">ping</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">int</span> <span class="title">getPinNum</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">4</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultMethodInInterface</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        USB usb2_0 = <span class="keyword">new</span> USB() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> String <span class="title">ping</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="string">"OK"</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        System.out.println(usb2_0.getPinNum());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Java-多继承"><a href="#Java-多继承" class="headerlink" title="Java 多继承"></a>Java 多继承</h3><p>既然接口都可以包含多个方法实现，那么Java本身可以实现多个接口，这样是不是可以实现多继承？</p>
+<p>可以实现Java的多继承。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">USB</span> </span>&#123;</span><br><span class="line">    <span class="function">String <span class="title">ping</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">int</span> <span class="title">getPinNum</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">4</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Plugin</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">default</span> String <span class="title">plug</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"biu"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">USB3_0</span> <span class="keyword">implements</span> <span class="title">USB</span>, <span class="title">Plugin</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">ping</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"OK"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultMethodInInterface</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        USB3_0 usb3_0 = <span class="keyword">new</span> USB3_0();</span><br><span class="line">        System.out.println(usb3_0.getPinNum());</span><br><span class="line">        System.out.println(usb3_0.plug());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Lambda"><a href="#Lambda" class="headerlink" title="Lambda"></a>Lambda</h2><p>省略匿名类实现单个方法的接口，直接使用单行表达式或者块。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; names = Arrays.asList(<span class="string">"hua"</span>, <span class="string">"zohar"</span>, <span class="string">"zonghua"</span>);</span><br><span class="line">Collections.sort(names, <span class="keyword">new</span> Comparator&lt;String&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(String o1, String o2)</span> </span>&#123; <span class="comment">// 前者比后者小</span></span><br><span class="line">        System.out.println(o1 + <span class="string">" --- "</span> + o2);</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">int</span>) o1.toCharArray()[<span class="number">0</span>] - (<span class="keyword">int</span>) o2.toCharArray()[<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 方法引用 String::compareTo</span></span><br><span class="line">Collections.sort(names, (o1, o2) -&gt; o1.compareTo(o2));</span><br></pre></td></tr></table></figure>
+<h2 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h2><h3 id="FunctionalInterface-注解"><a href="#FunctionalInterface-注解" class="headerlink" title="@FunctionalInterface 注解"></a>@FunctionalInterface 注解</h3><p>使用该注解声明一个接口只包含一个抽象方法，但是可以包含多个默认方法实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">SomeThing</span></span>&#123;</span><br><span class="line">    <span class="function">String <span class="title">say</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TheFunctionalInterface</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SomeThing someThing = () -&gt; <span class="string">"lala"</span>;</span><br><span class="line">        System.out.println(someThing.say());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="方法引用"><a href="#方法引用" class="headerlink" title="方法引用"></a>方法引用</h3><p>可以从类或者实例中获取方法引用，使用<code>::</code>符号</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeClass</span> </span>&#123;</span><br><span class="line">    <span class="function">String <span class="title">say</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"haha"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OtherClass</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> String <span class="title">say</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"66666"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TheMethodReference</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SomeClass someObject = <span class="keyword">new</span> SomeClass();</span><br><span class="line">        SomeThing someThing = someObject::say;</span><br><span class="line">        SomeThing otherThing = OtherClass::say;</span><br><span class="line">        System.out.println(someThing.say());</span><br><span class="line">        System.out.println(otherThing.say());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h3><p>与匿名类的访问类似，实际上访问外部变量只能是<code>final</code>修饰变量，虽然可以省略，但再次变更变量会导致编译出错。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Lala</span> </span>&#123;</span><br><span class="line">    <span class="function">String <span class="title">say</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TheLambdaContext</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String[] name = <span class="keyword">new</span> String[]&#123;<span class="string">"Lily"</span>&#125;;</span><br><span class="line">        Lala lala = () -&gt; name[<span class="number">0</span>] + <span class="string">" hehe"</span>;</span><br><span class="line">        System.out.println(lala.say());</span><br><span class="line"><span class="comment">//        name = new String[]&#123;"What"&#125;; 不可变更引用或者值</span></span><br><span class="line">        lala = () -&gt; &#123;</span><br><span class="line">            name[<span class="number">0</span>] = <span class="string">"Zoar"</span>;</span><br><span class="line">            <span class="keyword">return</span> name[<span class="number">0</span>];</span><br><span class="line">        &#125;;</span><br><span class="line">        System.out.println(lala.say());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="内嵌函数式接口"><a href="#内嵌函数式接口" class="headerlink" title="内嵌函数式接口"></a>内嵌函数式接口</h2><h3 id="Functions"><a href="#Functions" class="headerlink" title="Functions"></a>Functions</h3><p>接收一个传入参数，返回结果，使用默认的方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Function&lt;String, Integer&gt; lala = (str) -&gt; <span class="number">1</span>; <span class="comment">// &lt;input,return&gt;</span></span><br><span class="line">System.out.println(lala.apply(<span class="string">"lala"</span>).addThen(Objects::notNull));</span><br><span class="line"></span><br><span class="line">Supplier&lt;String&gt; hehe = () -&gt; <span class="string">"lala"</span>; <span class="comment">// 没有输入参数</span></span><br><span class="line">System.out.println(hehe.get());</span><br><span class="line"></span><br><span class="line">Consumer&lt;String&gt; whatsUp = (str) -&gt; str = str.substring(<span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">String someThing = <span class="string">"lala"</span>;</span><br><span class="line">whatsUp.accept(someThing);</span><br><span class="line">System.out.println(someThing);</span><br><span class="line"></span><br><span class="line">Comparator&lt;String&gt; strCompare = (o1, o2) -&gt; o1.compareTo(o2); <span class="comment">// 前者比后者大为正</span></span><br><span class="line">System.out.println(strCompare.compare(<span class="string">"a"</span>, <span class="string">"b"</span>));</span><br></pre></td></tr></table></figure>
+<h3 id="Predicates"><a href="#Predicates" class="headerlink" title="Predicates"></a>Predicates</h3><p>传入参数，返回布尔值。具有逻辑方法<code>or</code> <code>and</code> <code>negate</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Predicate&lt;String&gt; predicate = (s) -&gt; s.length() &gt; <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">predicate.test(<span class="string">"foo"</span>);              <span class="comment">// true</span></span><br><span class="line">predicate.negate().test(<span class="string">"foo"</span>);     <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line">Predicate&lt;Boolean&gt; nonNull = Objects::nonNull;</span><br><span class="line">Predicate&lt;Boolean&gt; isNull = Objects::isNull;</span><br><span class="line"></span><br><span class="line">Predicate&lt;String&gt; isEmpty = String::isEmpty;</span><br><span class="line">Predicate&lt;String&gt; isNotEmpty = isEmpty.negate();</span><br></pre></td></tr></table></figure>
+<h3 id="Suppliers"><a href="#Suppliers" class="headerlink" title="Suppliers"></a>Suppliers</h3><p>没有传入参数，返回给定类型。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Supplier&lt;String&gt; hehe = () -&gt; <span class="string">"lala"</span>; <span class="comment">// 没有输入参数</span></span><br><span class="line">System.out.println(hehe.get());</span><br></pre></td></tr></table></figure>
+<h3 id="Consumers"><a href="#Consumers" class="headerlink" title="Consumers"></a>Consumers</h3><p>没有返回参数，给定输入类型。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Consumer&lt;String&gt; whatsUp = (str) -&gt; str = str.substring(<span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">String someThing = <span class="string">"lala"</span>;</span><br><span class="line">whatsUp.accept(someThing);</span><br><span class="line">System.out.println(someThing);</span><br></pre></td></tr></table></figure>
+<h3 id="Comparators"><a href="#Comparators" class="headerlink" title="Comparators"></a>Comparators</h3><p>对比两个传入参数，左边的比右边的大就返回正值，反则负值，相等为0。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Comparator&lt;String&gt; strCompare = (o1, o2) -&gt; o1.compareTo(o2); <span class="comment">// 前者比后者大为正</span></span><br><span class="line">System.out.println(strCompare.compare(<span class="string">"a"</span>, <span class="string">"b"</span>));</span><br></pre></td></tr></table></figure>
+<h3 id="Optionals"><a href="#Optionals" class="headerlink" title="Optionals"></a>Optionals</h3><p>一个存储结果的容器，用来省掉函数过程中的<code>if xx != null</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Optional&lt;String&gt; optional = Optional.of(<span class="string">"lala"</span>);</span><br><span class="line"></span><br><span class="line">optional.isPresent();           <span class="comment">// true</span></span><br><span class="line">optional.get();                 <span class="comment">// "lala"</span></span><br><span class="line">optional.orElse(<span class="string">"hehe"</span>);    <span class="comment">// "lala"</span></span><br><span class="line"></span><br><span class="line">optional.ifPresent((s) -&gt; System.out.println(s.charAt(<span class="number">0</span>)));     <span class="comment">// "l"</span></span><br></pre></td></tr></table></figure>
+<h2 id="流处理"><a href="#流处理" class="headerlink" title="流处理"></a>流处理</h2><h3 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h3><p>过滤掉集合中的某些元素，传入参数是元素，返回过滤判断的布尔值。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">names.stream()</span><br><span class="line">        .filter(Objects::nonNull)</span><br><span class="line">        .map(String::toUpperCase)</span><br><span class="line">        .sorted(((o1, o2) -&gt; -o1.compareTo(o2)))</span><br><span class="line">        .forEach(System.out::println);</span><br></pre></td></tr></table></figure>
+<h3 id="Sorted"><a href="#Sorted" class="headerlink" title="Sorted"></a>Sorted</h3><p>传入前后两个参数，返回两者判断的有符号整数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">names.stream()</span><br><span class="line">        .filter(Objects::nonNull)</span><br><span class="line">        .map(String::toUpperCase)</span><br><span class="line">        .sorted(((o1, o2) -&gt; -o1.compareTo(o2)))</span><br><span class="line">        .forEach(System.out::println);</span><br></pre></td></tr></table></figure>
+<p><strong>原来集合的顺序并不会被改变</strong></p>
+<h3 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h3><p>传入一个元素，处理后返回这个元素。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">names.stream()</span><br><span class="line">        .filter(Objects::nonNull)</span><br><span class="line">        .map(String::toUpperCase)</span><br><span class="line">        .sorted(((o1, o2) -&gt; -o1.compareTo(o2)))</span><br><span class="line">        .forEach(System.out::println);</span><br></pre></td></tr></table></figure>
+<h3 id="anyMatch"><a href="#anyMatch" class="headerlink" title="anyMatch"></a>anyMatch</h3><p>在集合中查找匹配的元素。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">boolean</span> hasStartWith0 = names.stream()</span><br><span class="line">                .anyMatch((s) -&gt; s.startsWith(<span class="string">"0"</span>));</span><br><span class="line">        System.out.println(hasStartWith0);</span><br></pre></td></tr></table></figure>
+<h3 id="Reduce"><a href="#Reduce" class="headerlink" title="Reduce"></a>Reduce</h3><p>传入最终元素、每个元素，把每个元素处理到最终的元素中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Optional&lt;String&gt; namesStr = names.stream()</span><br><span class="line">        .filter(TheStreams::nonNull)</span><br><span class="line">        .reduce((o1, o2) -&gt; &#123;</span><br><span class="line">            System.out.println(o2);</span><br><span class="line">            <span class="keyword">return</span> o1 + <span class="string">" - "</span> + o2;</span><br><span class="line">        &#125;); <span class="comment">// 最终元素,每个元素</span></span><br><span class="line">namesStr.ifPresent(System.out::println);</span><br></pre></td></tr></table></figure>
+<h3 id="Count"><a href="#Count" class="headerlink" title="Count"></a>Count</h3><p>计算集合中的数量</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> count = names.stream()</span><br><span class="line">        .filter(TheStreams::nonNull)</span><br><span class="line">        .filter((s) -&gt; s.startsWith(<span class="string">"0"</span>) || s.startsWith(<span class="string">"L"</span>))</span><br><span class="line">        .count();</span><br><span class="line">System.out.println(count);</span><br></pre></td></tr></table></figure>
+<h3 id="并行化"><a href="#并行化" class="headerlink" title="并行化"></a>并行化</h3><p>Java 8 流操作内部封装了多线程调用，可以使用流操作进行并行处理。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;String&gt; <span class="title">generateRandomNameList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> max = <span class="number">1000000</span>;</span><br><span class="line">    List&lt;String&gt; values = <span class="keyword">new</span> ArrayList&lt;&gt;(max);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; max; i++) &#123;</span><br><span class="line">        UUID uuid = UUID.randomUUID();</span><br><span class="line">        values.add(uuid.toString());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> values;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">long</span> <span class="title">sequenceSort</span><span class="params">(List&lt;String&gt; names)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> names.stream()</span><br><span class="line">            .sorted()</span><br><span class="line">            .count(); <span class="comment">// 3s518ms</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">long</span> <span class="title">parallelSort</span><span class="params">(List&lt;String&gt; names)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> names.parallelStream()</span><br><span class="line">            .sorted()</span><br><span class="line">            .count(); <span class="comment">//2s134ms</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-10-26T21:49:24.153Z" itemprop="dateUpdated">2019-10-27 05:49:24</time>
+</span><br>
+
+
+        
+        这里不可以写作者留言.
+        
+    </div>
+    <footer>
+        <a href="https://zh-h.github.io">
+            <img src="/img/avatar.jpg" alt="Zohar Hou">
+            Zohar Hou
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2017/10/04/2017/10/4/using-java8/&title=《Java 8 的一些使用技巧》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2017/10/04/2017/10/4/using-java8/&title=《Java 8 的一些使用技巧》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2017/10/04/2017/10/4/using-java8/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java 8 的一些使用技巧》 — Applehater&url=https://zh-h.github.io/2017/10/04/2017/10/4/using-java8/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2017/10/04/2017/10/4/using-java8/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/10/14/2017/10/14/spring-boot-embedded-tomcat-tunning/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Spring Boot 内嵌 tomcat 调优</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/09/25/2017/09/25/spring-boot-linux-service/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Spring Boot 注册为 Linux 系统服务</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'zh-h',
+            repo: 'zh-h.github.io.comment',
+            oauth: {
+                client_id: '3a6263282611b5518bd4',
+                client_secret: 'df06fc0681c7b83ceba630b8649f6cc80a0776ae',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+            <p>
+                
+                    <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+                    
+                        <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+            </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zohar Hou &copy; 2015 - 2019</span>
+            <span>
+                <a href="http://www.beian.gov.cn/portal/index" target="_blank">粤ICP备14081324号</a>
+            </span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2017/10/04/2017/10/4/using-java8/&title=《Java 8 的一些使用技巧》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2017/10/04/2017/10/4/using-java8/&title=《Java 8 的一些使用技巧》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2017/10/04/2017/10/4/using-java8/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java 8 的一些使用技巧》 — Applehater&url=https://zh-h.github.io/2017/10/04/2017/10/4/using-java8/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2017/10/04/2017/10/4/using-java8/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zh-h.github.io/2017/10/04/2017/10/4/using-java8/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Look at me !';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Emmm ...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

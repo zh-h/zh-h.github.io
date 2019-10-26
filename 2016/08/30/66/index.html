@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Vim 操作集合 | Applehater | developer ? operator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#009999">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="打开文件vim 打开 Vim 欢迎页面vim filename 打开文件，文件名不存在是创建文件vim foldername 打开文件夹:open file 当前窗口打开文件:split file 新窗口打开文件:bn 下一个文件:bp 上一个文件 模式切换正常模式（按Esc或Ctrl+[进入） 左下角显示文件名或为空插入模式（按i键进入） 左下角显示–INSERT–可视模式（按v进入） 左下角">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vim 操作集合">
+<meta property="og:url" content="https://zh-h.github.io/2016/08/30/66/index.html">
+<meta property="og:site_name" content="Applehater">
+<meta property="og:description" content="打开文件vim 打开 Vim 欢迎页面vim filename 打开文件，文件名不存在是创建文件vim foldername 打开文件夹:open file 当前窗口打开文件:split file 新窗口打开文件:bn 下一个文件:bp 上一个文件 模式切换正常模式（按Esc或Ctrl+[进入） 左下角显示文件名或为空插入模式（按i键进入） 左下角显示–INSERT–可视模式（按v进入） 左下角">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="https://applehater.cn/usr/uploads/2016/08/4181151301.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/e7c91439gw1f7xsppi107j20mt0ea467.jpg">
+<meta property="og:updated_time" content="2019-10-26T21:49:24.158Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vim 操作集合">
+<meta name="twitter:description" content="打开文件vim 打开 Vim 欢迎页面vim filename 打开文件，文件名不存在是创建文件vim foldername 打开文件夹:open file 当前窗口打开文件:split file 新窗口打开文件:bn 下一个文件:bp 上一个文件 模式切换正常模式（按Esc或Ctrl+[进入） 左下角显示文件名或为空插入模式（按i键进入） 左下角显示–INSERT–可视模式（按v进入） 左下角">
+<meta name="twitter:image" content="https://applehater.cn/usr/uploads/2016/08/4181151301.jpg">
+    
+        <link rel="alternate" type="application/atom+xml" title="Applehater" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zohar Hou</h5>
+          <a href="mailto:emguaEBvdXRsb29rLmNvbQ==" title="emguaEBvdXRsb29rLmNvbQ==" class="mail">emguaEBvdXRsb29rLmNvbQ==</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories/Java/"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-weibo"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/links"  >
+                <i class="icon icon-lg icon-link"></i>
+                Links
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zh-h" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Vim 操作集合</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Vim 操作集合</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-08-30T00:43:00.000Z" itemprop="datePublished" class="page-time">
+  2016-08-30
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/">Linux</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/vim/">vim</a></li></ul></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#打开文件"><span class="post-toc-number">1.</span> <span class="post-toc-text"><a href="#&#x6253;&#x5F00;&#x6587;&#x4EF6;" class="headerlink" title="&#x6253;&#x5F00;&#x6587;&#x4EF6;"></a>&#x6253;&#x5F00;&#x6587;&#x4EF6;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#模式切换"><span class="post-toc-number">2.</span> <span class="post-toc-text"><a href="#&#x6A21;&#x5F0F;&#x5207;&#x6362;" class="headerlink" title="&#x6A21;&#x5F0F;&#x5207;&#x6362;"></a>&#x6A21;&#x5F0F;&#x5207;&#x6362;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#插入命令"><span class="post-toc-number">3.</span> <span class="post-toc-text"><a href="#&#x63D2;&#x5165;&#x547D;&#x4EE4;" class="headerlink" title="&#x63D2;&#x5165;&#x547D;&#x4EE4;"></a>&#x63D2;&#x5165;&#x547D;&#x4EE4;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#查找命令"><span class="post-toc-number">4.</span> <span class="post-toc-text"><a href="#&#x67E5;&#x627E;&#x547D;&#x4EE4;" class="headerlink" title="&#x67E5;&#x627E;&#x547D;&#x4EE4;"></a>&#x67E5;&#x627E;&#x547D;&#x4EE4;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#替换命令"><span class="post-toc-number">5.</span> <span class="post-toc-text"><a href="#&#x66FF;&#x6362;&#x547D;&#x4EE4;" class="headerlink" title="&#x66FF;&#x6362;&#x547D;&#x4EE4;"></a>&#x66FF;&#x6362;&#x547D;&#x4EE4;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#移动命令"><span class="post-toc-number">6.</span> <span class="post-toc-text"><a href="#&#x79FB;&#x52A8;&#x547D;&#x4EE4;" class="headerlink" title="&#x79FB;&#x52A8;&#x547D;&#x4EE4;"></a>&#x79FB;&#x52A8;&#x547D;&#x4EE4;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#撤销操作"><span class="post-toc-number">7.</span> <span class="post-toc-text"><a href="#&#x64A4;&#x9500;&#x64CD;&#x4F5C;" class="headerlink" title="&#x64A4;&#x9500;&#x64CD;&#x4F5C;"></a>&#x64A4;&#x9500;&#x64CD;&#x4F5C;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#删除操作"><span class="post-toc-number">8.</span> <span class="post-toc-text"><a href="#&#x5220;&#x9664;&#x64CD;&#x4F5C;" class="headerlink" title="&#x5220;&#x9664;&#x64CD;&#x4F5C;"></a>&#x5220;&#x9664;&#x64CD;&#x4F5C;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#复制粘贴剪切"><span class="post-toc-number">9.</span> <span class="post-toc-text"><a href="#&#x590D;&#x5236;&#x7C98;&#x8D34;&#x526A;&#x5207;" class="headerlink" title="&#x590D;&#x5236;&#x7C98;&#x8D34;&#x526A;&#x5207;"></a>&#x590D;&#x5236;&#x7C98;&#x8D34;&#x526A;&#x5207;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#进入可视模式，hljk移动光标，选中部分高亮"><span class="post-toc-number">9.1.</span> <span class="post-toc-text"><a href="#&#x8FDB;&#x5165;&#x53EF;&#x89C6;&#x6A21;&#x5F0F;&#xFF0C;hljk&#x79FB;&#x52A8;&#x5149;&#x6807;&#xFF0C;&#x9009;&#x4E2D;&#x90E8;&#x5206;&#x9AD8;&#x4EAE;" class="headerlink" title="&#x8FDB;&#x5165;&#x53EF;&#x89C6;&#x6A21;&#x5F0F;&#xFF0C;hljk&#x79FB;&#x52A8;&#x5149;&#x6807;&#xFF0C;&#x9009;&#x4E2D;&#x90E8;&#x5206;&#x9AD8;&#x4EAE;"></a>&#x8FDB;&#x5165;&#x53EF;&#x89C6;&#x6A21;&#x5F0F;&#xFF0C;hljk&#x79FB;&#x52A8;&#x5149;&#x6807;&#xFF0C;&#x9009;&#x4E2D;&#x90E8;&#x5206;&#x9AD8;&#x4EAE;</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#普通模式"><span class="post-toc-number">9.2.</span> <span class="post-toc-text"><a href="#&#x666E;&#x901A;&#x6A21;&#x5F0F;" class="headerlink" title="&#x666E;&#x901A;&#x6A21;&#x5F0F;"></a>&#x666E;&#x901A;&#x6A21;&#x5F0F;</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#全局命令"><span class="post-toc-number">10.</span> <span class="post-toc-text"><a href="#&#x5168;&#x5C40;&#x547D;&#x4EE4;" class="headerlink" title="&#x5168;&#x5C40;&#x547D;&#x4EE4;"></a>&#x5168;&#x5C40;&#x547D;&#x4EE4;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#注释命令"><span class="post-toc-number">11.</span> <span class="post-toc-text"><a href="#&#x6CE8;&#x91CA;&#x547D;&#x4EE4;" class="headerlink" title="&#x6CE8;&#x91CA;&#x547D;&#x4EE4;"></a>&#x6CE8;&#x91CA;&#x547D;&#x4EE4;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#执行"><span class="post-toc-number">12.</span> <span class="post-toc-text"><a href="#&#x6267;&#x884C;" class="headerlink" title="&#x6267;&#x884C;"></a>&#x6267;&#x884C;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#其他"><span class="post-toc-number">13.</span> <span class="post-toc-text"><a href="#&#x5176;&#x4ED6;" class="headerlink" title="&#x5176;&#x4ED6;"></a>&#x5176;&#x4ED6;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Vim-tutor"><span class="post-toc-number">14.</span> <span class="post-toc-text"><a href="#Vim-tutor" class="headerlink" title="Vim tutor"></a>Vim tutor</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-66"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Vim 操作集合</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-08-30 08:43:00" datetime="2016-08-30T00:43:00.000Z"  itemprop="datePublished">2016-08-30</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/">Linux</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/vim/">vim</a></li></ul></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p><img src="https://applehater.cn/usr/uploads/2016/08/4181151301.jpg" alt="601c4466gw1f7av5vyw2yj20lg0oi76u.jpg"></p>
+<h2 id="打开文件"><a href="#打开文件" class="headerlink" title="打开文件"></a>打开文件</h2><p><code>vim</code> 打开 Vim 欢迎页面<br><code>vim filename</code> 打开文件，文件名不存在是创建文件<br><code>vim foldername</code> 打开文件夹<br><code>:open file</code> 当前窗口打开文件<br><code>:split file</code> 新窗口打开文件<br><code>:bn</code> 下一个文件<br><code>:bp</code> 上一个文件</p>
+<h2 id="模式切换"><a href="#模式切换" class="headerlink" title="模式切换"></a>模式切换</h2><p>正常模式（按Esc或Ctrl+[进入） 左下角显示文件名或为空<br>插入模式（按i键进入） 左下角显示–INSERT–<br>可视模式（按v进入） 左下角显示–VISUAL–</p>
+<h2 id="插入命令"><a href="#插入命令" class="headerlink" title="插入命令"></a>插入命令</h2><p>i 在当前位置生前插入<br>I 在当前行首插入<br>a 在当前位置后插入<br>A 在当前行尾插入<br>o 在当前行之后插入一行<br>O 在当前行之前插入一行</p>
+<h2 id="查找命令"><a href="#查找命令" class="headerlink" title="查找命令"></a>查找命令</h2><p><code>/text</code>　　查找text，按n健查找下一个，按N健查找前一个。<br><code>?text</code>　　查找text，反向查找，按n健查找下一个，按N健查找前一个。<br>光标移动到该词上，按<em>或#键即可以该单词进行搜索，相当于/搜索。而#命令相当于?搜索<br>vim中有一些特殊字符转义　　.</em>[]^%/?~$</p>
+<h2 id="替换命令"><a href="#替换命令" class="headerlink" title="替换命令"></a>替换命令</h2><p><code>s/old/new/</code> old替换new，替换当前行的第一个匹配<br><code>s/old/new/g</code> old替换new，替换当前行的所有匹配<br><code>%s/old/new/</code> old替换new，替换所有行的第一个匹配<br><code>%s/old/new/g</code> old替换new，替换整个文件的所有匹配</p>
+<h2 id="移动命令"><a href="#移动命令" class="headerlink" title="移动命令"></a>移动命令</h2><p>h 左移一个字符<br>l 右移一个字符<br>k 上移一个字符<br>j 下移一个字符<br>以上命令可以与数字组合，如先按2再按j就是向下移动两个字符</p>
+<p>w 向前移动一个单词,光标停留在行首，如果已到行尾，则转至下一行行首。<br>b 向后移动一个单词<br>e 同w，光标停在单词尾部<br>ge 同b，光标停在单词尾部<br>gg 移动到文件头<br>G 移动到文件尾<br>^ 移动到本行第一个非空白字符上<br>0 移动到本行第一个字符上</p>
+<p><code>:200</code> 跳转到行数</p>
+<p>Ctrl + e 向下滚动一行<br>Ctrl + y 向上滚动一行<br>Ctrl + d 向下滚动半屏<br>Ctrl + u 向上滚动半屏<br>Ctrl + f 向下滚动一屏<br>Ctrl + b 向上滚动一屏</p>
+<h2 id="撤销操作"><a href="#撤销操作" class="headerlink" title="撤销操作"></a>撤销操作</h2><p>u 撤销（Undo）<br>U 撤销对整行的操作<br>Ctrl + r 重做，相当于 Windows 里用的 Ctrl Y</p>
+<h2 id="删除操作"><a href="#删除操作" class="headerlink" title="删除操作"></a>删除操作</h2><p>x 删除光标后字符<br>3x 删除当前光标开始向后三个字符<br>X 删除当前字符的前一个字符<br>dd 删除当前行<br>10d 删除当前行开始的10行。<br>D 删除当前字符至行尾<br><code>:1,10d</code> 删除1-10行</p>
+<h2 id="复制粘贴剪切"><a href="#复制粘贴剪切" class="headerlink" title="复制粘贴剪切"></a>复制粘贴剪切</h2><h3 id="进入可视模式，hljk移动光标，选中部分高亮"><a href="#进入可视模式，hljk移动光标，选中部分高亮" class="headerlink" title="进入可视模式，hljk移动光标，选中部分高亮"></a>进入可视模式，hljk移动光标，选中部分高亮</h3><p>y 复制高亮部分<br>d 剪切</p>
+<h3 id="普通模式"><a href="#普通模式" class="headerlink" title="普通模式"></a>普通模式</h3><p>yy 拷贝当前行<br>nyy 拷贝当前后开始的n行<br>p  在当前光标后粘贴<br>P 在当前行前粘贴<br>ddp 交换当前行和其下一行<br>xp 交换当前字符和其后一个字符</p>
+<h2 id="全局命令"><a href="#全局命令" class="headerlink" title="全局命令"></a>全局命令</h2><p><code>:wq</code> 保存并退出<br><code>:q!</code> 强制退出并忽略所有更改<br><code>:e!</code> 放弃所有修改，并打开原来文件<br>Ctrl+ww 移动到下一个窗口<br>Ctrl+wj 移动到下方的窗口<br>Ctrl+wk 移动到上方的窗口<br><code>:close</code> 最后一个窗口不能使用此命令</p>
+<h2 id="注释命令"><a href="#注释命令" class="headerlink" title="注释命令"></a>注释命令</h2><p>1,10 s/^/#/g 注释第1-10行<br>1,10 s/^#//g 解除1-10行的注释</p>
+<h2 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h2><p><code>:!command</code> 执行shell命令</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p><code>:help</code> xxx 显示xxx的帮助，比如 :help i, :help CTRL-[（即Ctrl+[的帮助）。<br><code>:help</code> ‘number’ Vim选项的帮助用单引号括起<br><code>:help</code> <esc> 特殊键的帮助用&lt;&gt;扩起</esc></p>
+<h2 id="Vim-tutor"><a href="#Vim-tutor" class="headerlink" title="Vim tutor"></a>Vim tutor</h2><p>随时随地学习<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vimtutor</span><br></pre></td></tr></table></figure></p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://ww4.sinaimg.cn/large/e7c91439gw1f7xsppi107j20mt0ea467.jpg" alt="vim" title="">
+                </div>
+                <div class="image-caption">vim</div>
+            </figure>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-10-26T21:49:24.158Z" itemprop="dateUpdated">2019-10-27 05:49:24</time>
+</span><br>
+
+
+        
+        这里不可以写作者留言.
+        
+    </div>
+    <footer>
+        <a href="https://zh-h.github.io">
+            <img src="/img/avatar.jpg" alt="Zohar Hou">
+            Zohar Hou
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2016/08/30/66/&title=《Vim 操作集合》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2016/08/30/66/&title=《Vim 操作集合》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2016/08/30/66/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Vim 操作集合》 — Applehater&url=https://zh-h.github.io/2016/08/30/66/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2016/08/30/66/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2016/09/03/67/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">在if处填写什么代码，可以使得输出结果为：AB</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/08/25/60/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">二叉查找树 (BST)</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'zh-h',
+            repo: 'zh-h.github.io.comment',
+            oauth: {
+                client_id: '3a6263282611b5518bd4',
+                client_secret: 'df06fc0681c7b83ceba630b8649f6cc80a0776ae',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+            <p>
+                
+                    <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+                    
+                        <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+            </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zohar Hou &copy; 2015 - 2019</span>
+            <span>
+                <a href="http://www.beian.gov.cn/portal/index" target="_blank">粤ICP备14081324号</a>
+            </span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2016/08/30/66/&title=《Vim 操作集合》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2016/08/30/66/&title=《Vim 操作集合》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2016/08/30/66/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Vim 操作集合》 — Applehater&url=https://zh-h.github.io/2016/08/30/66/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2016/08/30/66/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zh-h.github.io/2016/08/30/66/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Look at me !';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Emmm ...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

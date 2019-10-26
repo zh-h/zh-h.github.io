@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>单例模式有七种 QAQ | Applehater | developer ? operator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#009999">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="为了能做准确描述实例，下列类都是单身汪 1. 懒汉式12345678910public class SingleDog &amp;#123;       private static SingleDog instance;       private SingleDog ()&amp;#123;&amp;#125;        public static SingleDog getInstance() &amp;#123;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="单例模式有七种 QAQ">
+<meta property="og:url" content="https://zh-h.github.io/2016/09/20/75/index.html">
+<meta property="og:site_name" content="Applehater">
+<meta property="og:description" content="为了能做准确描述实例，下列类都是单身汪 1. 懒汉式12345678910public class SingleDog &amp;#123;       private static SingleDog instance;       private SingleDog ()&amp;#123;&amp;#125;        public static SingleDog getInstance() &amp;#123;">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2019-10-26T21:49:24.159Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="单例模式有七种 QAQ">
+<meta name="twitter:description" content="为了能做准确描述实例，下列类都是单身汪 1. 懒汉式12345678910public class SingleDog &amp;#123;       private static SingleDog instance;       private SingleDog ()&amp;#123;&amp;#125;        public static SingleDog getInstance() &amp;#123;">
+    
+        <link rel="alternate" type="application/atom+xml" title="Applehater" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zohar Hou</h5>
+          <a href="mailto:emguaEBvdXRsb29rLmNvbQ==" title="emguaEBvdXRsb29rLmNvbQ==" class="mail">emguaEBvdXRsb29rLmNvbQ==</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories/Java/"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-weibo"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/links"  >
+                <i class="icon icon-lg icon-link"></i>
+                Links
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zh-h" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">单例模式有七种 QAQ</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">单例模式有七种 QAQ</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-09-20T04:09:00.000Z" itemprop="datePublished" class="page-time">
+  2016-09-20
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-懒汉式"><span class="post-toc-number">1.</span> <span class="post-toc-text"><a href="#1-&#x61D2;&#x6C49;&#x5F0F;" class="headerlink" title="1. &#x61D2;&#x6C49;&#x5F0F;"></a>1. &#x61D2;&#x6C49;&#x5F0F;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-懒汉式（同步方法）"><span class="post-toc-number">2.</span> <span class="post-toc-text"><a href="#2-&#x61D2;&#x6C49;&#x5F0F;&#xFF08;&#x540C;&#x6B65;&#x65B9;&#x6CD5;&#xFF09;" class="headerlink" title="2. &#x61D2;&#x6C49;&#x5F0F;&#xFF08;&#x540C;&#x6B65;&#x65B9;&#x6CD5;&#xFF09;"></a>2. &#x61D2;&#x6C49;&#x5F0F;&#xFF08;&#x540C;&#x6B65;&#x65B9;&#x6CD5;&#xFF09;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3-饿汉式（静态成员）"><span class="post-toc-number">3.</span> <span class="post-toc-text"><a href="#3-&#x997F;&#x6C49;&#x5F0F;&#xFF08;&#x9759;&#x6001;&#x6210;&#x5458;&#xFF09;" class="headerlink" title="3. &#x997F;&#x6C49;&#x5F0F;&#xFF08;&#x9759;&#x6001;&#x6210;&#x5458;&#xFF09;"></a>3. &#x997F;&#x6C49;&#x5F0F;&#xFF08;&#x9759;&#x6001;&#x6210;&#x5458;&#xFF09;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#4-饿汉式（静态代码块）"><span class="post-toc-number">4.</span> <span class="post-toc-text"><a href="#4-&#x997F;&#x6C49;&#x5F0F;&#xFF08;&#x9759;&#x6001;&#x4EE3;&#x7801;&#x5757;&#xFF09;" class="headerlink" title="4. &#x997F;&#x6C49;&#x5F0F;&#xFF08;&#x9759;&#x6001;&#x4EE3;&#x7801;&#x5757;&#xFF09;"></a>4. &#x997F;&#x6C49;&#x5F0F;&#xFF08;&#x9759;&#x6001;&#x4EE3;&#x7801;&#x5757;&#xFF09;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#5-饿汉式（静态内部类）"><span class="post-toc-number">5.</span> <span class="post-toc-text"><a href="#5-&#x997F;&#x6C49;&#x5F0F;&#xFF08;&#x9759;&#x6001;&#x5185;&#x90E8;&#x7C7B;&#xFF09;" class="headerlink" title="5. &#x997F;&#x6C49;&#x5F0F;&#xFF08;&#x9759;&#x6001;&#x5185;&#x90E8;&#x7C7B;&#xFF09;"></a>5. &#x997F;&#x6C49;&#x5F0F;&#xFF08;&#x9759;&#x6001;&#x5185;&#x90E8;&#x7C7B;&#xFF09;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#6-枚举"><span class="post-toc-number">6.</span> <span class="post-toc-text"><a href="#6-&#x679A;&#x4E3E;" class="headerlink" title="6. &#x679A;&#x4E3E;"></a>6. &#x679A;&#x4E3E;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#7-懒汉式（双重检查锁-）"><span class="post-toc-number">7.</span> <span class="post-toc-text"><a href="#7-&#x61D2;&#x6C49;&#x5F0F;&#xFF08;&#x53CC;&#x91CD;&#x68C0;&#x67E5;&#x9501;-&#xFF09;" class="headerlink" title="7. &#x61D2;&#x6C49;&#x5F0F;&#xFF08;&#x53CC;&#x91CD;&#x68C0;&#x67E5;&#x9501; &#xFF09;"></a>7. &#x61D2;&#x6C49;&#x5F0F;&#xFF08;&#x53CC;&#x91CD;&#x68C0;&#x67E5;&#x9501; &#xFF09;</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-75"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">单例模式有七种 QAQ</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-09-20 12:09:00" datetime="2016-09-20T04:09:00.000Z"  itemprop="datePublished">2016-09-20</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>为了能做准确描述实例，下列类都是单身汪</p>
+<h2 id="1-懒汉式"><a href="#1-懒汉式" class="headerlink" title="1. 懒汉式"></a>1. 懒汉式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class SingleDog &#123;  </span><br><span class="line">     private static SingleDog instance;  </span><br><span class="line">     private SingleDog ()&#123;&#125;   </span><br><span class="line">     public static SingleDog getInstance() &#123;  </span><br><span class="line">       if (instance == null) &#123;  </span><br><span class="line">         instance = new SingleDog();  </span><br><span class="line">       &#125;  </span><br><span class="line">     return instance;  </span><br><span class="line">     &#125;  </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-懒汉式（同步方法）"><a href="#2-懒汉式（同步方法）" class="headerlink" title="2. 懒汉式（同步方法）"></a>2. 懒汉式（同步方法）</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class SingleDog &#123;</span><br><span class="line">    private static SingleDog instance;</span><br><span class="line">    private SingleDog() &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    public static synchronized SingleDog getInstance() &#123;</span><br><span class="line">        if (instance == null) &#123;</span><br><span class="line">            instance = new SingleDog();</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-饿汉式（静态成员）"><a href="#3-饿汉式（静态成员）" class="headerlink" title="3. 饿汉式（静态成员）"></a>3. 饿汉式（静态成员）</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class SingleDog &#123;  </span><br><span class="line">  private static SingleDog instance = new SingleDog();  </span><br><span class="line">  private SingleDog ()&#123;&#125;</span><br><span class="line">  public static SingleDog getInstance() &#123;  </span><br><span class="line">     return instance;  </span><br><span class="line">  &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="4-饿汉式（静态代码块）"><a href="#4-饿汉式（静态代码块）" class="headerlink" title="4. 饿汉式（静态代码块）"></a>4. 饿汉式（静态代码块）</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class SingleDog&#123;</span><br><span class="line">    private static SingleDog instance = null;</span><br><span class="line">    static&#123;</span><br><span class="line">      instance = new SingleDog();</span><br><span class="line">    &#125;</span><br><span class="line">    private SingleDog()&#123;&#125;</span><br><span class="line">    public static SingleDog getInstance()&#123;</span><br><span class="line">      return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="5-饿汉式（静态内部类）"><a href="#5-饿汉式（静态内部类）" class="headerlink" title="5. 饿汉式（静态内部类）"></a>5. 饿汉式（静态内部类）</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class SingleDog &#123;</span><br><span class="line">    private static class SingleDogHolder &#123;</span><br><span class="line">        private static final SingleDog INSTANCE = new SingleDog();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private SingleDog() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static final SingleDog getInstance() &#123;</span><br><span class="line">        return SingleDogHolder.INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="6-枚举"><a href="#6-枚举" class="headerlink" title="6. 枚举"></a>6. 枚举</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public enum SingleDog&#123;</span><br><span class="line">    INSTANCE;</span><br><span class="line">    public void metting(Girl she)&#123;</span><br><span class="line">        // TODO</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="7-懒汉式（双重检查锁-）"><a href="#7-懒汉式（双重检查锁-）" class="headerlink" title="7. 懒汉式（双重检查锁 ）"></a>7. 懒汉式（双重检查锁 ）</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class SingleDog &#123;</span><br><span class="line">    private volatile static SingleDog singleDog = null;</span><br><span class="line"></span><br><span class="line">    private SingleDog() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static SingleDog getInstance() &#123;</span><br><span class="line">        if (singleDog == null) &#123; // 使用 volatile 保证了线程可见性，所以不用锁</span><br><span class="line">            synchronized (SingleDog.class) &#123; // 锁定不给其他变量操作</span><br><span class="line">                SingleDog temp = singleDog;</span><br><span class="line">                synchronized (SingleDog.class) &#123; // 保证读写有序</span><br><span class="line">                    if (temp == null) &#123;</span><br><span class="line">                        singleDog = new SingleDog();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                singleDog = temp;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return singleDog;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>volatile 变量写后读，保障读取瞬时都是正确非空的判断。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-10-26T21:49:24.159Z" itemprop="dateUpdated">2019-10-27 05:49:24</time>
+</span><br>
+
+
+        
+        这里不可以写作者留言.
+        
+    </div>
+    <footer>
+        <a href="https://zh-h.github.io">
+            <img src="/img/avatar.jpg" alt="Zohar Hou">
+            Zohar Hou
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2016/09/20/75/&title=《单例模式有七种 QAQ》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2016/09/20/75/&title=《单例模式有七种 QAQ》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2016/09/20/75/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《单例模式有七种 QAQ》 — Applehater&url=https://zh-h.github.io/2016/09/20/75/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2016/09/20/75/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2016/09/23/76/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">BIO AIO NIO</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/09/17/74/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Create a global .gitignore</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'zh-h',
+            repo: 'zh-h.github.io.comment',
+            oauth: {
+                client_id: '3a6263282611b5518bd4',
+                client_secret: 'df06fc0681c7b83ceba630b8649f6cc80a0776ae',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+            <p>
+                
+                    <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+                    
+                        <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+            </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zohar Hou &copy; 2015 - 2019</span>
+            <span>
+                <a href="http://www.beian.gov.cn/portal/index" target="_blank">粤ICP备14081324号</a>
+            </span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2016/09/20/75/&title=《单例模式有七种 QAQ》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2016/09/20/75/&title=《单例模式有七种 QAQ》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2016/09/20/75/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《单例模式有七种 QAQ》 — Applehater&url=https://zh-h.github.io/2016/09/20/75/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2016/09/20/75/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zh-h.github.io/2016/09/20/75/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Look at me !';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Emmm ...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

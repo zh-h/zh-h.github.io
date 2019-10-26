@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Java Promise 实现 | Applehater | developer ? operator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#009999">
+    
+    
+    <meta name="keywords" content="promise">
+    <meta name="description" content="使用 ExcuteService可以根据自己的需要来创建壹個 ExecutorService ，也可以使用 Executors 工厂方法来创建壹個 ExecutorService 实例。这里有几個创建 ExecutorService 的例子：123ExecutorService executorService1 = Executors.newSingleThreadExecutor();  Exe">
+<meta name="keywords" content="promise">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Promise 实现">
+<meta property="og:url" content="https://zh-h.github.io/2017/11/17/2017/11/17/java-promise/index.html">
+<meta property="og:site_name" content="Applehater">
+<meta property="og:description" content="使用 ExcuteService可以根据自己的需要来创建壹個 ExecutorService ，也可以使用 Executors 工厂方法来创建壹個 ExecutorService 实例。这里有几個创建 ExecutorService 的例子：123ExecutorService executorService1 = Executors.newSingleThreadExecutor();  Exe">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2019-10-26T21:49:24.154Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java Promise 实现">
+<meta name="twitter:description" content="使用 ExcuteService可以根据自己的需要来创建壹個 ExecutorService ，也可以使用 Executors 工厂方法来创建壹個 ExecutorService 实例。这里有几個创建 ExecutorService 的例子：123ExecutorService executorService1 = Executors.newSingleThreadExecutor();  Exe">
+    
+        <link rel="alternate" type="application/atom+xml" title="Applehater" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zohar Hou</h5>
+          <a href="mailto:emguaEBvdXRsb29rLmNvbQ==" title="emguaEBvdXRsb29rLmNvbQ==" class="mail">emguaEBvdXRsb29rLmNvbQ==</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories/Java/"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-weibo"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/links"  >
+                <i class="icon icon-lg icon-link"></i>
+                Links
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zh-h" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Java Promise 实现</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Java Promise 实现</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-11-16T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2017-11-17
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#使用-ExcuteService"><span class="post-toc-number">1.</span> <span class="post-toc-text"><a href="#&#x4F7F;&#x7528;-ExcuteService" class="headerlink" title="&#x4F7F;&#x7528; ExcuteService"></a>&#x4F7F;&#x7528; ExcuteService</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#ExecutorService-使用方法"><span class="post-toc-number">1.1.</span> <span class="post-toc-text"><a href="#ExecutorService-&#x4F7F;&#x7528;&#x65B9;&#x6CD5;" class="headerlink" title="ExecutorService &#x4F7F;&#x7528;&#x65B9;&#x6CD5;"></a>ExecutorService &#x4F7F;&#x7528;&#x65B9;&#x6CD5;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#execute-Runnable"><span class="post-toc-number">1.1.1.</span> <span class="post-toc-text"><a href="#execute-Runnable" class="headerlink" title="execute(Runnable)"></a>execute(Runnable)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#submit-Runnable"><span class="post-toc-number">1.1.2.</span> <span class="post-toc-text"><a href="#submit-Runnable" class="headerlink" title="submit(Runnable)"></a>submit(Runnable)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#submit-Callable"><span class="post-toc-number">1.1.3.</span> <span class="post-toc-text"><a href="#submit-Callable" class="headerlink" title="submit(Callable)"></a>submit(Callable)</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-2017/11/17/java-promise"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Java Promise 实现</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-11-17 00:00:00" datetime="2017-11-16T16:00:00.000Z"  itemprop="datePublished">2017-11-17</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="使用-ExcuteService"><a href="#使用-ExcuteService" class="headerlink" title="使用 ExcuteService"></a>使用 ExcuteService</h2><p>可以根据自己的需要来创建壹個 ExecutorService ，也可以使用 Executors 工厂方法来创建壹個 ExecutorService 实例。这里有几個创建 ExecutorService 的例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ExecutorService executorService1 = Executors.newSingleThreadExecutor();  </span><br><span class="line">ExecutorService executorService2 = Executors.newFixedThreadPool(<span class="number">10</span>);  </span><br><span class="line">ExecutorService executorService3 = Executors.newScheduledThreadPool(<span class="number">10</span>);</span><br></pre></td></tr></table></figure></p>
+<h3 id="ExecutorService-使用方法"><a href="#ExecutorService-使用方法" class="headerlink" title="ExecutorService 使用方法"></a>ExecutorService 使用方法</h3><p>这里有几种不同的方式让你将任务委托给壹個 ExecutorService：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">execute(Runnable)  </span><br><span class="line">submit(Runnable)  </span><br><span class="line">submit(Callable)  </span><br><span class="line">invokeAny(...)  </span><br><span class="line">invokeAll(...)</span><br></pre></td></tr></table></figure></p>
+<h4 id="execute-Runnable"><a href="#execute-Runnable" class="headerlink" title="execute(Runnable)"></a>execute(Runnable)</h4><p>方法 execute(Runnable) 接收壹個 java.lang.Runnable 对象作为参数，并且以异步的方式执行它。如下是壹個使用 ExecutorService 执行 Runnable 的例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ExecutorService executorService = Executors.newSingleThreadExecutor();  </span><br><span class="line">    </span><br><span class="line">executorService.execute(<span class="keyword">new</span> Runnable() &#123;  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">        System.out.println(<span class="string">"Asynchronous task"</span>);  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;);  </span><br><span class="line">        </span><br><span class="line">executorService.shutdown();</span><br></pre></td></tr></table></figure></p>
+<p>使用这种方式没有办法获取执行 Runnable 之后的结果，如果你希望获取运行之后的返回值，就必须使用 接收 Callable 参数的 execute() 方法，后者将会在下文中提到。</p>
+<h4 id="submit-Runnable"><a href="#submit-Runnable" class="headerlink" title="submit(Runnable)"></a>submit(Runnable)</h4><p>方法 submit(Runnable) 同样接收壹個 Runnable 的实现作为参数，但是会返回一个 Future 对象。这個 Future 对象可以用于判断 Runnable 是否结束执行。如下是壹個 ExecutorService 的 submit() 方法的例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Future future = executorService.submit(<span class="keyword">new</span> Runnable() &#123;  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">        System.out.println(<span class="string">"Asynchronous task"</span>);  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;);  </span><br><span class="line"><span class="comment">//如果任务结束执行则返回 null  </span></span><br><span class="line">System.out.println(<span class="string">"future.get()="</span> + future.get());</span><br></pre></td></tr></table></figure></p>
+<h4 id="submit-Callable"><a href="#submit-Callable" class="headerlink" title="submit(Callable)"></a>submit(Callable)</h4><p>方法 submit(Callable) 和方法 submit(Runnable) 比较类似，但是区别则在于它们接收不同的参数类型。Callable 的实例与 Runnable 的实例很类似，但是 Callable 的 call() 方法可以返回壹個结果。方法 Runnable.run() 则不能返回结果。</p>
+<p>Callable 的返回值可以从方法 submit(Callable) 返回的 Future 对象中获取。如下是壹個 ExecutorService Callable 的样例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Future future = executorService.submit(<span class="keyword">new</span> Callable()&#123;  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;  </span><br><span class="line">        System.out.println(<span class="string">"Asynchronous Callable"</span>);  </span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Callable Result"</span>;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;);  </span><br><span class="line">    </span><br><span class="line">System.out.println(<span class="string">"future.get() = "</span> + future.get());</span><br></pre></td></tr></table></figure></p>
+<p>上述样例代码会输出如下结果：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">ExecutorService executorService = Executors.newSingleThreadExecutor();  </span><br><span class="line">    </span><br><span class="line">Set&lt;Callable&lt;String&gt;&gt; callables = <span class="keyword">new</span> HashSet&lt;Callable&lt;String&gt;&gt;();  </span><br><span class="line">    </span><br><span class="line">callables.add(<span class="keyword">new</span> Callable&lt;String&gt;() &#123;  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;  </span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Task 1"</span>;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;);  </span><br><span class="line">callables.add(<span class="keyword">new</span> Callable&lt;String&gt;() &#123;  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;  </span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Task 2"</span>;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;);  </span><br><span class="line">callables.add(<span class="keyword">new</span> Callable&lt;String&gt;() &#123;  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;  </span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Task 3"</span>;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;);  </span><br><span class="line">    </span><br><span class="line">String result = executorService.invoke(callables);  </span><br><span class="line">    </span><br><span class="line">System.out.println(<span class="string">"result = "</span> + result);  </span><br><span class="line">    </span><br><span class="line">executorService.shutdown();</span><br></pre></td></tr></table></figure></p>
+<p>如果把当中 Callable 的方法作为 Http 请求，那么就可以实现多个 HTTP 请求并发，一个请求异常整个调用异常，最后一个请求完成，整个调用完成。极大利用了 Java 的线程管理和网络带宽。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-10-26T21:49:24.154Z" itemprop="dateUpdated">2019-10-27 05:49:24</time>
+</span><br>
+
+
+        
+        这里不可以写作者留言.
+        
+    </div>
+    <footer>
+        <a href="https://zh-h.github.io">
+            <img src="/img/avatar.jpg" alt="Zohar Hou">
+            Zohar Hou
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/promise/">promise</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2017/11/17/2017/11/17/java-promise/&title=《Java Promise 实现》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2017/11/17/2017/11/17/java-promise/&title=《Java Promise 实现》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2017/11/17/2017/11/17/java-promise/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java Promise 实现》 — Applehater&url=https://zh-h.github.io/2017/11/17/2017/11/17/java-promise/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2017/11/17/2017/11/17/java-promise/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/11/26/2017/11/26/Spring-Boot-With-Embedded-MongoDB-for-testing/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Spring Boot 使用内嵌 Mongo 进行测试</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/10/2017/11/10/groovy-hole/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Groovy 踩坑纪实</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'zh-h',
+            repo: 'zh-h.github.io.comment',
+            oauth: {
+                client_id: '3a6263282611b5518bd4',
+                client_secret: 'df06fc0681c7b83ceba630b8649f6cc80a0776ae',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+            <p>
+                
+                    <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+                    
+                        <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+            </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zohar Hou &copy; 2015 - 2019</span>
+            <span>
+                <a href="http://www.beian.gov.cn/portal/index" target="_blank">粤ICP备14081324号</a>
+            </span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2017/11/17/2017/11/17/java-promise/&title=《Java Promise 实现》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2017/11/17/2017/11/17/java-promise/&title=《Java Promise 实现》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2017/11/17/2017/11/17/java-promise/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java Promise 实现》 — Applehater&url=https://zh-h.github.io/2017/11/17/2017/11/17/java-promise/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2017/11/17/2017/11/17/java-promise/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zh-h.github.io/2017/11/17/2017/11/17/java-promise/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Look at me !';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Emmm ...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

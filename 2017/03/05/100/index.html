@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>MQTT 话题匹配算法实现 | Applehater | developer ? operator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#009999">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="MQTT 协议的订阅的话题名称采用修改版UTF-8编码，订阅者的话题支持通配符#和+  用户需要一次订阅多个具有类似结构的话题，可以在话题过滤器中包含通配符。通配符只可用在话题过滤器中，在发布应用消息时的话题名不允许包含通配符，话题通配符有两种：  #：表示匹配&amp;gt;=0个层次，比如a/#就匹配a/b，a/b/c（不能匹配a/，后面必须有其它话题）。单独的一个#表示匹配所有，不允许a#或a/#/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MQTT 话题匹配算法实现">
+<meta property="og:url" content="https://zh-h.github.io/2017/03/05/100/index.html">
+<meta property="og:site_name" content="Applehater">
+<meta property="og:description" content="MQTT 协议的订阅的话题名称采用修改版UTF-8编码，订阅者的话题支持通配符#和+  用户需要一次订阅多个具有类似结构的话题，可以在话题过滤器中包含通配符。通配符只可用在话题过滤器中，在发布应用消息时的话题名不允许包含通配符，话题通配符有两种：  #：表示匹配&amp;gt;=0个层次，比如a/#就匹配a/b，a/b/c（不能匹配a/，后面必须有其它话题）。单独的一个#表示匹配所有，不允许a#或a/#/">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2019-10-26T21:49:24.150Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MQTT 话题匹配算法实现">
+<meta name="twitter:description" content="MQTT 协议的订阅的话题名称采用修改版UTF-8编码，订阅者的话题支持通配符#和+  用户需要一次订阅多个具有类似结构的话题，可以在话题过滤器中包含通配符。通配符只可用在话题过滤器中，在发布应用消息时的话题名不允许包含通配符，话题通配符有两种：  #：表示匹配&amp;gt;=0个层次，比如a/#就匹配a/b，a/b/c（不能匹配a/，后面必须有其它话题）。单独的一个#表示匹配所有，不允许a#或a/#/">
+    
+        <link rel="alternate" type="application/atom+xml" title="Applehater" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zohar Hou</h5>
+          <a href="mailto:emguaEBvdXRsb29rLmNvbQ==" title="emguaEBvdXRsb29rLmNvbQ==" class="mail">emguaEBvdXRsb29rLmNvbQ==</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories/Java/"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-weibo"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/links"  >
+                <i class="icon icon-lg icon-link"></i>
+                Links
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zh-h" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">MQTT 话题匹配算法实现</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">MQTT 话题匹配算法实现</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-03-04T19:27:00.000Z" itemprop="datePublished" class="page-time">
+  2017-03-05
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/数据结构与算法/">数据结构与算法</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/数据结构与算法/mqtt/">mqtt</a></li></ul></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-实现一"><span class="post-toc-number">1.</span> <span class="post-toc-text"><a href="#1-&#x5B9E;&#x73B0;&#x4E00;" class="headerlink" title="1. &#x5B9E;&#x73B0;&#x4E00;"></a>1. &#x5B9E;&#x73B0;&#x4E00;</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#实现二"><span class="post-toc-number">2.</span> <span class="post-toc-text"><a href="#&#x5B9E;&#x73B0;&#x4E8C;" class="headerlink" title="&#x5B9E;&#x73B0;&#x4E8C;"></a>&#x5B9E;&#x73B0;&#x4E8C;</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-100"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">MQTT 话题匹配算法实现</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-03-05 03:27:00" datetime="2017-03-04T19:27:00.000Z"  itemprop="datePublished">2017-03-05</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/数据结构与算法/">数据结构与算法</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/数据结构与算法/mqtt/">mqtt</a></li></ul></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>MQTT 协议的订阅的话题名称采用修改版UTF-8编码，订阅者的话题支持通配符#和+ </p>
+<p>用户需要一次订阅多个具有类似结构的话题，可以在话题过滤器中包含通配符。通配符只可用在话题过滤器中，在发布应用消息时的话题名不允许包含通配符，话题通配符有两种：</p>
+<ul>
+<li><p>#：表示匹配&gt;=0个层次，比如a/#就匹配a/b，a/b/c（不能匹配a/，后面必须有其它话题）。单独的一个#表示匹配所有，不允许a#或a/#/c等形式。</p>
+</li>
+<li><p>+：表示匹配一个层次，例如a/+匹配a/b，a/c，不匹配a/b/c。单独的一个+是允许的，但a+为非法形式。</p>
+</li>
+</ul>
+<h2 id="1-实现一"><a href="#1-实现一" class="headerlink" title="1. 实现一"></a>1. 实现一</h2><ol>
+<li>先使用排列组合生成有可能匹配的所有话题模式，然后放置到Object中，在这里当只有唯一元素的Set使用</li>
+<li>在目标话题中直接查找，如果在所有话题模式中包含这个目标话题，就返回真。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line">&quot;use strict&quot;;</span><br><span class="line"></span><br><span class="line">var LRU = require(&quot;lru-cache&quot;);</span><br><span class="line"></span><br><span class="line">var logger = require(&apos;./logHelper&apos;).logger(__filename)</span><br><span class="line"></span><br><span class="line">var cache = LRU(&#123;</span><br><span class="line">  max: 10000,</span><br><span class="line">  maxAge: 1000 * 60 * 60</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Generate the possible patterns that might match a topic.</span><br><span class="line"> *</span><br><span class="line"> * @param &#123;String&#125; the topic</span><br><span class="line"> * @return the object of the patterns</span><br><span class="line"> */</span><br><span class="line">function _topicPatterns(topic) &#123;</span><br><span class="line">  var parts = topic.split(&quot;/&quot;);</span><br><span class="line">  var patterns = &#123;&#125;;</span><br><span class="line">  patterns[topic] = true</span><br><span class="line">  var i, a = [], b = [], j, k, h, list = [];</span><br><span class="line"></span><br><span class="line">  for (j = 1; j &lt; parts.length; j++) &#123;</span><br><span class="line">    list.length = 0; // clear the array</span><br><span class="line"></span><br><span class="line">    for (i = 0; i &lt; parts.length; i++) &#123;</span><br><span class="line">      a.length = 0;</span><br><span class="line">      b.length = 0;</span><br><span class="line"></span><br><span class="line">      list.push(i);</span><br><span class="line">      for (h = 1; list.length &lt; j; h++) &#123;</span><br><span class="line">        list.unshift(parts.length - h);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      for (k = 0; k &lt; parts.length; k++) &#123;</span><br><span class="line">        if (list.indexOf(k) &gt;= 0) &#123;</span><br><span class="line">          a.push(parts[k]);</span><br><span class="line">          b.push(parts[k]);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">          if (k === 0 || a[a.length - 1] !== &quot;#&quot;) &#123;</span><br><span class="line">            a.push(&quot;#&quot;);</span><br><span class="line">          &#125;</span><br><span class="line">          b.push(&quot;+&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      patterns[(a.join(&quot;/&quot;))] = true;</span><br><span class="line">      patterns[(b.join(&quot;/&quot;))] = true;</span><br><span class="line">      list.shift();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return patterns;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Generate the possible patterns that might match a topic.</span><br><span class="line"> * Memozied version.</span><br><span class="line"> *</span><br><span class="line"> * @param &#123;String&#125; the topic</span><br><span class="line"> * @return the map of the patterns</span><br><span class="line"> */</span><br><span class="line">function topicPatterns(topic) &#123;</span><br><span class="line">  var result = cache.get(topic);</span><br><span class="line">  if (!result) &#123;</span><br><span class="line">    result = _topicPatterns(topic);</span><br><span class="line">  &#125;</span><br><span class="line">  cache.set(topic, result);</span><br><span class="line">  return result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 根据输入的话题匹配目标话题列表，匹配成功就返回true</span><br><span class="line"> * 使用lur缓存，现在有BUG，只能匹配/开头的话题</span><br><span class="line"> * </span><br><span class="line"> * @param &#123;String&#125; 输入的话题</span><br><span class="line"> * @param &#123;list&#125; 目标话题</span><br><span class="line"> */</span><br><span class="line">function match(topic, targetTopics) &#123;</span><br><span class="line">  var possibles = topicPatterns(topic);</span><br><span class="line">  logger.debug(&apos;possible topic patterns: &apos;)</span><br><span class="line">  logger.debug(possibles)</span><br><span class="line">  for (var i = 0; i &lt; targetTopics.length; i++) &#123;</span><br><span class="line">    var targetTopic = targetTopics[i];</span><br><span class="line">    if (possibles[targetTopic]) &#123;</span><br><span class="line">      logger.debug(&apos;Topic match: %s&apos;, true)</span><br><span class="line">      return true;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  logger.debug(&apos;Topic match: %s&apos;, false)</span><br><span class="line">  return false;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">module.exports.match = match;</span><br><span class="line"></span><br><span class="line">module.exports.topicPatterns = topicPatterns</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>测试<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">function testMatch() &#123;</span><br><span class="line"></span><br><span class="line">    var subscribeTopics = [&apos;/a/sdfsdfds/u/sdfsdf/#&apos;]</span><br><span class="line"></span><br><span class="line">    var publishTopic = &apos;/a1/sdfsdfds/u/sdfsdf/12222&apos;</span><br><span class="line"></span><br><span class="line">    var result = match(publishTopic, subscribeTopics)</span><br><span class="line"></span><br><span class="line">    console.log(result==false)</span><br><span class="line">    </span><br><span class="line">     var result = match(&apos;/a/sdfsdfds/u/sdfsdf/12222&apos;, subscribeTopics)</span><br><span class="line"></span><br><span class="line">    console.log(result==false)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>输出<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[2017-03-05 11:31:40.157] [DEBUG] file - possible topic patterns: </span><br><span class="line">[2017-03-05 11:31:40.158] [DEBUG] file - &#123; &apos;/a1/sdfsdfds/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/#&apos;: true,</span><br><span class="line">  &apos;/+/+/+/+/+&apos;: true,</span><br><span class="line">  &apos;#/a1/#&apos;: true,</span><br><span class="line">  &apos;+/a1/+/+/+/+&apos;: true,</span><br><span class="line">  &apos;#/sdfsdfds/#&apos;: true,</span><br><span class="line">  &apos;+/+/sdfsdfds/+/+/+&apos;: true,</span><br><span class="line">  &apos;#/u/#&apos;: true,</span><br><span class="line">  &apos;+/+/+/u/+/+&apos;: true,</span><br><span class="line">  &apos;#/sdfsdf/#&apos;: true,</span><br><span class="line">  &apos;+/+/+/+/sdfsdf/+&apos;: true,</span><br><span class="line">  &apos;#/12222&apos;: true,</span><br><span class="line">  &apos;+/+/+/+/+/12222&apos;: true,</span><br><span class="line">  &apos;/#/12222&apos;: true,</span><br><span class="line">  &apos;/+/+/+/+/12222&apos;: true,</span><br><span class="line">  &apos;/a1/#&apos;: true,</span><br><span class="line">  &apos;/a1/+/+/+/+&apos;: true,</span><br><span class="line">  &apos;#/a1/sdfsdfds/#&apos;: true,</span><br><span class="line">  &apos;+/a1/sdfsdfds/+/+/+&apos;: true,</span><br><span class="line">  &apos;#/sdfsdfds/u/#&apos;: true,</span><br><span class="line">  &apos;+/+/sdfsdfds/u/+/+&apos;: true,</span><br><span class="line">  &apos;#/u/sdfsdf/#&apos;: true,</span><br><span class="line">  &apos;+/+/+/u/sdfsdf/+&apos;: true,</span><br><span class="line">  &apos;#/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;+/+/+/+/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/#/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/+/+/+/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/a1/#/12222&apos;: true,</span><br><span class="line">  &apos;/a1/+/+/+/12222&apos;: true,</span><br><span class="line">  &apos;/a1/sdfsdfds/#&apos;: true,</span><br><span class="line">  &apos;/a1/sdfsdfds/+/+/+&apos;: true,</span><br><span class="line">  &apos;#/a1/sdfsdfds/u/#&apos;: true,</span><br><span class="line">  &apos;+/a1/sdfsdfds/u/+/+&apos;: true,</span><br><span class="line">  &apos;#/sdfsdfds/u/sdfsdf/#&apos;: true,</span><br><span class="line">  &apos;+/+/sdfsdfds/u/sdfsdf/+&apos;: true,</span><br><span class="line">  &apos;#/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;+/+/+/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/#/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/+/+/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/a1/#/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/a1/+/+/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/a1/sdfsdfds/#/12222&apos;: true,</span><br><span class="line">  &apos;/a1/sdfsdfds/+/+/12222&apos;: true,</span><br><span class="line">  &apos;/a1/sdfsdfds/u/#&apos;: true,</span><br><span class="line">  &apos;/a1/sdfsdfds/u/+/+&apos;: true,</span><br><span class="line">  &apos;#/a1/sdfsdfds/u/sdfsdf/#&apos;: true,</span><br><span class="line">  &apos;+/a1/sdfsdfds/u/sdfsdf/+&apos;: true,</span><br><span class="line">  &apos;#/sdfsdfds/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;+/+/sdfsdfds/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/#/sdfsdfds/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/+/sdfsdfds/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/a1/#/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/a1/+/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/a1/sdfsdfds/#/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/a1/sdfsdfds/+/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/a1/sdfsdfds/u/#/12222&apos;: true,</span><br><span class="line">  &apos;/a1/sdfsdfds/u/+/12222&apos;: true,</span><br><span class="line">  &apos;/a1/sdfsdfds/u/sdfsdf/#&apos;: true,</span><br><span class="line">  &apos;/a1/sdfsdfds/u/sdfsdf/+&apos;: true,</span><br><span class="line">  &apos;#/a1/sdfsdfds/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;+/a1/sdfsdfds/u/sdfsdf/12222&apos;: true &#125;</span><br><span class="line">[2017-03-05 11:31:40.161] [DEBUG] file - Topic match: false</span><br><span class="line">[2017-03-05 11:33:18.170] [DEBUG] file - possible topic patterns: </span><br><span class="line">[2017-03-05 11:33:18.173] [DEBUG] file - &#123; &apos;/a/sdfsdfds/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/#&apos;: true,</span><br><span class="line">  &apos;/+/+/+/+/+&apos;: true,</span><br><span class="line">  &apos;#/a/#&apos;: true,</span><br><span class="line">  &apos;+/a/+/+/+/+&apos;: true,</span><br><span class="line">  &apos;#/sdfsdfds/#&apos;: true,</span><br><span class="line">  &apos;+/+/sdfsdfds/+/+/+&apos;: true,</span><br><span class="line">  &apos;#/u/#&apos;: true,</span><br><span class="line">  &apos;+/+/+/u/+/+&apos;: true,</span><br><span class="line">  &apos;#/sdfsdf/#&apos;: true,</span><br><span class="line">  &apos;+/+/+/+/sdfsdf/+&apos;: true,</span><br><span class="line">  &apos;#/12222&apos;: true,</span><br><span class="line">  &apos;+/+/+/+/+/12222&apos;: true,</span><br><span class="line">  &apos;/#/12222&apos;: true,</span><br><span class="line">  &apos;/+/+/+/+/12222&apos;: true,</span><br><span class="line">  &apos;/a/#&apos;: true,</span><br><span class="line">  &apos;/a/+/+/+/+&apos;: true,</span><br><span class="line">  &apos;#/a/sdfsdfds/#&apos;: true,</span><br><span class="line">  &apos;+/a/sdfsdfds/+/+/+&apos;: true,</span><br><span class="line">  &apos;#/sdfsdfds/u/#&apos;: true,</span><br><span class="line">  &apos;+/+/sdfsdfds/u/+/+&apos;: true,</span><br><span class="line">  &apos;#/u/sdfsdf/#&apos;: true,</span><br><span class="line">  &apos;+/+/+/u/sdfsdf/+&apos;: true,</span><br><span class="line">  &apos;#/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;+/+/+/+/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/#/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/+/+/+/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/a/#/12222&apos;: true,</span><br><span class="line">  &apos;/a/+/+/+/12222&apos;: true,</span><br><span class="line">  &apos;/a/sdfsdfds/#&apos;: true,</span><br><span class="line">  &apos;/a/sdfsdfds/+/+/+&apos;: true,</span><br><span class="line">  &apos;#/a/sdfsdfds/u/#&apos;: true,</span><br><span class="line">  &apos;+/a/sdfsdfds/u/+/+&apos;: true,</span><br><span class="line">  &apos;#/sdfsdfds/u/sdfsdf/#&apos;: true,</span><br><span class="line">  &apos;+/+/sdfsdfds/u/sdfsdf/+&apos;: true,</span><br><span class="line">  &apos;#/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;+/+/+/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/#/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/+/+/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/a/#/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/a/+/+/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/a/sdfsdfds/#/12222&apos;: true,</span><br><span class="line">  &apos;/a/sdfsdfds/+/+/12222&apos;: true,</span><br><span class="line">  &apos;/a/sdfsdfds/u/#&apos;: true,</span><br><span class="line">  &apos;/a/sdfsdfds/u/+/+&apos;: true,</span><br><span class="line">  &apos;#/a/sdfsdfds/u/sdfsdf/#&apos;: true,</span><br><span class="line">  &apos;+/a/sdfsdfds/u/sdfsdf/+&apos;: true,</span><br><span class="line">  &apos;#/sdfsdfds/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;+/+/sdfsdfds/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/#/sdfsdfds/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/+/sdfsdfds/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/a/#/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/a/+/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/a/sdfsdfds/#/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/a/sdfsdfds/+/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;/a/sdfsdfds/u/#/12222&apos;: true,</span><br><span class="line">  &apos;/a/sdfsdfds/u/+/12222&apos;: true,</span><br><span class="line">  &apos;/a/sdfsdfds/u/sdfsdf/#&apos;: true,</span><br><span class="line">  &apos;/a/sdfsdfds/u/sdfsdf/+&apos;: true,</span><br><span class="line">  &apos;#/a/sdfsdfds/u/sdfsdf/12222&apos;: true,</span><br><span class="line">  &apos;+/a/sdfsdfds/u/sdfsdf/12222&apos;: true &#125;</span><br><span class="line">[2017-03-05 11:33:18.179] [DEBUG] file - Topic match: true</span><br></pre></td></tr></table></figure></p>
+<h2 id="实现二"><a href="#实现二" class="headerlink" title="实现二"></a>实现二</h2><p>把话题路径中的<code>#</code>和<code>+</code>替换成语言内置的正则语法，然后进行匹配<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var matchTopic = function(inputTopic, targetTopic) &#123;</span><br><span class="line">        if (inputTopic== &quot;#&quot;) &#123;</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">        var re = new RegExp(&quot;^&quot;+inputTopic.replace(/([\[\]\?\(\)\\\\$\^\*\.|])/g,&quot;\\$1&quot;).replace(/\+/g,&quot;[^/]+&quot;).replace(/\/#$/,&quot;(\/.*)?&quot;)+&quot;$&quot;);</span><br><span class="line">        return re.test(targetTopic);</span><br><span class="line">    &#125;;</span><br></pre></td></tr></table></figure></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-10-26T21:49:24.150Z" itemprop="dateUpdated">2019-10-27 05:49:24</time>
+</span><br>
+
+
+        
+        这里不可以写作者留言.
+        
+    </div>
+    <footer>
+        <a href="https://zh-h.github.io">
+            <img src="/img/avatar.jpg" alt="Zohar Hou">
+            Zohar Hou
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2017/03/05/100/&title=《MQTT 话题匹配算法实现》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2017/03/05/100/&title=《MQTT 话题匹配算法实现》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2017/03/05/100/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MQTT 话题匹配算法实现》 — Applehater&url=https://zh-h.github.io/2017/03/05/100/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2017/03/05/100/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/03/06/101/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">有关 Django 的一些</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/02/28/99/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Nginx 关闭站点访问规则</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'zh-h',
+            repo: 'zh-h.github.io.comment',
+            oauth: {
+                client_id: '3a6263282611b5518bd4',
+                client_secret: 'df06fc0681c7b83ceba630b8649f6cc80a0776ae',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+            <p>
+                
+                    <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+                    
+                        <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+            </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zohar Hou &copy; 2015 - 2019</span>
+            <span>
+                <a href="http://www.beian.gov.cn/portal/index" target="_blank">粤ICP备14081324号</a>
+            </span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zh-h.github.io/2017/03/05/100/&title=《MQTT 话题匹配算法实现》 — Applehater&pic=https://zh-h.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zh-h.github.io/2017/03/05/100/&title=《MQTT 话题匹配算法实现》 — Applehater&source=nothing" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zh-h.github.io/2017/03/05/100/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MQTT 话题匹配算法实现》 — Applehater&url=https://zh-h.github.io/2017/03/05/100/&via=https://zh-h.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zh-h.github.io/2017/03/05/100/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zh-h.github.io/2017/03/05/100/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Look at me !';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Emmm ...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
