@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "hexo": "^4.0.0",
+    "hexo-deployer-aliyun-oss": "git+https://github.com/zh-h/hexo-deployer-aliyun-oss.git#develop",
     "hexo-deployer-ftpsync": "^0.1.1",
     "hexo-deployer-git": "^0.3.1",
     "hexo-generator-archive": "^1.0.0",
@@ -19,7 +20,6 @@
     "hexo-renderer-less": "^0.2.0",
     "hexo-renderer-marked": "^2.0.0",
     "hexo-renderer-stylus": "^1.1.0",
-    "hexo-server": "^1.0.0",
-    "hexo-deployer-aliyun-oss": "^0.0.1"
+    "hexo-server": "^1.0.0"
   }
 }
